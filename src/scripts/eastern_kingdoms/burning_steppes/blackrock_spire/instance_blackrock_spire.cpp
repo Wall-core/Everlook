@@ -81,6 +81,7 @@ static const uint32 aStadiumSpectators[12] =
 
 static const Position aSpectatorsSpawnLocs[12] =
 {
+
     { 163.3209f, -340.9818f, 111.0216f, 4.818223f },
     { 164.2471f, -339.0313f, 111.0368f, 1.413717f },
     { 161.124f, -339.5178f, 111.0381f, 3.001966f },
@@ -423,14 +424,26 @@ void instance_blackrock_spire::SetData(uint32 uiType, uint32 uiData)
             // Combat door
             DoUseDoorOrButton(m_uiGythEntryDoorGUID);
             // Start event
-            if (uiData == IN_PROGRESS)
-                StartNextDialogueText(SAY_NEFARIUS_INTRO_1);
+			if (uiData == IN_PROGRESS)
+				StartNextDialogueText(SAY_NEFARIUS_INTRO_1);
+
             else if (uiData == DONE)
             {
                 // Event complete: remove the summoned spectators
                 DespawnStadiumSpectators();
-                DoUseDoorOrButton(m_uiGythExitDoorGUID);
-            }
+                DoUseDoorOrButton(m_uiGythExitDoorGUID); 
+				
+				// Everlook - Combat Stop
+				std::set<Player*>::iterator it;
+				Map::PlayerList const &pl = GetMap()->GetPlayers();
+				for (const auto& it2 : pl)
+				{
+					Player* rendplayer = it2.getSource();
+					if (rendplayer)
+						rendplayer->CombatStop();
+				}
+				
+			}
             else if (uiData == FAIL)
             {
                 // Despawn Nefarius, Rend and the spectators on fail (the others are despawned OnCreatureEvade())
@@ -445,6 +458,16 @@ void instance_blackrock_spire::SetData(uint32 uiType, uint32 uiData)
                 m_uiStadiumEventTimer = 0;
                 m_uiStadiumMobsAlive = 0;
                 m_uiStadiumWaves = 0;
+
+				// Everlook - Combat Stop
+				std::set<Player*>::iterator it;
+				Map::PlayerList const &pl = GetMap()->GetPlayers();
+				for (const auto& it2 : pl)
+				{
+					Player* rendplayer = it2.getSource();
+					if (rendplayer)
+						rendplayer->CombatStop();
+				}
             }
             m_auiEncounter[uiType] = uiData;
             break;
@@ -567,7 +590,7 @@ void instance_blackrock_spire::JustDidDialogueStep(int32 iEntry)
         case NPC_BLACKHAND_HANDLER:
             m_uiStadiumEventTimer = 1000;
             // Move the two near the balcony
-            if (Creature* pRend = GetCreature(m_uiRendGUID))
+			if (Creature* pRend = GetCreature(m_uiRendGUID))
                 pRend->SetFacingTo(aStadiumLocs[5].o);
             if (Creature* pNefarius = GetCreature(m_uiNefariusGUID))
             {
@@ -689,7 +712,7 @@ void instance_blackrock_spire::DoSendNextStadiumWave()
     if (m_uiStadiumWaves >= MAX_STADIUM_WAVES)
         m_uiStadiumEventTimer = 0;
     else
-        m_uiStadiumEventTimer = 60000;
+        m_uiStadiumEventTimer = /*60000*/ 30000; // Everlook: Brotalnia curses us every time we do this
 }
 
 enum
@@ -936,19 +959,22 @@ bool AreaTrigger_at_blackrock_spire(Player* pPlayer, AreaTriggerEntry const* pAt
             }
             break;
         case AREATRIGGER_STADIUM:
-            if (instance_blackrock_spire* pInstance = (instance_blackrock_spire*)pPlayer->GetInstanceData())
-            {
-                if (pInstance->GetData(TYPE_STADIUM) == IN_PROGRESS || pInstance->GetData(TYPE_STADIUM) == DONE)
-                    return false;
+			if (instance_blackrock_spire* pInstance = (instance_blackrock_spire*)pPlayer->GetInstanceData())
+			{
+				if (pInstance->GetData(TYPE_STADIUM) != DONE) 
+					pPlayer->SetInCombatState(220000, nullptr); // Everlook - NO DRINKING
 
-                // Respawn Nefarius and Rend for the dialogue event if they are not spawned already.
-                if (Creature* pNefarius = pInstance->GetCreature(pInstance->GetData64(NPC_LORD_VICTOR_NEFARIUS)))
-                    if (!pNefarius->IsAlive())
-                        pNefarius->Respawn();
-                if (Creature* pRend = pInstance->GetCreature(pInstance->GetData64(NPC_REND_BLACKHAND)))
-                    if (!pRend->IsAlive())
-                        pRend->Respawn();
+				if (pInstance->GetData(TYPE_STADIUM) == IN_PROGRESS || pInstance->GetData(TYPE_STADIUM) == DONE)
+					return false;
 
+				// Respawn Nefarius and Rend for the dialogue event if they are not spawned already.
+				if (Creature* pNefarius = pInstance->GetCreature(pInstance->GetData64(NPC_LORD_VICTOR_NEFARIUS)))
+					if (!pNefarius->IsAlive())
+						pNefarius->Respawn();
+				if (Creature* pRend = pInstance->GetCreature(pInstance->GetData64(NPC_REND_BLACKHAND)))
+					if (!pRend->IsAlive())
+
+						pRend->Respawn();
                 pInstance->SetData(TYPE_STADIUM, IN_PROGRESS);
             }
             break;
