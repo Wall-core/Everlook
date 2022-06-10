@@ -17,6 +17,7 @@
 *.so.dbg
 *.bin
 *.gz
+*.log
 
 # Visual studio solution files
 *.tlog
