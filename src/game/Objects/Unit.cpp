@@ -7550,6 +7550,7 @@ float Unit::GetTotalResistanceValue(SpellSchools school) const
     value += m_auraModifiersGroup[unitMod][TOTAL_VALUE];
     value *= m_auraModifiersGroup[unitMod][TOTAL_PCT];
 
+	/* Everlook - negative resist
     // World of Warcraft Client Patch 1.9.0 (2006-01-03)
     // - Curse of Shadow and Curse of the Elements - These curses can no
     //   longer cause resistance to become negative.
@@ -7558,7 +7559,7 @@ float Unit::GetTotalResistanceValue(SpellSchools school) const
     // PS: Actually, they can, but only visually advertised in the fields, calculations ignore it, we limit both
     if (value < 0 && !vulnerability)
         value = 0;
-#endif
+#endif */
 
     return value;
 }
