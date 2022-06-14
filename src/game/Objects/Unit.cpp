@@ -1950,10 +1950,10 @@ void Unit::CalculateDamageAbsorbAndResist(SpellCaster* pCaster, SpellSchoolMask 
 
         uint32 splitted = currentAbsorb;
         uint32 splitted_absorb = 0;
-        // Nostalrius : la reflection (bene de sacrifice par exemple) ne fait pas forcement des degats (si pala sous bouclier divin)
+        // Nostalrius: reflection (blessing of sacrifice for example) does not necessarily do damage (if pala under divine shield)
         uint32 reflectAbsorb = 0;
         int32 reflectResist = 0;
-        // On evite une boucle infinie
+        // We avoid an infinite loop
         if (!reflectTo->HasAuraType(SPELL_AURA_SPLIT_DAMAGE_FLAT))
             reflectTo->CalculateDamageAbsorbAndResist(pCaster, schoolMask, DOT, splitted, &reflectAbsorb, &reflectResist, spellProto);
         splitted -= (reflectAbsorb + reflectResist);
@@ -1961,7 +1961,7 @@ void Unit::CalculateDamageAbsorbAndResist(SpellCaster* pCaster, SpellSchoolMask 
         pCaster->SendSpellNonMeleeDamageLog(reflectTo, (*i)->GetSpellProto()->Id, splitted, schoolMask, splitted_absorb, 0, (damagetype == DOT), 0, false, true);
         CleanDamage cleanDamage = CleanDamage(splitted, BASE_ATTACK, MELEE_HIT_NORMAL, reflectAbsorb, reflectResist);
         pCaster->DealDamage(reflectTo, splitted, &cleanDamage, DOT, schoolMask, (*i)->GetSpellProto(), false);
-    }
+	}
 
     AuraList const& vSplitDamagePct = GetAurasByType(SPELL_AURA_SPLIT_DAMAGE_PCT);
     for (AuraList::const_iterator i = vSplitDamagePct.begin(), next; i != vSplitDamagePct.end() && RemainingDamage >= 0; i = next)

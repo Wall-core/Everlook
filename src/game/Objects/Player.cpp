@@ -7538,9 +7538,9 @@ void Player::CastItemCombatSpell(Unit* Target, WeaponAttackType attType)
         if (GetExtraAttacks() && spellInfo->HasEffect(SPELL_EFFECT_ADD_EXTRA_ATTACKS))
             return;
 
-        // Need to check gcd here because the cast is triggered and skips it.
-        if (HasGCD(spellInfo))
-            continue;
+        // Everlook - no GCD blocking
+        /*if (HasGCD(spellInfo))
+            continue;*/
 
         float chance = (float)spellInfo->procChance;
 
