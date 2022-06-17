@@ -964,7 +964,6 @@ bool AreaTrigger_at_blackrock_spire(Player* pPlayer, AreaTriggerEntry const* pAt
 				// Everlook - Combat Start
 				if (!pInstance->GetData(TYPE_STADIUM) == DONE || !pInstance->GetData(TYPE_STADIUM) == IN_PROGRESS)
 				{
-					// Everlook - Combat Stop
 					std::set<Player*>::iterator it;
 					Map::PlayerList const &pl = pPlayer->GetMap()->GetPlayers();
 					for (const auto& it2 : pl)
