@@ -1567,13 +1567,7 @@ void Player::Update(uint32 update_diff, uint32 p_time)
     }
 
     if (HasUnitState(UNIT_STAT_MELEE_ATTACKING))
-    {
         UpdateMeleeAttackingState();
-
-        Unit const* pVictim = GetVictim();
-        if (pVictim && !IsNonMeleeSpellCasted(false) && CanReachWithMeleeAutoAttack(pVictim))
-            TogglePlayerPvPFlagOnAttackVictim(pVictim);
-    }
 
     if (HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING))
     {
@@ -14986,6 +14980,9 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder* holder)
                 m_movementInfo.ClearTransportData();
 
                 RelocateToHomebind();
+                if (GetMapId() <= 1)
+                    SetLocationInstanceId(sMapMgr.GetContinentInstanceId(GetMapId(), GetPositionX(), GetPositionY()));
+                SetMap(sMapMgr.CreateMap(GetMapId(), this));
             }
             else
             {
@@ -15006,6 +15003,9 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder* holder)
                           guid.GetString().c_str(), transGUID);
 
             RelocateToHomebind();
+            if (GetMapId() <= 1)
+                SetLocationInstanceId(sMapMgr.GetContinentInstanceId(GetMapId(), GetPositionX(), GetPositionY()));
+            SetMap(sMapMgr.CreateMap(GetMapId(), this));
         }
     }
 
