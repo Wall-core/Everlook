@@ -3856,7 +3856,24 @@ void Spell::EffectEnchantItemTmp(SpellEffectIndex eff_idx)
                         itemTarget->GetProto()->Name1, itemTarget->GetEntry(),
                         item_owner->GetName(), item_owner->GetSession()->GetAccountId());
     }
-
+	// Everlook - Imbue Twisting
+	if (enchant_id)
+	{
+		uint32 cImbue = itemTarget->GetEnchantmentId(TEMP_ENCHANTMENT_SLOT);
+		switch (cImbue)
+		{
+			case 283:
+				p_caster->CastSpell(p_caster, 33031, true);
+			case 284:
+				p_caster->CastSpell(p_caster, 33032, true);
+			case 525:
+				p_caster->CastSpell(p_caster, 33033, true);
+			case 1669:
+				p_caster->CastSpell(p_caster, 33034, true);
+			default:
+				break;
+		}
+	}
     // remove old enchant before applying new
     item_owner->ApplyEnchantment(itemTarget, TEMP_ENCHANTMENT_SLOT, false);
 
