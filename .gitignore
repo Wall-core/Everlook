@@ -18,6 +18,7 @@
 *.bin
 *.gz
 *.log
+*.exe
 
 # Visual studio solution files
 *.tlog
