@@ -2090,14 +2090,14 @@ void Spell::EffectTriggerSpell(SpellEffectIndex eff_idx)
         case 12709:
             m_caster->CastSpell(unitTarget, (urand(0, 2) ? 11638 : 11637), true, m_CastItem, nullptr, m_originalCasterGUID);
             return;
-        // Linken's Boomerang: 10% chance to proc stun, 3% chance to proc disarm (dubious numbers)
+		// Everlook - Linken's Boomerang old values: 50% chance to proc stun, 50% chance to proc disarm
         case 15712:
-            if (triggered_spell_id == 15753 && urand(0, 10))
+            if (triggered_spell_id == 15753 && urand(0, 2))
             {
                 return;
             }
 
-            if (triggered_spell_id == 15752 && urand(0, 30))
+            if (triggered_spell_id == 15752 && urand(0, 2))
             {
                 return;
             }
