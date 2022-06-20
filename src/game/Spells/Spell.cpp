@@ -714,7 +714,7 @@ void Spell::prepareDataForTriggerSystem()
         {
             case SPELLFAMILY_MAGE:
                 // Arcane Missiles / Blizzard triggers need do it
-                if (m_spellInfo->IsFitToFamilyMask(uint64(0x0000000000200080)))
+				if (m_spellInfo->IsFitToFamilyMask<CF_MAGE_ARCANE_MISSILES, CF_MAGE_BLIZZARD>())
                     m_canTrigger = true;
                 break;
             case SPELLFAMILY_WARLOCK:
