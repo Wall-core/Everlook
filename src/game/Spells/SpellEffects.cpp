@@ -3857,7 +3857,7 @@ void Spell::EffectEnchantItemTmp(SpellEffectIndex eff_idx)
                         item_owner->GetName(), item_owner->GetSession()->GetAccountId());
     }
 	// Everlook - Imbue Twisting
-	bool wfcheck = m_spellInfo->IsFitToFamilyMask<CF_SHAMAN_WINDFURY_WEAPON>();
+	bool wfcheck = m_spellInfo->SpellIconID == 220;
 	if (enchant_id && !wfcheck)
 	{
 		uint32 cImbue = itemTarget->GetEnchantmentId(TEMP_ENCHANTMENT_SLOT);
