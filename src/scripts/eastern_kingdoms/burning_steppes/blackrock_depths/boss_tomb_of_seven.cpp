@@ -207,7 +207,7 @@ struct boss_doomrelAI : public ScriptedAI
                     {
                         CallToFight(true);
                         ++m_uiDwarfRound;
-                        m_uiCallToFight_Timer = 30000;
+                        m_uiCallToFight_Timer = /*30000 Everlook - Reduced wave timers */20000;
                         m_uiWipeCheck_Timer = 25000;
                     }
                     else
