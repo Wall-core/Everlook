@@ -695,15 +695,15 @@ void Spell::prepareDataForTriggerSystem()
     m_procAttacker = PROC_FLAG_NONE;
     m_procVictim = PROC_FLAG_NONE;
 
-    if (m_spellInfo->AttributesEx3 & SPELL_ATTR_EX3_SUPPRESS_CASTER_PROCS)
-        m_canTrigger = false;         // Explicitly not allowed to trigger
-    else if (m_CastItem)
-        m_canTrigger = false;         // Do not trigger from item cast spell
-    else if (m_originalCasterGUID.IsGameObject())   // Do not trigger anything if the spell is casted by using a game object (eg. Lightwell)
-        m_canTrigger = false;
-    else if (!m_IsTriggeredSpell)
-        m_canTrigger = true;          // Normal cast - can trigger
-    else if (!m_triggeredByAuraSpell)
+	if (m_spellInfo->AttributesEx3 & SPELL_ATTR_EX3_SUPPRESS_CASTER_PROCS)
+		m_canTrigger = false;         // Explicitly not allowed to trigger
+	else if (m_CastItem)
+		m_canTrigger = /*false -- Everlook - item proc*/true;         // Do not trigger from item cast spell
+	else if (m_originalCasterGUID.IsGameObject())   // Do not trigger anything if the spell is casted by using a game object (eg. Lightwell)
+		m_canTrigger = false;
+	else if (!m_IsTriggeredSpell || m_IsTriggeredSpell) // Everlook - trigger procs)
+		m_canTrigger = true;          // Normal cast - can trigger
+    else if (!m_triggeredByAuraSpell || m_triggeredByAuraSpell) // Everlook - trigger procs)
         m_canTrigger = true;          // Triggered from SPELL_EFFECT_TRIGGER_SPELL - can trigger
     else if (m_spellInfo->HasAttribute(SPELL_ATTR_EX2_TRIGGERED_CAN_TRIGGER_PROC) || m_spellInfo->HasAttribute(SPELL_ATTR_EX3_TRIGGERED_CAN_TRIGGER_SPECIAL))
         m_canTrigger = true;          // Spells with these special attributes can trigger even if triggeredByAuraSpell
@@ -995,11 +995,11 @@ void Spell::AddUnitTarget(Unit* pTarget, SpellEffectIndex effIndex)
     {
         // After patch 1.10, hunter trap effects are no longer reflected back.
         // https://classic.wowhead.com/item=18634/gyrofreeze-ice-reflector#comments
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
+/* #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4 -- Everlook - Reflectable Traps
         if (!m_casterUnit || m_originalCasterGUID.IsGameObject())
-#else
+#else */
         if (!m_casterUnit)
-#endif
+// #endif
         {
             if (m_casterUnit && !m_spellInfo->HasAttribute(SPELL_ATTR_EX3_SUPPRESS_TARGET_PROCS))
                 m_casterUnit->ProcDamageAndSpell(ProcSystemArguments(pTarget, PROC_FLAG_NONE, PROC_FLAG_TAKE_HARMFUL_SPELL, PROC_EX_REFLECT, 1, BASE_ATTACK, m_spellInfo, this));
