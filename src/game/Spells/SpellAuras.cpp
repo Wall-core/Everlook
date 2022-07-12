@@ -4239,6 +4239,18 @@ void Aura::HandleAuraProcTriggerSpell(bool apply, bool Real)
                 GetHolder()->SetAuraCharges(6);
             break;
         }
+		// Everlook - Seal Twisting
+		case 20375: // Rank 1
+		case 20915: // Rank 2
+		case 20918: // Rank 3
+		case 20919: // Rank 4
+		case 20920: // Rank 5
+		{
+			// Using custom copy of seal of commmand aura.
+			if (m_removeMode == AURA_REMOVE_BY_DEFAULT)
+				GetTarget()->CastSpell(GetTarget(), 33006, true);
+			break;
+		}
         default:
             break;
     }

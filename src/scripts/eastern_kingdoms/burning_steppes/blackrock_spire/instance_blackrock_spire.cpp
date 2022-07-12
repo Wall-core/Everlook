@@ -430,6 +430,16 @@ void instance_blackrock_spire::SetData(uint32 uiType, uint32 uiData)
                 // Event complete: remove the summoned spectators
                 DespawnStadiumSpectators();
                 DoUseDoorOrButton(m_uiGythExitDoorGUID);
+
+				// Everlook - Combat Stop
+				std::set<Player*>::iterator it;
+				Map::PlayerList const &pl = GetMap()->GetPlayers();
+				for (const auto& it2 : pl)
+				{
+					Player* rendplayer = it2.getSource();
+					if (rendplayer)
+						rendplayer->CombatStop();
+				}
             }
             else if (uiData == FAIL)
             {
@@ -445,6 +455,16 @@ void instance_blackrock_spire::SetData(uint32 uiType, uint32 uiData)
                 m_uiStadiumEventTimer = 0;
                 m_uiStadiumMobsAlive = 0;
                 m_uiStadiumWaves = 0;
+
+				// Everlook - Combat Stop
+				std::set<Player*>::iterator it;
+				Map::PlayerList const &pl = GetMap()->GetPlayers();
+				for (const auto& it2 : pl)
+				{
+					Player* rendplayer = it2.getSource();
+					if (rendplayer)
+						rendplayer->CombatStop();
+				}
             }
             m_auiEncounter[uiType] = uiData;
             break;
@@ -689,7 +709,7 @@ void instance_blackrock_spire::DoSendNextStadiumWave()
     if (m_uiStadiumWaves >= MAX_STADIUM_WAVES)
         m_uiStadiumEventTimer = 0;
     else
-        m_uiStadiumEventTimer = 60000;
+        m_uiStadiumEventTimer = /*60000*/ 30000; // Everlook: Brotalnia curses us every time we do this
 }
 
 enum
@@ -938,6 +958,19 @@ bool AreaTrigger_at_blackrock_spire(Player* pPlayer, AreaTriggerEntry const* pAt
         case AREATRIGGER_STADIUM:
             if (instance_blackrock_spire* pInstance = (instance_blackrock_spire*)pPlayer->GetInstanceData())
             {
+				// Everlook - Combat Start
+				if (pInstance->GetData(TYPE_STADIUM) != DONE)
+				{
+					std::set<Player*>::iterator it;
+					Map::PlayerList const &pl = pPlayer->GetMap()->GetPlayers();
+					for (const auto& it2 : pl)
+					{
+						Player* rendplayer = it2.getSource();
+						if (rendplayer)
+							rendplayer->SetInCombatState(220000, nullptr);
+					}
+				}
+
                 if (pInstance->GetData(TYPE_STADIUM) == IN_PROGRESS || pInstance->GetData(TYPE_STADIUM) == DONE)
                     return false;
 

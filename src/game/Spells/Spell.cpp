@@ -998,11 +998,11 @@ void Spell::AddUnitTarget(Unit* pTarget, SpellEffectIndex effIndex)
     {
         // After patch 1.10, hunter trap effects are no longer reflected back.
         // https://classic.wowhead.com/item=18634/gyrofreeze-ice-reflector#comments
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
+/* #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
         if (!m_casterUnit || m_originalCasterGUID.IsGameObject())
-#else
+#else */
         if (!m_casterUnit)
-#endif
+// #endif -- Everlook - Reflectable traps
         {
             if (m_casterUnit && !m_spellInfo->HasAttribute(SPELL_ATTR_EX3_SUPPRESS_TARGET_PROCS))
                 m_casterUnit->ProcDamageAndSpell(ProcSystemArguments(pTarget, PROC_FLAG_NONE, PROC_FLAG_TAKE_HARMFUL_SPELL, PROC_EX_REFLECT, 1, BASE_ATTACK, m_spellInfo, this));

@@ -7521,15 +7521,15 @@ float Unit::GetTotalResistanceValue(SpellSchools school) const
     value += m_auraModifiersGroup[unitMod][TOTAL_VALUE];
     value *= m_auraModifiersGroup[unitMod][TOTAL_PCT];
 
-    // World of Warcraft Client Patch 1.9.0 (2006-01-03)
+    // World of Warcraft Client Patch 1.9.0 (2006-01-03) -- Everlook negative resist
     // - Curse of Shadow and Curse of the Elements - These curses can no
     //   longer cause resistance to become negative.
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
+/*#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     // Auras can't cause resistances to dip below 0 since early vanilla
     // PS: Actually, they can, but only visually advertised in the fields, calculations ignore it, we limit both
     if (value < 0 && !vulnerability)
         value = 0;
-#endif
+#endif */
 
     return value;
 }

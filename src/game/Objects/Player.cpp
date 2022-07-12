@@ -7529,8 +7529,8 @@ void Player::CastItemCombatSpell(Unit* Target, WeaponAttackType attType)
             return;
 
         // Need to check gcd here because the cast is triggered and skips it.
-        if (HasGCD(spellInfo))
-            continue;
+/*        if (HasGCD(spellInfo)) -- Everlook - no GCD blocking
+            continue; */
 
         float chance = (float)spellInfo->procChance;
 

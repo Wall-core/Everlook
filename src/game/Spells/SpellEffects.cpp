@@ -2091,13 +2091,13 @@ void Spell::EffectTriggerSpell(SpellEffectIndex eff_idx)
             m_caster->CastSpell(unitTarget, (urand(0, 2) ? 11638 : 11637), true, m_CastItem, nullptr, m_originalCasterGUID);
             return;
         // Linken's Boomerang: 10% chance to proc stun, 3% chance to proc disarm (dubious numbers)
-        case 15712:
-            if (triggered_spell_id == 15753 && urand(0, 10))
+        case 15712: // Everlook - reversion to old values
+            if (triggered_spell_id == 15753 && urand(0, 2))
             {
                 return;
             }
 
-            if (triggered_spell_id == 15752 && urand(0, 30))
+            if (triggered_spell_id == 15752 && urand(0, 2))
             {
                 return;
             }
@@ -3857,6 +3857,25 @@ void Spell::EffectEnchantItemTmp(SpellEffectIndex eff_idx)
                         item_owner->GetName(), item_owner->GetSession()->GetAccountId());
     }
 
+	// Everlook - Imbue Twisting
+	bool wfcheck = m_spellInfo->SpellIconID == 220;
+	if (enchant_id && !wfcheck)
+	{
+		uint32 cImbue = itemTarget->GetEnchantmentId(TEMP_ENCHANTMENT_SLOT);
+		switch (cImbue)
+		{
+		case 283:
+			p_caster->CastSpell(p_caster, 33031, true);
+		case 284:
+			p_caster->CastSpell(p_caster, 33032, true);
+		case 525:
+			p_caster->CastSpell(p_caster, 33033, true);
+		case 1669:
+			p_caster->CastSpell(p_caster, 33034, true);
+		default:
+			break;
+		}
+	}
     // remove old enchant before applying new
     item_owner->ApplyEnchantment(itemTarget, TEMP_ENCHANTMENT_SLOT, false);
 
