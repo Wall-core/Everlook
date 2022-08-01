@@ -475,8 +475,8 @@ void WorldSession::HandleSetSelectionOpcode(WorldPacket& recv_data)
 
     // Drop combo points only for rogues and druids
     // Warriors use combo points internally, do no reset for everyone
-    if ((_player->GetClass() == CLASS_ROGUE || _player->GetClass() == CLASS_DRUID) && unit && guid != _player->GetComboTargetGuid())
-        _player->ClearComboPoints();
+/*    if ((_player->GetClass() == CLASS_ROGUE || _player->GetClass() == CLASS_DRUID) && unit && guid != _player->GetComboTargetGuid())
+        _player->ClearComboPoints(); -- Everlook: Don't drop combo points on changing target */
 
     // Update autoshot if need
     if (Spell* pSpell = _player->GetCurrentSpell(CURRENT_AUTOREPEAT_SPELL))
