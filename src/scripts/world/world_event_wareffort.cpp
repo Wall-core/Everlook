@@ -299,15 +299,18 @@ struct npc_AQwar_collectorAI : CreatureAI
 
         switch (creature->GetFactionTemplateId())
         {
-            case 57:
-            case 11:
-            case 875:
-            case 79:
-                team = TEAM_ALLIANCE;
-                break;
-            default:
-                team = TEAM_HORDE;
-                break;
+        case 12:
+        case 80:
+        case 55:
+        case 57:
+        case 11:
+        case 875:
+        case 79:
+            team = TEAM_ALLIANCE;
+            break;
+        default:
+            team = TEAM_HORDE;
+            break;
         }
 
         // Initializes resource ID/type too, must have team set first

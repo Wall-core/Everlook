@@ -7091,6 +7091,10 @@ float Unit::ApplyTotalThreatModifier(float threat, SpellSchoolMask schoolMask)
 
 void Unit::AddThreat(Unit* pVictim, float threat /*= 0.0f*/, bool crit /*= false*/, SpellSchoolMask schoolMask /*= SPELL_SCHOOL_MASK_NONE*/, SpellEntry const* threatSpell /*= nullptr*/)
 {
+	if (pVictim && threatSpell)
+    if (pVictim->HasAura(24314) && pVictim->IsPlayer() && threatSpell->HasAura(SPELL_AURA_PERIODIC_DAMAGE)) // Player being watched by Mandokir - Ignore threat increase if DOT - e.g Stops killing warriors having deep wounds on mandokir -/- DS
+        return;
+		
     // Only mobs can manage threat lists
     if (CanHaveThreatList() && IsInMap(pVictim))
         m_ThreatManager.addThreat(pVictim, threat, crit, schoolMask, threatSpell, false);

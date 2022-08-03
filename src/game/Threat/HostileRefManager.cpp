@@ -64,6 +64,11 @@ void HostileRefManager::threatAssist(Unit* pVictim, float pThreat, SpellEntry co
     uint32 size = pSingleTarget ? 1 : getSize();            // if pSingleTarget do not devide threat
     float threat = pThreat / size;
     HostileReference* ref = getFirst();
+	
+	if (pVictim && pThreatSpell)		
+    if (pVictim->HasAura(24314) && pThreatSpell->HasAura(SPELL_AURA_PERIODIC_HEAL)) // Player being watched by Mandokir - Ignore threat increase if HOT - prevents healers with hots on tanks getting killed by mandokir when being watched -/- DS
+            return;
+
     while (ref)
     {
         ref->getSource()->addThreat(pVictim, threat, false, (pThreatSpell ? pThreatSpell->GetSpellSchoolMask() : SPELL_SCHOOL_MASK_NORMAL), pThreatSpell, true);
