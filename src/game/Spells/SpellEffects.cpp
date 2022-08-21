@@ -195,7 +195,7 @@ void Spell::EffectEmpty(SpellEffectIndex /*eff_idx*/)
 
 void Spell::EffectNULL(SpellEffectIndex /*eff_idx*/)
 {
-    DEBUG_LOG("WORLD: Spell Effect DUMMY");
+    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WORLD: Spell Effect DUMMY");
 }
 
 void Spell::EffectUnused(SpellEffectIndex /*eff_idx*/)
@@ -287,7 +287,7 @@ void Spell::EffectInstaKill(SpellEffectIndex /*eff_idx*/)
                 spellId = 18791;
                 break;               //succubus
             default:
-                sLog.outError("EffectInstaKill: Unhandled creature entry (%u) case.", entry);
+                sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "EffectInstaKill: Unhandled creature entry (%u) case.", entry);
                 return;
         }
 
@@ -998,7 +998,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                             damage *= 0.6f;
                             break;
                         default:
-                            sLog.outError("Spell::EffectDummy: Spell %u not handled in DW", m_spellInfo->Id);
+                            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Spell::EffectDummy: Spell %u not handled in DW", m_spellInfo->Id);
                             return;
                     };
 
@@ -1059,7 +1059,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         m_caster->CastCustomSpell(unitTarget, 26470, damage, {}, {}, true);
                         break;
                     default:
-                        sLog.outError("EffectDummy: Non-handled case for spell 13567 for triggered aura %u", m_triggeredByAuraSpell->Id);
+                        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "EffectDummy: Non-handled case for spell 13567 for triggered aura %u", m_triggeredByAuraSpell->Id);
                         break;
                     }
                     return;
@@ -1284,7 +1284,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
 
                     creatureTarget->ForcedDespawn();
 
-                    DEBUG_LOG("AddObject at SpellEfects.cpp EffectDummy");
+                    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "AddObject at SpellEfects.cpp EffectDummy");
                     map->Add(pGameObj);
 
                     WorldPacket data(SMSG_GAMEOBJECT_SPAWN_ANIM, 8);
@@ -1855,7 +1855,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                             spellid = 25460;
                             break; // Rank 7
                         default:
-                            sLog.outError("Spell::EffectDummy: Spell 28598 triggered by unhandeled spell %u", m_triggeredByAuraSpell->Id);
+                            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Spell::EffectDummy: Spell 28598 triggered by unhandeled spell %u", m_triggeredByAuraSpell->Id);
                             return;
                     }
                     m_caster->CastSpell(unitTarget, spellid, true, nullptr);
@@ -1937,7 +1937,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                             heal = 25903;
                             break;
                         default:
-                            sLog.outError("Spell::EffectDummy: Spell %u not handled in HS", m_spellInfo->Id);
+                            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Spell::EffectDummy: Spell %u not handled in HS", m_spellInfo->Id);
                             return;
                     }
 
@@ -1995,7 +1995,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         spell_id = 36771;
                         break;    // Rank 7
                     default:
-                        sLog.outError("Spell::EffectDummy: Spell %u not handled in RW", m_spellInfo->Id);
+                        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Spell::EffectDummy: Spell %u not handled in RW", m_spellInfo->Id);
                         return;
                 }
 
@@ -2003,7 +2003,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
 
                 if (!spellInfo)
                 {
-                    sLog.outError("WORLD: unknown spell id %i", spell_id);
+                    sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WORLD: unknown spell id %i", spell_id);
                     return;
                 }
 
@@ -2039,7 +2039,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
             {
                 if (!m_CastItem)
                 {
-                    sLog.outError("Spell::EffectDummy: spell %i requires cast Item", m_spellInfo->Id);
+                    sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Spell::EffectDummy: spell %i requires cast Item", m_spellInfo->Id);
                     return;
                 }
                 // found spelldamage coefficients of 0.381% per 0.1 speed and 15.244 per 4.0 speed
@@ -2077,7 +2077,7 @@ void Spell::EffectTriggerSpell(SpellEffectIndex eff_idx)
     if (!unitTarget)
     {
         if (gameObjTarget || itemTarget)
-            sLog.outError("Spell::EffectTriggerSpell (Spell: %u): Unsupported non-unit case!", m_spellInfo->Id);
+            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Spell::EffectTriggerSpell (Spell: %u): Unsupported non-unit case!", m_spellInfo->Id);
         return;
     }
 
@@ -2144,7 +2144,7 @@ void Spell::EffectTriggerSpell(SpellEffectIndex eff_idx)
     SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(triggered_spell_id);
     if (!spellInfo)
     {
-        sLog.outError("EffectTriggerSpell of spell %u: triggering unknown spell id %i", m_spellInfo->Id, triggered_spell_id);
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "EffectTriggerSpell of spell %u: triggering unknown spell id %i", m_spellInfo->Id, triggered_spell_id);
         return;
     }
 
@@ -2201,7 +2201,7 @@ void Spell::EffectTriggerMissileSpell(SpellEffectIndex effect_idx)
 
     if (!spellInfo)
     {
-        sLog.outError("EffectTriggerMissileSpell of spell %u (eff: %u): triggering unknown spell id %u",
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "EffectTriggerMissileSpell of spell %u (eff: %u): triggering unknown spell id %u",
                       m_spellInfo->Id, effect_idx, triggered_spell_id);
         return;
     }
@@ -2234,7 +2234,7 @@ void Spell::EffectTeleportUnits(SpellEffectIndex eff_idx)
             SpellTargetPosition const* st = sSpellMgr.GetSpellTargetPosition(m_spellInfo->Id);
             if (!st)
             {
-                sLog.outError("Spell::EffectTeleportUnits - unknown Teleport coordinates for spell ID %u", m_spellInfo->Id);
+                sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Spell::EffectTeleportUnits - unknown Teleport coordinates for spell ID %u", m_spellInfo->Id);
                 return;
             }
 
@@ -2263,7 +2263,7 @@ void Spell::EffectTeleportUnits(SpellEffectIndex eff_idx)
             // If not exist data for dest location - return
             if (!(m_targets.m_targetMask & TARGET_FLAG_DEST_LOCATION))
             {
-                sLog.outError("Spell::EffectTeleportUnits - unknown EffectImplicitTargetB[%u] = %u for spell ID %u", eff_idx, m_spellInfo->EffectImplicitTargetB[eff_idx], m_spellInfo->Id);
+                sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Spell::EffectTeleportUnits - unknown EffectImplicitTargetB[%u] = %u for spell ID %u", eff_idx, m_spellInfo->EffectImplicitTargetB[eff_idx], m_spellInfo->Id);
                 return;
             }
             // Init dest coordinates
@@ -2469,7 +2469,7 @@ void Spell::EffectHeal(SpellEffectIndex eff_idx)
 
             if (!targetAura)
             {
-                sLog.outError("Target (GUID: %u TypeId: %u) has aurastate AURA_STATE_SWIFTMEND but no matching aura.", unitTarget->GetGUIDLow(), unitTarget->GetTypeId());
+                sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Target (GUID: %u TypeId: %u) has aurastate AURA_STATE_SWIFTMEND but no matching aura.", unitTarget->GetGUIDLow(), unitTarget->GetTypeId());
                 return;
             }
             int idx = 0;
@@ -2772,10 +2772,10 @@ void Spell::SendLoot(ObjectGuid guid, LootType loottype, LockType lockType)
                         gameObjTarget->UseDoorOrButton(0, true);
                     return;
                 }
-                sLog.outError("Spell::SendLoot unhandled locktype %u for GameObject trap (entry %u) for spell %u.", lockType, gameObjTarget->GetEntry(), m_spellInfo->Id);
+                sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Spell::SendLoot unhandled locktype %u for GameObject trap (entry %u) for spell %u.", lockType, gameObjTarget->GetEntry(), m_spellInfo->Id);
                 return;
             default:
-                sLog.outError("Spell::SendLoot unhandled GameObject type %u (entry %u) for spell %u.", gameObjTarget->GetGoType(), gameObjTarget->GetEntry(), m_spellInfo->Id);
+                sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Spell::SendLoot unhandled GameObject type %u (entry %u) for spell %u.", gameObjTarget->GetGoType(), gameObjTarget->GetEntry(), m_spellInfo->Id);
                 return;
         }
     }
@@ -2791,7 +2791,7 @@ void Spell::EffectOpenLock(SpellEffectIndex eff_idx)
 {
     if (!m_caster || m_caster->GetTypeId() != TYPEID_PLAYER)
     {
-        DEBUG_LOG("WORLD: Open Lock - No Player Caster!");
+        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WORLD: Open Lock - No Player Caster!");
         return;
     }
 
@@ -2839,7 +2839,7 @@ void Spell::EffectOpenLock(SpellEffectIndex eff_idx)
     }
     else
     {
-        DEBUG_LOG("WORLD: Open Lock - No GameObject/Item Target!");
+        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WORLD: Open Lock - No GameObject/Item Target!");
         return;
     }
 
@@ -3028,7 +3028,7 @@ void Spell::EffectSummon(SpellEffectIndex eff_idx)
     CreatureInfo const* cInfo = sCreatureStorage.LookupEntry<CreatureInfo>(petEntry);
     if (!cInfo)
     {
-        sLog.outErrorDb("Spell::DoSummon: creature entry %u not found for spell %u.", petEntry, m_spellInfo->Id);
+        sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Spell::DoSummon: creature entry %u not found for spell %u.", petEntry, m_spellInfo->Id);
         return;
     }
 
@@ -3057,7 +3057,7 @@ void Spell::EffectSummon(SpellEffectIndex eff_idx)
     uint32 petNumber = sObjectMgr.GeneratePetNumber();
     if (!spawnCreature->Create(map->GenerateLocalLowGuid(HIGHGUID_PET), pos, cInfo, petNumber))
     {
-        sLog.outErrorDb("Spell::EffectSummon: can't create creature with entry %u for spell %u", cInfo->entry, m_spellInfo->Id);
+        sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Spell::EffectSummon: can't create creature with entry %u for spell %u", cInfo->entry, m_spellInfo->Id);
         delete spawnCreature;
         return;
     }
@@ -3125,7 +3125,7 @@ void Spell::EffectLearnSpell(SpellEffectIndex eff_idx)
     uint32 spellToLearn = m_spellInfo->EffectTriggerSpell[eff_idx];
     player->LearnSpell(spellToLearn, false);
 
-    DEBUG_LOG("Spell: Player %u has learned spell %u from NpcGUID=%u", player->GetGUIDLow(), spellToLearn, m_caster->GetGUIDLow());
+    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Spell: Player %u has learned spell %u from NpcGUID=%u", player->GetGUIDLow(), spellToLearn, m_caster->GetGUIDLow());
 }
 
 void Spell::EffectDispel(SpellEffectIndex eff_idx)
@@ -3285,7 +3285,7 @@ void Spell::EffectDispel(SpellEffectIndex eff_idx)
                         heal_spell = 19735;
                         break;
                     default:
-                        DEBUG_LOG("Spell for Devour Magic %d not handled in Spell::EffectDispel", m_spellInfo->Id);
+                        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Spell for Devour Magic %d not handled in Spell::EffectDispel", m_spellInfo->Id);
                         break;
                 }
                 if (heal_spell)
@@ -3317,7 +3317,7 @@ void Spell::EffectDualWield(SpellEffectIndex /*eff_idx*/)
 void Spell::EffectPull(SpellEffectIndex /*eff_idx*/)
 {
     // TODO: create a proper pull towards distract spell center for distract
-    DEBUG_LOG("WORLD: Spell Effect DUMMY");
+    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WORLD: Spell Effect DUMMY");
 }
 
 void Spell::EffectDistract(SpellEffectIndex eff_idx)
@@ -3507,7 +3507,7 @@ void Spell::EffectSummonGuardian(SpellEffectIndex eff_idx)
     CreatureInfo const* cInfo = sCreatureStorage.LookupEntry<CreatureInfo>(petEntry);
     if (!cInfo)
     {
-        sLog.outErrorDb("Spell::DoSummonGuardian: creature entry %u not found for spell %u.", petEntry, m_spellInfo->Id);
+        sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Spell::DoSummonGuardian: creature entry %u not found for spell %u.", petEntry, m_spellInfo->Id);
         return;
     }
 
@@ -3593,7 +3593,7 @@ void Spell::EffectSummonGuardian(SpellEffectIndex eff_idx)
         uint32 petNumber = sObjectMgr.GeneratePetNumber();
         if (!spawnCreature->Create(map->GenerateLocalLowGuid(HIGHGUID_PET), pos, cInfo, petNumber))
         {
-            sLog.outError("Spell::DoSummonGuardian: can't create creature entry %u for spell %u.", petEntry, m_spellInfo->Id);
+            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Spell::DoSummonGuardian: can't create creature entry %u for spell %u.", petEntry, m_spellInfo->Id);
             delete spawnCreature;
             return;
         }
@@ -3699,7 +3699,7 @@ void Spell::EffectSummonPossessed(SpellEffectIndex eff_idx)
     Creature* pMinion = pCaster->SummonPossessedMinion(creatureEntry, m_spellInfo->Id, m_targets.m_destX, m_targets.m_destY, m_targets.m_destZ, m_caster->GetOrientation());
     if (!pMinion)
     {
-        sLog.outError("Spell::EffectSummonPossessed: creature entry %u for spell %u could not be summoned.", creatureEntry, m_spellInfo->Id);
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Spell::EffectSummonPossessed: creature entry %u for spell %u could not be summoned.", creatureEntry, m_spellInfo->Id);
         return;
     }
 
@@ -3745,7 +3745,7 @@ void Spell::EffectLearnSkill(SpellEffectIndex eff_idx)
     target->SetSkill(skillid, current, max, step);
 
     if (SpellCaster const* caster = GetCastingObject())
-        DEBUG_LOG("Spell: %s has learned skill %u (to maxlevel %u) from %s", target->GetGuidStr().c_str(), skillid, max, caster->GetGuidStr().c_str());
+        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Spell: %s has learned skill %u (to maxlevel %u) from %s", target->GetGuidStr().c_str(), skillid, max, caster->GetGuidStr().c_str());
 }
 
 void Spell::EffectAddHonor(SpellEffectIndex /*eff_idx*/)
@@ -3808,10 +3808,11 @@ void Spell::EffectEnchantItemPerm(SpellEffectIndex eff_idx)
 
     if (item_owner != p_caster && p_caster->GetSession()->GetSecurity() > SEC_PLAYER && sWorld.getConfig(CONFIG_BOOL_GM_LOG_TRADE))
     {
-        sLog.outCommand(p_caster->GetSession()->GetAccountId(), "GM %s (Account: %u) enchanting(perm): %s (Entry: %d) for player: %s (Account: %u)",
-                        p_caster->GetName(), p_caster->GetSession()->GetAccountId(),
-                        itemTarget->GetProto()->Name1, itemTarget->GetEntry(),
-                        item_owner->GetName(), item_owner->GetSession()->GetAccountId());
+        sLog.Player(p_caster->GetSession(), LOG_GM, LOG_LVL_BASIC,
+            "GM %s (Account: %u) enchanting(perm): %s (Entry: %d) for player: %s (Account: %u)",
+            p_caster->GetName(), p_caster->GetSession()->GetAccountId(),
+            itemTarget->GetProto()->Name1, itemTarget->GetEntry(),
+            item_owner->GetName(), item_owner->GetSession()->GetAccountId());
     }
 
     // remove old enchanting before applying new if equipped
@@ -3838,14 +3839,14 @@ void Spell::EffectEnchantItemTmp(SpellEffectIndex eff_idx)
 
     if (!enchant_id)
     {
-        sLog.outError("Spell %u Effect %u (SPELL_EFFECT_ENCHANT_ITEM_TEMPORARY) have 0 as enchanting id", m_spellInfo->Id, eff_idx);
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Spell %u Effect %u (SPELL_EFFECT_ENCHANT_ITEM_TEMPORARY) have 0 as enchanting id", m_spellInfo->Id, eff_idx);
         return;
     }
 
     SpellItemEnchantmentEntry const* pEnchant = sSpellItemEnchantmentStore.LookupEntry(enchant_id);
     if (!pEnchant)
     {
-        sLog.outError("Spell %u Effect %u (SPELL_EFFECT_ENCHANT_ITEM_TEMPORARY) have nonexistent enchanting id %u ", m_spellInfo->Id, eff_idx, enchant_id);
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Spell %u Effect %u (SPELL_EFFECT_ENCHANT_ITEM_TEMPORARY) have nonexistent enchanting id %u ", m_spellInfo->Id, eff_idx, enchant_id);
         return;
     }
 
@@ -3859,10 +3860,11 @@ void Spell::EffectEnchantItemTmp(SpellEffectIndex eff_idx)
 
     if (item_owner != p_caster && p_caster->GetSession()->GetSecurity() > SEC_PLAYER && sWorld.getConfig(CONFIG_BOOL_GM_LOG_TRADE))
     {
-        sLog.outCommand(p_caster->GetSession()->GetAccountId(), "GM %s (Account: %u) enchanting(temp): %s (Entry: %d) for player: %s (Account: %u)",
-                        p_caster->GetName(), p_caster->GetSession()->GetAccountId(),
-                        itemTarget->GetProto()->Name1, itemTarget->GetEntry(),
-                        item_owner->GetName(), item_owner->GetSession()->GetAccountId());
+        sLog.Player(p_caster->GetSession(), LOG_GM, LOG_LVL_BASIC,
+            "GM %s (Account: %u) enchanting(temp): %s (Entry: %d) for player: %s (Account: %u)",
+            p_caster->GetName(), p_caster->GetSession()->GetAccountId(),
+            itemTarget->GetProto()->Name1, itemTarget->GetEntry(),
+            item_owner->GetName(), item_owner->GetSession()->GetAccountId());
     }
 
 	// Everlook - Imbue Twisting
@@ -3920,7 +3922,7 @@ void Spell::EffectTameCreature(SpellEffectIndex /*eff_idx*/)
 
     if (!pet->InitStatsForLevel(creatureTarget->GetLevel()))
     {
-        sLog.outError("Pet::InitStatsForLevel() failed for creature (Entry: %u)!", creatureTarget->GetEntry());
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Pet::InitStatsForLevel() failed for creature (Entry: %u)!", creatureTarget->GetEntry());
         delete pet;
         return;
     }
@@ -3979,7 +3981,7 @@ ObjectGuid Unit::EffectSummonPet(uint32 spellId, uint32 petEntry, uint32 petLeve
     // == 0 in case call current pet, check only real summon case
     if (petEntry && !cInfo)
     {
-        sLog.outErrorDb("EffectSummonPet: creature entry %u not found for spell %u.", petEntry, spellId);
+        sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "EffectSummonPet: creature entry %u not found for spell %u.", petEntry, spellId);
         return ObjectGuid();
     }
 
@@ -4075,7 +4077,7 @@ ObjectGuid Unit::EffectSummonPet(uint32 spellId, uint32 petEntry, uint32 petLeve
 
     map->Add((Creature*)newSummon);
     SetPet(newSummon);
-    DEBUG_LOG("New Pet has guid %u", newSummon->GetGUIDLow());
+    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "New Pet has guid %u", newSummon->GetGUIDLow());
 
     if (Player* caster = ToPlayer())
     {
@@ -5646,8 +5648,8 @@ void Spell::EffectStuck(SpellEffectIndex /*eff_idx*/)
 
     Player* pTarget = (Player*)unitTarget;
 
-    DEBUG_LOG("Spell Effect: Stuck");
-    sLog.outInfo("Player %s (guid %u) used auto-unstuck feature at map %u (%f, %f, %f).", pTarget->GetName(), pTarget->GetGUIDLow(), m_caster->GetMapId(), m_caster->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ());
+    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Spell Effect: Stuck");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Player %s (guid %u) used auto-unstuck feature at map %u (%f, %f, %f).", pTarget->GetName(), pTarget->GetGUIDLow(), m_caster->GetMapId(), m_caster->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ());
 
     if (pTarget->IsTaxiFlying())
         return;
@@ -5688,7 +5690,7 @@ void Spell::EffectActivateObject(SpellEffectIndex eff_idx)
     switch (action)
     {
         case GameObjectActions::None:
-            sLog.outError("Spell::EffectActivateObject: Incorrect GameObjectActions::None action in spell %u", m_spellInfo->Id);
+            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Spell::EffectActivateObject: Incorrect GameObjectActions::None action in spell %u", m_spellInfo->Id);
             break;
         case GameObjectActions::AnimateCustom0:
             gameObjTarget->SendGameObjectCustomAnim(0);
@@ -5787,7 +5789,7 @@ void Spell::EffectActivateObject(SpellEffectIndex eff_idx)
             // No use cases, implementation unknown
             break;
         default:
-            sLog.outError("Spell::EffectActivateObject: Unhandled GameObjectActions action %u in spell %u", (uint32)action, m_spellInfo->Id);
+            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Spell::EffectActivateObject: Unhandled GameObjectActions action %u in spell %u", (uint32)action, m_spellInfo->Id);
             break;
     }
 }
@@ -5833,7 +5835,7 @@ void Spell::EffectSummonTotem(SpellEffectIndex eff_idx)
     CreatureInfo const* cinfo = ObjectMgr::GetCreatureTemplate(m_spellInfo->EffectMiscValue[eff_idx]);
     if (!cinfo)
     {
-        sLog.outErrorDb("Creature entry %u does not exist but used in spell %u totem summon.", m_spellInfo->EffectMiscValue[eff_idx], m_spellInfo->Id);
+        sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Creature entry %u does not exist but used in spell %u totem summon.", m_spellInfo->EffectMiscValue[eff_idx], m_spellInfo->Id);
         return;
     }
 
@@ -6331,7 +6333,7 @@ void Spell::EffectSummonCritter(SpellEffectIndex eff_idx)
     CreatureInfo const* cInfo = sCreatureStorage.LookupEntry<CreatureInfo>(petEntry);
     if (!cInfo)
     {
-        sLog.outErrorDb("Spell::DoSummonCritter: creature entry %u not found for spell %u.", petEntry, m_spellInfo->Id);
+        sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Spell::DoSummonCritter: creature entry %u not found for spell %u.", petEntry, m_spellInfo->Id);
         return;
     }
 
@@ -6359,7 +6361,7 @@ void Spell::EffectSummonCritter(SpellEffectIndex eff_idx)
     uint32 petNumber = sObjectMgr.GeneratePetNumber();
     if (!critter->Create(map->GenerateLocalLowGuid(HIGHGUID_PET), pos, cInfo, petNumber))
     {
-        sLog.outError("Spell::EffectSummonCritter, spellid %u: no such creature entry %u", m_spellInfo->Id, petEntry);
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Spell::EffectSummonCritter, spellid %u: no such creature entry %u", m_spellInfo->Id, petEntry);
         delete critter;
         return;
     }
@@ -6603,7 +6605,7 @@ void Spell::EffectTransmitted(SpellEffectIndex eff_idx)
 
     if (!goinfo)
     {
-        sLog.outErrorDb("Gameobject (Entry: %u) not exist and not created at spell (ID: %u) cast", name_id, m_spellInfo->Id);
+        sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Gameobject (Entry: %u) not exist and not created at spell (ID: %u) cast", name_id, m_spellInfo->Id);
         return;
     }
 
@@ -6725,7 +6727,7 @@ void Spell::EffectTransmitted(SpellEffectIndex eff_idx)
     pGameObj->SetUInt32Value(GAMEOBJECT_LEVEL, m_casterUnit->GetLevel());
     pGameObj->SetSpellId(m_spellInfo->Id);
 
-    DEBUG_LOG("AddObject at SpellEfects.cpp EffectTransmitted");
+    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "AddObject at SpellEfects.cpp EffectTransmitted");
     //m_casterUnit->AddGameObject(pGameObj);
     //m_ObjToDel.push_back(pGameObj);
 
@@ -6741,7 +6743,7 @@ void Spell::EffectTransmitted(SpellEffectIndex eff_idx)
 
 void Spell::EffectSkill(SpellEffectIndex /*eff_idx*/)
 {
-    DEBUG_LOG("WORLD: SkillEFFECT");
+    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WORLD: SkillEFFECT");
 }
 
 void Spell::EffectSummonDemon(SpellEffectIndex eff_idx)
@@ -6810,7 +6812,7 @@ void Spell::EffectSpiritHeal(SpellEffectIndex /*eff_idx*/)
 // remove insignia spell effect
 void Spell::EffectSkinPlayerCorpse(SpellEffectIndex eff_idx)
 {
-    DEBUG_LOG("Effect: SkinPlayerCorpse");
+    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Effect: SkinPlayerCorpse");
     Player* playerCaster = m_caster->ToPlayer();
     if (!playerCaster)
         return;
@@ -6823,7 +6825,7 @@ void Spell::EffectSkinPlayerCorpse(SpellEffectIndex eff_idx)
         ASSERT(corpseTarget);
         sObjectAccessor.ConvertCorpseForPlayer(corpseTarget->GetOwnerGuid(), playerCaster);
         playerCaster->SendLoot(corpseTarget->GetObjectGuid(), LOOT_INSIGNIA);
-        DEBUG_LOG("Effect SkinPlayerCorpse: corpse owner was not found");
+        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Effect SkinPlayerCorpse: corpse owner was not found");
         return;
     }
 
@@ -6857,11 +6859,11 @@ void Spell::EffectBind(SpellEffectIndex eff_idx)
     data << uint32(area_id);
     player->SendDirectMessage(&data);
 
-    DEBUG_LOG("New Home Position X is %f", loc.x);
-    DEBUG_LOG("New Home Position Y is %f", loc.y);
-    DEBUG_LOG("New Home Position Z is %f", loc.z);
-    DEBUG_LOG("New Home MapId is %u", loc.mapId);
-    DEBUG_LOG("New Home AreaId is %u", area_id);
+    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "New Home Position X is %f", loc.x);
+    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "New Home Position Y is %f", loc.y);
+    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "New Home Position Z is %f", loc.z);
+    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "New Home MapId is %u", loc.mapId);
+    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "New Home AreaId is %u", area_id);
 
     // zone update
     data.Initialize(SMSG_PLAYERBOUND, 8 + 4);
@@ -6872,12 +6874,12 @@ void Spell::EffectBind(SpellEffectIndex eff_idx)
 
 void Spell::EffectDespawnObject(SpellEffectIndex eff_idx)
 {
-    DEBUG_LOG("SPELL_EFFECT_DESPAWN_OBJECT");
+    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "SPELL_EFFECT_DESPAWN_OBJECT");
     if (!gameObjTarget)
         return;
     gameObjTarget->AddObjectToRemoveList();
 }
 void Spell::EffectNostalrius(SpellEffectIndex eff_idx)
 {
-    DEBUG_LOG("SPELL_EFFECT_NOSTALRIUS");
+    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "SPELL_EFFECT_NOSTALRIUS");
 }
