@@ -172,9 +172,9 @@ class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::m
 
         bool IsSmartLog(uint32 entry, uint32 guid) const;
 
-        uint32 GetConsoleLevel() const { return m_consoleLevel; }
-        uint32 GetFileLevel() const { return m_fileLevel; }
-        uint32 GetDbLevel() const { return m_dbLevel; }
+        LogLevel GetConsoleLevel() const { return m_consoleLevel; }
+        LogLevel GetFileLevel() const { return m_fileLevel; }
+        LogLevel GetDbLevel() const { return m_dbLevel; }
         void SetConsoleLevel(LogLevel level);
         void SetFileLevel(LogLevel level);
 

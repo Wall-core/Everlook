@@ -49,6 +49,10 @@ void AnticheatManager::LoadAnticheatData()
     sLog.Out(LOG_ANTICHEAT, LOG_LVL_MINIMAL, "");
     sLog.Out(LOG_ANTICHEAT, LOG_LVL_MINIMAL, "Loading warden modules...");
     sWardenModuleMgr;
+
+    sLog.Out(LOG_ANTICHEAT, LOG_LVL_MINIMAL, "");
+    sLog.Out(LOG_ANTICHEAT, LOG_LVL_MINIMAL, "Loading antispam system...");
+    sAntispamMgr.LoadFromDB();
 }
 
 MovementAnticheat* AnticheatManager::CreateAnticheatFor(Player* player)

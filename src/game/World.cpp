@@ -905,6 +905,29 @@ void World::LoadConfigSettings(bool reload)
     setConfigMinMax(CONFIG_UINT32_MAX_POINTS_PER_MVT_PACKET, "Movement.MaxPointsPerPacket", 80, 5, 10000);
     setConfigMinMax(CONFIG_UINT32_RELOCATION_VMAP_CHECK_TIMER, "Movement.RelocationVmapsCheckDelay", 0, 0, 2000);
 
+    // antispam
+    setConfig(CONFIG_BOOL_AC_ANTISPAM_ENABLED, "Antispam.Enable", false);
+    setConfig(CONFIG_BOOL_AC_ANTISPAM_SILENCE, "Antispam.Silence", false);
+    setConfig(CONFIG_UINT32_AC_ANTISPAM_MAX_LEVEL, "Antispam.MaxLevel", 25);
+    setConfig(CONFIG_UINT32_AC_ANTISPAM_NORMALIZE_MASK, "Antispam.NormalizeMask", 0);
+    setConfig(CONFIG_UINT32_AC_ANTISPAM_ANALYSIS_TIMER, "Antispam.AnalysisTimer", 30);
+    setConfig(CONFIG_UINT32_AC_ANTISPAM_MAX_RATE, "Antispam.MaxRate", 30);
+    setConfig(CONFIG_UINT32_AC_ANTISPAM_RATE_GRACE_PERIOD, "Antispam.RateGracePeriod", 45);
+    setConfig(CONFIG_UINT32_AC_ANTISPAM_MAX_UNIQUE_PERCENTAGE, "Antispam.MaxUniquePercentage", 90);
+    setConfig(CONFIG_UINT32_AC_ANTISPAM_MIN_UNIQUE_MESSAGES, "Antispam.MinUniqueMessages", 100);
+    setConfig(CONFIG_UINT32_AC_ANTISPAM_BLACKLIST_NOTIFY, "Antispam.BlacklistNotify", 5);
+    setConfig(CONFIG_UINT32_AC_ANTISPAM_BLACKLIST_NOTIFY_COOLDOWN, "Antispam.BlacklistNotifyCooldown", 10);
+    setConfig(CONFIG_UINT32_AC_ANTISPAM_BLACKLIST_SILENCE, "Antispam.BlacklistSilence", 15);
+    setConfig(CONFIG_UINT32_AC_ANTISPAM_BLACKLIST_LEVEL, "Antispam.BlacklistLevel", 5);
+    setConfig(CONFIG_UINT32_AC_ANTISPAM_CACHE_EXPIRATION, "Antispam.CacheExpiration", 3600);
+    setConfig(CONFIG_UINT32_AC_ANTISPAM_UNIQUENESS_THRESHOLD, "Antispam.UniquenessThreshold", 5);
+    setConfig(CONFIG_UINT32_AC_ANTISPAM_MIN_REPETITION_MESSAGES, "Antispam.MinRepetitionMessages", 5);
+    setConfig(CONFIG_UINT32_AC_ANTISPAM_REPETITION_NOTIFY, "Antispam.RepetitionNotify", 50);
+    setConfig(CONFIG_UINT32_AC_ANTISPAM_REPETITION_SILENCE, "Antispam.RepetitionSilence", 0);
+    setConfig(CONFIG_UINT32_AC_ANTISPAM_REPETITION_MOVEMENT_TIMEOUT, "Antispam.RepetitionMovementTimeout", 60);
+    setConfig(CONFIG_FLOAT_AC_ANTISPAM_REPETITION_DISTANCE_SCALE, "Antispam.RepetitionDistanceScale", 1.f);
+    setConfig(CONFIG_FLOAT_AC_ANTISPAM_REPETITION_TIME_SCALE, "Antispam.RepetitionTimeScale", 0.f);
+
     sPlayerBotMgr.LoadConfig();
     setConfig(CONFIG_BOOL_PLAYER_BOT_SHOW_IN_WHO_LIST, "PlayerBot.ShowInWhoList", false);
     setConfig(CONFIG_UINT32_PARTY_BOT_MAX_BOTS, "PartyBot.MaxBots", 0);
@@ -1130,6 +1153,9 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_BOOL_AC_MOVEMENT_CHEAT_FORBIDDEN_AREA_ENABLED, "Anticheat.ForbiddenArea.Enable", true);
     setConfig(CONFIG_UINT32_AC_MOVEMENT_CHEAT_FORBIDDEN_AREA_THRESHOLD, "Anticheat.ForbiddenArea.Threshold", 1);
     setConfig(CONFIG_UINT32_AC_MOVEMENT_CHEAT_FORBIDDEN_AREA_PENALTY, "Anticheat.ForbiddenArea.Penalty", CHEAT_ACTION_LOG | CHEAT_ACTION_REPORT_GMS);
+
+    // Antispam
+
 
     // Warden Anticheat
     setConfig(CONFIG_BOOL_AC_WARDEN_WIN_ENABLED, "Warden.WinEnabled", true);
@@ -2880,13 +2906,13 @@ void World::LogChat(WorldSession* sess, char const* type, std::string const& msg
     ASSERT(plr);
 
     if (target)
-        sLog.Player(sess, LOG_CHAT, LOG_LVL_MINIMAL, "[%s] %s:%u -> %s:%u : %s", type, plr->GetName(), plr->GetObjectGuid().GetCounter(), target->GetName(), target->GetObjectGuid().GetCounter(), msg.c_str());
+        sLog.Player(sess, LOG_CHAT, type, LOG_LVL_MINIMAL, "[%s] %s:%u -> %s:%u : %s", type, plr->GetName(), plr->GetObjectGuid().GetCounter(), target->GetName(), target->GetObjectGuid().GetCounter(), msg.c_str());
     else if (chanId)
-        sLog.Player(sess, LOG_CHAT, LOG_LVL_MINIMAL, "[%s:%u] %s:%u : %s", type, chanId, plr->GetName(), plr->GetObjectGuid().GetCounter(), msg.c_str());
+        sLog.Player(sess, LOG_CHAT, type, LOG_LVL_MINIMAL, "[%s:%u] %s:%u : %s", type, chanId, plr->GetName(), plr->GetObjectGuid().GetCounter(), msg.c_str());
     else if (chanStr)
-        sLog.Player(sess, LOG_CHAT, LOG_LVL_MINIMAL, "[%s:%s] %s:%u : %s", type, chanStr, plr->GetName(), plr->GetObjectGuid().GetCounter(), msg.c_str());
+        sLog.Player(sess, LOG_CHAT, type, LOG_LVL_MINIMAL, "[%s:%s] %s:%u : %s", type, chanStr, plr->GetName(), plr->GetObjectGuid().GetCounter(), msg.c_str());
     else
-        sLog.Player(sess, LOG_CHAT, LOG_LVL_MINIMAL, "[%s] %s:%u : %s", type, plr->GetName(), plr->GetObjectGuid().GetCounter(), msg.c_str());
+        sLog.Player(sess, LOG_CHAT, type, LOG_LVL_MINIMAL, "[%s] %s:%u : %s", type, plr->GetName(), plr->GetObjectGuid().GetCounter(), msg.c_str());
 }
 
 void World::LogTransaction(PlayerTransactionData const& data)

@@ -1100,18 +1100,17 @@ ChatCommand * ChatHandler::getCommandTable()
 
     static ChatCommand spamerCommandTable[] =
     {
-        { "mute",               SEC_MODERATOR,      true,  &ChatHandler::HandleSpamerMute,                "", nullptr },
-        { "unmute",             SEC_TICKETMASTER,   true,  &ChatHandler::HandleSpamerUnmute,              "", nullptr },
+        { "silence",            SEC_MODERATOR,      true,  &ChatHandler::HandleSpamerSilence,             "", nullptr },
+        { "unsilence",          SEC_TICKETMASTER,   true,  &ChatHandler::HandleSpamerUnsilence,           "", nullptr },
         { "list",               SEC_TICKETMASTER,   true,  &ChatHandler::HandleSpamerList,                "", nullptr },
         { nullptr,              0,                  false, nullptr,                                       "", nullptr }
     };
 
-    static ChatCommand AntiSpamCommandTable[] =
+    static ChatCommand antiSpamCommandTable[] =
     {
         { "add",                SEC_TICKETMASTER,   true,  &ChatHandler::HandleAntiSpamAdd,                "", nullptr },
-        { "remove",             SEC_BASIC_ADMIN,    true,  &ChatHandler::HandleAntiSpamRemove,             "", nullptr },
-        { "replace",            SEC_TICKETMASTER,   true,  &ChatHandler::HandleAntiSpamReplace,            "", nullptr },
-        { "removereplace",      SEC_BASIC_ADMIN,    true,  &ChatHandler::HandleAntiSpamRemoveReplace,      "", nullptr },
+        { "reload",             SEC_BASIC_ADMIN,    true,  &ChatHandler::HandleAntiSpamReload,             "", nullptr },
+        { "info",               SEC_MODERATOR,      true,  &ChatHandler::HandleAntiSpamInfo,               "", nullptr },
         { nullptr,              0,                  false, nullptr,                                        "", nullptr }
     };
 
@@ -1248,7 +1247,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "channel",        SEC_MODERATOR,      false, nullptr,                                        "", channelCommandTable},
         { "log",            SEC_GAMEMASTER,     true,  &ChatHandler::HandleViewLogCommand,             "", nullptr },
         { "spamer",         SEC_MODERATOR,      true, nullptr,                                         "", spamerCommandTable },
-        { "antispam",       SEC_TICKETMASTER,   true, nullptr,                                         "", AntiSpamCommandTable },
+        { "antispam",       SEC_TICKETMASTER,   true, nullptr,                                         "", antiSpamCommandTable },
         { "gold",           SEC_BASIC_ADMIN,    true, nullptr,                                         "", goldCommandTable },
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };

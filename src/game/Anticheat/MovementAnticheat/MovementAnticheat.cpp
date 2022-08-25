@@ -676,6 +676,11 @@ bool MovementAnticheat::HandlePositionTests(Player* pPlayer, MovementInfo& movem
         return false;
     }
 
+    auto const deltaX = GetLastMovementInfo().pos.x - movementInfo.pos.x;
+    auto const deltaY = GetLastMovementInfo().pos.y - movementInfo.pos.y;
+    
+    m_distanceTraveled += sqrtf(deltaX * deltaX + deltaY * deltaY);
+
     return true;
 #undef APPEND_CHEAT
 #undef HAS_CHEAT

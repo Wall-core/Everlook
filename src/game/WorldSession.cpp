@@ -73,7 +73,7 @@ WorldSession::WorldSession(uint32 id, WorldSocket *sock, AccountTypes sec, time_
     m_accountFlags(0), m_idleTime(WorldTimer::getMSTime()), _player(nullptr), m_socket(sock), m_security(sec), m_accountId(id), m_logoutTime(0), m_inQueue(false),
     m_playerLoading(false), m_playerLogout(false), m_playerRecentlyLogout(false), m_playerSave(false), m_sessionDbcLocale(sWorld.GetAvailableDbcLocale(locale)),
     m_sessionDbLocaleIndex(sObjectMgr.GetIndexForLocale(locale)), m_latency(0), m_tutorialState(TUTORIALDATA_UNCHANGED), m_warden(nullptr), m_cheatData(nullptr),
-    m_bot(nullptr), m_clientOS(CLIENT_OS_UNKNOWN), m_gameBuild(0),
+    m_bot(nullptr), m_clientOS(CLIENT_OS_UNKNOWN), m_gameBuild(0), m_antispam(sAntispamMgr.GetSession(id)),
     m_charactersCount(10), m_characterMaxLevel(0), m_lastPubChannelMsgTime(0), m_moveRejectTime(0), m_masterPlayer(nullptr)
 {
     if (sock)
@@ -892,15 +892,6 @@ MovementAnticheat* WorldSession::GetCheatData()
 void WorldSession::ProcessAnticheatAction(char const* detector, char const* reason, uint32 cheatAction, uint32 banSeconds)
 {
     char const* action = "";
-    if (cheatAction & CHEAT_ACTION_MUTE_PUB_CHANS)
-    {
-        action = "Muted from public channels.";
-        if (GetSecurity() == SEC_PLAYER)
-        {
-            LoginDatabase.PExecute("UPDATE `account` SET `flags` = `flags` | 0x%x WHERE `id` = %u", ACCOUNT_FLAG_MUTED_FROM_PUBLIC_CHANNELS, GetAccountId());
-            SetAccountFlags(GetAccountFlags() | ACCOUNT_FLAG_MUTED_FROM_PUBLIC_CHANNELS);
-        }
-    }
     if (cheatAction & CHEAT_ACTION_BAN_IP_ACCOUNT)
     {
         action = "Account+IP banned.";
@@ -945,7 +936,7 @@ void WorldSession::ProcessAnticheatAction(char const* detector, char const* reas
         (cheatAction >= CHEAT_ACTION_KICK))
     {
         std::stringstream oss;
-        oss << "|r[|c1f40af20Announce by |cffff0000" << detector << "|r]: Player " << _player->GetName() << ", Cheat: " << reason << ", Penalty: " << action;
+        oss << "|r[|c1f40af20Announce by |cffff0000Anticheat (" << detector << ")|r]: Player " << _player->GetName() << ", Cheat: " << reason << ", Penalty: " << action;
         sWorld.SendGlobalText(oss.str().c_str(), this);
     }
 
@@ -960,8 +951,8 @@ void WorldSession::ProcessAnticheatAction(char const* detector, char const* reas
         sWorld.SendGMText(LANG_GM_ANNOUNCE_COLOR, detector, oss.str().c_str());
     }
     
-    sLog.Player(this, LOG_ANTICHEAT, LOG_LVL_MINIMAL, "[%s] Player %s, Cheat %s, Penalty: %s",
-        detector, playerDesc.c_str(), reason, action);
+    sLog.Player(this, LOG_ANTICHEAT, detector, LOG_LVL_MINIMAL, "Cheat %s, Penalty: %s",
+        reason, action);
 }
 
 bool WorldSession::AllowPacket(uint16 opcode)

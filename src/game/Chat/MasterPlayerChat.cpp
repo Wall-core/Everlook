@@ -45,7 +45,9 @@ void MasterPlayer::Whisper(std::string const& text, uint32 language, MasterPlaye
 
     WorldPacket data;
     ChatHandler::BuildChatPacket(data, CHAT_MSG_WHISPER, text.c_str(), Language(language), GetChatTag(), GetObjectGuid(), GetName());
-    receiver->GetSession()->SendPacket(&data);
+
+    if (!m_session->IsSilenced())
+        receiver->GetSession()->SendPacket(&data);
 
     // not send confirmation for addon messages
     if (language != LANG_ADDON)

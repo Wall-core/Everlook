@@ -213,16 +213,15 @@ class ChatHandler
         bool HandleDebugItemEnchantCommand(int lootid, unsigned int simCount);
         bool HandleServiceDeleteCharacters(char* args);
 
-        bool HandleSpamerMute(char* args);
-        bool HandleSpamerUnmute(char* args);
+        bool HandleSpamerSilence(char* args);
+        bool HandleSpamerUnsilence(char* args);
         bool HandleSpamerList(char* args);
         bool HandleWhisperRestrictionCommand(char* args);
         bool HandleUnstuckCommand(char* args);
         bool HandleGoldRemoval(char* args);
         bool HandleAntiSpamAdd(char* args);
-        bool HandleAntiSpamRemove(char* args);
-        bool HandleAntiSpamReplace(char* args);
-        bool HandleAntiSpamRemoveReplace(char* args);
+        bool HandleAntiSpamReload(char* args);
+        bool HandleAntiSpamInfo(char* args);
 
         // Mmaps
         bool HandleMmap(char* args);
