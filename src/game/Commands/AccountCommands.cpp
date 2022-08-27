@@ -1047,7 +1047,7 @@ bool ChatHandler::HandleAnticheatCommand(char* args)
     return true;
 }
 
-bool ChatHandler::HandleSpamerMute(char* args)
+bool ChatHandler::HandleSpamerSilence(char* args)
 {
     if (!*args)
         return false;
@@ -1056,19 +1056,27 @@ bool ChatHandler::HandleSpamerMute(char* args)
     if (!cname)
         return false;
 
-    if (Player* player = ObjectAccessor::FindPlayerByName(cname))
+    std::string name{ cname };
+    if (!normalizePlayerName(name))
+        return false;
+
+    auto pData = sObjectMgr.GetPlayerDataByName(name);
+    if (!pData)
+        return false;
+
+    if (sAntispamMgr.IsSilenced(pData->uiAccount))
     {
-        if (AntispamInterface *a = sAnticheatMgr->GetAntispam())
-        {
-            a->mute(player->GetSession()->GetAccountId());
-            PSendSysMessage("Spamer %s was muted", cname);
-        }
+        SendSysMessage("Account is already silenced");
+        return true;
     }
+
+    sAntispamMgr.Silence(pData->uiAccount);
+    PSendSysMessage("Player %s (account %d) silenced", name.c_str(), pData->uiAccount);
 
     return true;
 }
 
-bool ChatHandler::HandleSpamerUnmute(char* args)
+bool ChatHandler::HandleSpamerUnsilence(char* args)
 {
     if (!*args)
         return false;
@@ -1077,22 +1085,35 @@ bool ChatHandler::HandleSpamerUnmute(char* args)
     if (!cname)
         return false;
 
-    if (Player* player = ObjectAccessor::FindPlayerByName(cname))
+    std::string name{ cname };
+    if (!normalizePlayerName(name))
+        return false;
+
+    auto pData = sObjectMgr.GetPlayerDataByName(name);
+    if (!pData)
+        return false;
+
+    if (!sAntispamMgr.IsSilenced(pData->uiAccount))
     {
-        if (AntispamInterface *a = sAnticheatMgr->GetAntispam())
-        {
-            a->unmute(player->GetSession()->GetAccountId());
-            PSendSysMessage("Spamer %s was unmuted", cname);
-        }
+        SendSysMessage("Account is not silenced");
+        return true;
     }
+
+    sAntispamMgr.Unsilence(pData->uiAccount);
+    PSendSysMessage("Player %s (account %d) unsilenced", name.c_str(), pData->uiAccount);
 
     return true;
 }
 
 bool ChatHandler::HandleSpamerList(char* args)
 {
-    if (AntispamInterface *a = sAnticheatMgr->GetAntispam())
-        a->showMuted(GetSession());
+    for (auto const& s : sWorld.GetAllSessions())
+        if (s.second->IsSilenced())
+            PSendSysMessage("Player %s (account %d) is silenced",
+                s.second->GetPlayerName(), s.second->GetAccountId());
+
+    SendSysMessage("End of list");
+
     return true;
 }
 

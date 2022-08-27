@@ -56,7 +56,6 @@ public:
     };
     void WhisperedBy(MasterPlayer* whisperer);
     uint32 CountWhispersTo(MasterPlayer* from, MasterPlayer* player);
-    bool CanWhisper(MasterPlayer* player) const;
     uint32 GetWhisperScore(MasterPlayer* from, MasterPlayer* player) const;
     uint32 CountDifferentWhispTargets() const { return m_whisperTargets.size(); }
 
@@ -91,6 +90,7 @@ class AccountMgr
         void SetSecurity(uint32 accId, AccountTypes sec);
 
         bool GetName(uint32 acc_id, std::string &name);
+        uint32 GetFlags(uint32 accountId) const;
         uint32 GetCharactersCount(uint32 acc_id);
         std::string CalculateShaPassHash(std::string& name, std::string& password);
 
@@ -115,10 +115,11 @@ class AccountMgr
         uint32 m_banlistUpdateTimer;
         std::map<std::string, uint32> m_ipBanned;
         std::map<uint32, uint32> m_accountBanned;
+        std::map<uint32, AccountPersistentData> m_accountPersistentData;
+
         typedef std::map<uint32 /* instanceId */, time_t /* enter time */> InstanceEnterTimesMap;
         typedef std::map<uint32 /* accountId */, InstanceEnterTimesMap> AccountInstanceEnterTimesMap;
         AccountInstanceEnterTimesMap m_instanceEnterTimes;
-        std::map<uint32, AccountPersistentData> m_accountPersistentData;
 };
 
 #define sAccountMgr MaNGOS::Singleton<AccountMgr>::Instance()

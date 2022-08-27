@@ -2081,6 +2081,87 @@ Anticheat.ForbiddenArea.Penalty = 3
 # Time to wait for movement change ack
 Movement.PendingAckResponseTime = 2000
 
+################################
+#
+# Anti spam system
+#
+################################
+
+# Enable anti spam system
+Antispam.Enable = 1
+
+# Automatically silence accounts identified as spammers
+Antispam.Silence = 0
+
+# Above this level, the spam filter will not be enforced
+Antispam.MaxLevel = 25
+
+# Normalization flags:
+# NF_CUT_COLOR                = 0x001,
+# NF_REPLACE_WORDS            = 0x002,
+# NF_CUT_SPACE                = 0x004,
+# NF_CUT_CTRL                 = 0x008,
+# NF_CUT_PUNCT                = 0x010,
+# NF_CUT_NUMBERS              = 0x020,
+# NF_REPLACE_UNICODE          = 0x040,
+# NF_REMOVE_REPEATS           = 0x080,
+# NF_REMOVE_NON_LATIN         = 0x100
+
+# Mask of normalization flags to use when normalizing messages prior to spam checks
+Antispam.NormalizeMask = 0
+
+# Time, in seconds, between each analysis of recent messages for spam
+Antispam.AnalysisTimer = 30
+
+# Maximum messages per minute to be considered spamming based solely on the outgoing rate.  Zero to disable.
+Antispam.MaxRate = 30
+
+# Grace period, in seconds, before messaging rate is checked against maximum allowed value for spam
+Antispam.RateGracePeriod = 45
+
+# Maximum percentage of whisper and mail recipients which can be unique before being considered spam.  Zero to disable.
+Antispam.MaxUniquePercentage = 90
+
+# Minimum whispers or mails before unique recipient percentage is considered.
+# WARNING: Zero does NOT disable this!  To disable, set Antispam.MaxUniquePercentage to zero
+Antispam.MinUniqueMessages = 100
+
+# How many occurrences of blacklist entries before a GM notification is sent out.  Zero to disable.
+Antispam.BlacklistNotify = 5
+
+# How many minutes must pass before the same session can trigger a second GM notification
+Antispam.BlacklistNotifyCooldown = 10
+
+# How many occurrences of blacklist entries before the account is considered a spammer and silenced (assuming automatic silence is enabled).  Zero to disable.
+Antispam.BlacklistSilence = 15
+
+# Minimum GM account level to allow in-game additions to antispam blacklist
+Antispam.BlacklistLevel = 5
+
+# How many seconds must pass before a cache entry can expire
+Antispam.CacheExpiration = 3600
+
+# Minimum distance between two strings before they are considered unique as defined by the Damerau-Levenshtein distance algorithm
+Antispam.UniquenessThreshold = 5
+
+# Minimum number of chat messages which must be sent before message repetition is considered
+Antispam.MinRepetitionMessages = 5
+
+# What percentage of messages must be repetitive before a GM notification is sent out.  Zero to disable.
+Antispam.RepetitionNotify = 50
+
+# What percentage of messages must be repetitive before the account is silenced.  Zero to disable.
+Antispam.RepetitionSilence = 0
+
+# By what factor should distance traveled (in yards) reduce the weight of message repetition.  0.0 for no adjustment.
+Antispam.RepetitionDistanceScale = 1.0
+
+# By what factor should time-connected (in seconds) increase the weight of message repetition.  0.0 for no adjustment.
+Antispam.RepetitionTimeScale = 0.0
+
+# How many seconds must pass before total movement distance is ignored.  Zero to disable.
+Antispam.RepetitionMovementTimeout = 60
+
 ###################################################################################################################
 # GAME MASTER SETTINGS
 #

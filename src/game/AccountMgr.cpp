@@ -285,6 +285,19 @@ bool AccountMgr::GetName(uint32 acc_id, std::string &name)
     return false;
 }
 
+uint32 AccountMgr::GetFlags(uint32 accountId) const
+{
+    QueryResult* result = LoginDatabase.PQuery("SELECT flags FROM account WHERE id = '%u'", accountId);
+
+    uint32 ret = 0;
+
+    if (result)
+        ret = (*result)[0].GetUInt32();
+
+    delete result;
+    return ret;
+}
+
 uint32 AccountMgr::GetCharactersCount(uint32 acc_id)
 {
     // check character count
@@ -518,11 +531,6 @@ uint32 AccountPersistentData::CountWhispersTo(MasterPlayer* from, MasterPlayer* 
     if (data.whispers_count == 1)
         data.score = GetWhisperScore(from, player);
     return data.whispers_count-1;
-}
-
-bool AccountPersistentData::CanWhisper(MasterPlayer* player) const
-{
-    return sAnticheatMgr->CanWhisper(*this, player);
 }
 
 uint32 AccountPersistentData::GetWhisperScore(MasterPlayer* from, MasterPlayer* target) const

@@ -38,7 +38,6 @@ enum CheatAction
     CHEAT_ACTION_KICK             = 0x08,
     CHEAT_ACTION_BAN_ACCOUNT      = 0x10,
     CHEAT_ACTION_BAN_IP_ACCOUNT   = 0x20,
-    CHEAT_ACTION_MUTE_PUB_CHANS   = 0x40, // Mutes the account from public channels
     CHEAT_MAX_ACTIONS,
 };
 
@@ -54,29 +53,35 @@ class MovementAnticheat;
 class AccountPersistentData;
 struct AreaEntry;
 
-class AntispamInterface
-{
-public:
-    virtual ~AntispamInterface() {}
-
-    virtual void loadData() {}
-    virtual void loadConfig() {}
-
-    virtual std::string normalizeMessage(std::string const& msg, uint32 mask = 0) { return msg; }
-    virtual bool filterMessage(std::string const& msg) { return 0; }
-
-    virtual void addMessage(std::string const& msg, uint32 type, PlayerPointer from, PlayerPointer to) {}
-
-    virtual bool isMuted(uint32 accountId, bool checkChatType = false, uint32 chatType = 0) const { return false; }
-    virtual void mute(uint32 accountId) {}
-    virtual void unmute(uint32 accountId) {}
-    virtual void showMuted(WorldSession* session) {}
-};
-
 #ifdef USE_ANTICHEAT
 #include "WardenAnticheat/Warden.hpp"
 #include "MovementAnticheat/MovementAnticheat.h"
+#include "Antispam/Antispam.hpp"
+#include "Antispam/AntispamMgr.hpp"
+
+using Antispam = NamreebAnticheat::Antispam;
 #else
+class Antispam
+{
+private:
+    const uint32 _account;
+public:
+    Antispam(uint32 account) : _account(account) {}
+
+    uint32 GetBlacklistCount() const { return 0; }
+    uint32 GetAccount() const { return _account; }
+    std::string GetInfo() const { return ""; }
+
+    void Whisper(const std::string& msg, const ObjectGuid& to) {}
+    void Say(const std::string& msg) {}
+    void Yell(const std::string& msg) {}
+    void Channel(const std::string& msg) {}
+    void Mail(const std::string& subject, const std::string& body, const ObjectGuid& to) {}
+
+    void Analyze() {}
+
+};
+
 class Warden
 {
 public:
@@ -142,10 +147,6 @@ public:
         return new MovementAnticheat();
     }
 #endif
-
-    // Antispam wrappers
-    AntispamInterface* GetAntispam() const { return nullptr; }
-    bool CanWhisper(AccountPersistentData const& data, MasterPlayer* player) { return true; }
 
     static AnticheatManager* instance();
 };

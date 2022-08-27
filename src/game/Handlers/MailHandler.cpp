@@ -178,7 +178,7 @@ void WorldSession::HandleSendMail(WorldPacket& recv_data)
     // client interface limit
     if (req->COD > 100000000)
     {
-        ProcessAnticheatAction("PassiveAnticheat", "Attempt to send more than 10000g COD mail", CHEAT_ACTION_LOG | CHEAT_ACTION_REPORT_GMS);
+        ProcessAnticheatAction("Passive", "Attempt to send more than 10000g COD mail", CHEAT_ACTION_LOG | CHEAT_ACTION_REPORT_GMS);
         delete req;
         return;
     }

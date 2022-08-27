@@ -449,7 +449,7 @@ void WorldSession::HandleItemQuerySingleOpcode(WorldPacket& recv_data)
         {
             std::stringstream oss;
             oss << "Requested info for undiscovered item " << pProto->ItemId;
-            ProcessAnticheatAction("PassiveAnticheat", oss.str().c_str(), CHEAT_ACTION_LOG);
+            ProcessAnticheatAction("Passive", oss.str().c_str(), CHEAT_ACTION_LOG);
         }
         
         WorldPacket data(SMSG_ITEM_QUERY_SINGLE_RESPONSE, 4);
