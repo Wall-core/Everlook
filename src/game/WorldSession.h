@@ -47,10 +47,16 @@ class LoginQueryHolder;
 class CharacterHandler;
 class MovementInfo;
 class WorldSession;
-class Warden;
-class MovementAnticheat;
 class BigNumber;
 class MasterPlayer;
+class MovementAnticheat;
+class Warden;
+namespace NamreebAnticheat
+{
+class Antispam;
+};
+
+using Antispam = NamreebAnticheat::Antispam;
 
 struct OpcodeHandler;
 struct PlayerBotEntry;
@@ -191,7 +197,7 @@ enum PacketProcessing
 
 enum AccountFlags
 {
-    ACCOUNT_FLAG_MUTED_FROM_PUBLIC_CHANNELS     = 0x1,
+    ACCOUNT_FLAG_SILENCED                       = 0x1,
 };
 
 //class to deal with packet processing
@@ -333,10 +339,12 @@ class WorldSession
         Warden* GetWarden() const { return m_warden; }
         void InitCheatData(Player* pPlayer);
         MovementAnticheat* GetCheatData();
+        std::shared_ptr<Antispam> GetAntispam() const { return m_antispam; }
         void ProcessAnticheatAction(char const* detector, char const* reason, uint32 action, uint32 banTime = 0 /* Perm ban */);
         uint32 GetFingerprint() const { return 0; } // TODO
         void CleanupFingerprintHistory() {} // TODO
         bool HasClientMovementControl() const { return !m_clientMoverGuid.IsEmpty(); }
+        bool IsSilenced() const { return (GetAccountFlags() & ACCOUNT_FLAG_SILENCED) != 0; }
         
         void SetReceivedWhoRequest(bool v) { m_who_recvd = v; }
         bool ReceivedWhoRequest() const { return m_who_recvd; }
@@ -820,6 +828,7 @@ class WorldSession
 
         Warden* m_warden;
         MovementAnticheat* m_cheatData;
+        std::shared_ptr<Antispam> m_antispam;
 
         Player* _player;
         ObjectGuid m_clientMoverGuid;

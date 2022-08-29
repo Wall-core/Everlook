@@ -77,6 +77,8 @@ class MovementAnticheat
 
         bool IsInKnockBack() const { return m_knockBack; }
 
+        float DistanceTraveled() const { return m_distanceTraveled; }
+
         void OnKnockBack(Player* pPlayer, float speedxy, float speedz, float cos, float sin);
         void OnUnreachable(Unit* attacker);
         void OnExplore(AreaEntry const* pArea);
@@ -116,6 +118,8 @@ private:
         uint32 m_maxClientDesync = 0;
         float m_overspeedDistance = 0.0f;
         float m_maxOverspeedDistance = 0.0f;
+
+        float m_distanceTraveled = 0.0f;
 
         Player* me = nullptr; // current player object that checks run on, changes on mind control
         WorldSession* const m_session = nullptr; // session to which the cheat data belongs, does not change

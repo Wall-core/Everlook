@@ -218,8 +218,8 @@ void AccountMgr::Load()
         BarGoLink bar(1);
         bar.step();
 
-        sLog.outString();
-        sLog.outString(">> Loaded 0 GM ranks");
+        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "");
+        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, ">> Loaded 0 GM ranks");
         return;
     }
 
@@ -249,9 +249,9 @@ void AccountMgr::Load()
         }
     } while (result->NextRow());
 
-    sLog.outString();
-    sLog.outString(">> %u GM ranks loaded for realm %u", m_accountSecurity.size(), realmID);
-    sLog.outString();
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, ">> %u GM ranks loaded for realm %u", m_accountSecurity.size(), realmID);
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "");
     LoadAccountBanList();
     LoadIPBanList();
 }
@@ -283,6 +283,19 @@ bool AccountMgr::GetName(uint32 acc_id, std::string &name)
     }
 
     return false;
+}
+
+uint32 AccountMgr::GetFlags(uint32 accountId) const
+{
+    QueryResult* result = LoginDatabase.PQuery("SELECT flags FROM account WHERE id = '%u'", accountId);
+
+    uint32 ret = 0;
+
+    if (result)
+        ret = (*result)[0].GetUInt32();
+
+    delete result;
+    return ret;
 }
 
 uint32 AccountMgr::GetCharactersCount(uint32 acc_id)
@@ -377,7 +390,7 @@ void AccountMgr::Update(uint32 diff)
 void AccountMgr::LoadIPBanList(bool silent)
 {
     if (!silent)
-        sLog.outString("Loading ip_banned ...");
+        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Loading ip_banned ...");
 
     std::unique_ptr<QueryResult> banresult(LoginDatabase.PQuery("SELECT `ip`, `unbandate`, `bandate` FROM `ip_banned` WHERE (`unbandate` > UNIX_TIMESTAMP() OR `bandate` = `unbandate`)"));
     
@@ -388,8 +401,8 @@ void AccountMgr::LoadIPBanList(bool silent)
             BarGoLink bar(1);
             bar.step();
 
-            sLog.outString();
-            sLog.outString(">> Loaded 0 ip bans");
+            sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "");
+            sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, ">> Loaded 0 ip bans");
         }
         return;
     }
@@ -410,15 +423,15 @@ void AccountMgr::LoadIPBanList(bool silent)
 
     if (!silent)
     {
-        sLog.outString();
-        sLog.outString(">> Loaded %u ip bans", m_ipBanned.size());
+        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "");
+        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, ">> Loaded %u ip bans", m_ipBanned.size());
     }
 }
 
 void AccountMgr::LoadAccountBanList(bool silent)
 {
     if (!silent)
-        sLog.outString("Loading account_banned ...");
+        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Loading account_banned ...");
 
     std::unique_ptr<QueryResult> banresult(LoginDatabase.PQuery("SELECT `id`, `unbandate`, `bandate` FROM `account_banned` WHERE `active` = 1 AND (`unbandate` > UNIX_TIMESTAMP() OR `bandate` = `unbandate`)"));
     
@@ -429,8 +442,8 @@ void AccountMgr::LoadAccountBanList(bool silent)
             BarGoLink bar(1);
             bar.step();
 
-            sLog.outString();
-            sLog.outString(">> Loaded 0 account bans");
+            sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "");
+            sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, ">> Loaded 0 account bans");
         }
         return;
     }
@@ -451,8 +464,8 @@ void AccountMgr::LoadAccountBanList(bool silent)
 
     if (!silent)
     {
-        sLog.outString();
-        sLog.outString(">> Loaded %u account bans", m_accountBanned.size());
+        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "");
+        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, ">> Loaded %u account bans", m_accountBanned.size());
     }
 }
 
@@ -518,11 +531,6 @@ uint32 AccountPersistentData::CountWhispersTo(MasterPlayer* from, MasterPlayer* 
     if (data.whispers_count == 1)
         data.score = GetWhisperScore(from, player);
     return data.whispers_count-1;
-}
-
-bool AccountPersistentData::CanWhisper(MasterPlayer* player) const
-{
-    return sAnticheatMgr->CanWhisper(*this, player);
 }
 
 uint32 AccountPersistentData::GetWhisperScore(MasterPlayer* from, MasterPlayer* target) const

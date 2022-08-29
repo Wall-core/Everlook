@@ -137,95 +137,57 @@ bool ChatHandler::HandleSaveAllCommand(char* /*args*/)
 
 bool ChatHandler::HandleAntiSpamAdd(char* args)
 {
-    if (!*args || !sAnticheatMgr->GetAntispam())
+    if (!*args)
         return false;
 
     char* wordStr = ExtractQuotedArg(&args);
     if (!wordStr)
     {
-        PSendSysMessage("[AntiSpam]: No word given.");
-        return false;
-    }
-    std::string word = wordStr;
-
-    uint32 ban = 0;
-    if (!ExtractUInt32(&args, ban))
-    {
-        PSendSysMessage("[AntiSpam]: No ban value given.");
+        SendSysMessage("[AntiSpam]: No word given");
         return false;
     }
 
-    LoginDatabase.PExecute("INSERT INTO `antispam_blacklist` (`word`, `ban`) VALUES('%s', %u);", word.c_str(), ban);
-    PSendSysMessage("[AntiSpam]: Word %s with ban value %u added to antispam_blacklist table.", word.c_str(), ban);
+    sAntispamMgr.BlacklistAdd(wordStr);
+
+    SendSysMessage("[AntiSpam]: Blacklist updated");
 
     return true;
 }
 
-bool ChatHandler::HandleAntiSpamRemove(char* args)
+bool ChatHandler::HandleAntiSpamReload(char* args)
 {
-    if (!*args || !sAnticheatMgr->GetAntispam())
-        return false;
-
-    char* wordStr = ExtractQuotedArg(&args);
-    if (!wordStr)
-    {
-        PSendSysMessage("[AntiSpam]: No word given.");
-        return false;
-    }
-    std::string word = wordStr;
-
-    LoginDatabase.PExecute("DELETE FROM `antispam_blacklist` WHERE `word`='%s';", word.c_str());
-
-    PSendSysMessage("[AntiSpam]: Word %s has been removed from antispam_blacklist table.", word.c_str());
-
+    sAntispamMgr.LoadFromDB();
+    SendSysMessage("[AntiSpam]: Reloaded");
     return true;
 }
 
-bool ChatHandler::HandleAntiSpamReplace(char* args)
+bool ChatHandler::HandleAntiSpamInfo(char* args)
 {
-    if (!*args || !sAnticheatMgr->GetAntispam())
+    Player* target = nullptr;
+    ObjectGuid playerGuid;
+
+    if (!ExtractPlayerTarget(&args, &target, &playerGuid))
         return false;
 
-    char* fromStr = ExtractQuotedArg(&args);
-    if (!fromStr)
+    std::shared_ptr<Antispam> antispam;
+
+    if (target)
+        antispam = target->GetSession()->GetAntispam();
+
+    if (!antispam)
     {
-        PSendSysMessage("[AntiSpam]: No from given.");
-        return false;
+        // if we reach here, lookup cached information instead
+        auto const playerData = sObjectMgr.GetPlayerDataByGUID(playerGuid.GetCounter());
+
+        antispam = sAntispamMgr.CheckCache(playerData->uiAccount);
     }
 
-    std::string from = fromStr;
-
-    char* toStr = ExtractQuotedArg(&args);
-    if (!toStr)
-    {
-        PSendSysMessage("[AntiSpam]: No to given.");
-        return false;
-    }
-
-    std::string to = toStr;
-
-    LoginDatabase.PExecute("INSERT INTO `antispam_replacement` (`from`, `to`) VALUES('%s', '%s');", from.c_str(), to.c_str());
-    PSendSysMessage("[AntiSpam]: Added replace letter %s to %s added to antispam_replacement table.", from.c_str(), to.c_str());
+    if (!antispam)
+        SendSysMessage("No antispam info available");
+    else
+        SendSysMessage(antispam->GetInfo().c_str());
 
     return true;
-}
-
-bool ChatHandler::HandleAntiSpamRemoveReplace(char* args)
-{
-    if (!*args || !sAnticheatMgr->GetAntispam())
-        return false;
-
-    char* fromStr = ExtractQuotedArg(&args);
-    if (!fromStr)
-    {
-        PSendSysMessage("[AntiSpam]: No from given.");
-        return false;
-    }
-
-    std::string from = fromStr;
-
-    LoginDatabase.PExecute("DELETE FROM `antispam_replacement` WHERE `from`='%s';", from.c_str());
-    PSendSysMessage("[AntiSpam]: From word %s is removed from antispam_replacement table.", from.c_str());
 
     return true;
 }
@@ -574,11 +536,12 @@ bool ChatHandler::HandleServerLogLevelCommand(char *args)
 {
     if (!*args)
     {
-        PSendSysMessage("Log level: %u", sLog.GetLogLevel());
+        PSendSysMessage("Console log level: %u File log level: %u",
+            sLog.GetConsoleLevel(), sLog.GetFileLevel());
         return true;
     }
 
-    sLog.SetLogLevel(args);
+    sLog.SetConsoleLevel(LogLevel(atoi(args)));
     return true;
 }
 
@@ -912,7 +875,7 @@ bool ChatHandler::HandleReloadAllAreaCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadAllLootCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Loot Tables...");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Loot Tables...");
     LoadLootTables();
     SendSysMessage("DB tables `*_loot_template` reloaded.");
     return true;
@@ -933,7 +896,7 @@ bool ChatHandler::HandleReloadAllQuestCommand(char* /*args*/)
     HandleReloadQuestAreaTriggersCommand((char*)"a");
     HandleReloadQuestTemplateCommand((char*)"a");
 
-    sLog.outString("Re-Loading Quests Relations...");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Quests Relations...");
     sObjectMgr.LoadQuestRelations();
     SendSysMessage("DB tables `*_questrelation` and `*_involvedrelation` reloaded.");
     return true;
@@ -948,7 +911,7 @@ bool ChatHandler::HandleReloadAllScriptsCommand(char* /*args*/)
         return false;
     }
 
-    sLog.outString("Re-Loading Scripts...");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Scripts...");
     HandleReloadGameObjectScriptsCommand((char*)"a");
     HandleReloadGossipScriptsCommand((char*)"a");
     HandleReloadGenericScriptsCommand((char*)"a");
@@ -1011,7 +974,7 @@ bool ChatHandler::HandleReloadAllLocalesCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadConfigCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading config settings...");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading config settings...");
     sWorld.LoadConfigSettings(true);
     SendSysMessage("World config settings reloaded.");
     return true;
@@ -1019,7 +982,7 @@ bool ChatHandler::HandleReloadConfigCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadAreaTriggerTavernCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Tavern Area Triggers...");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Tavern Area Triggers...");
     sObjectMgr.LoadTavernAreaTriggers();
     SendSysMessage("DB table `areatrigger_tavern` reloaded.");
     return true;
@@ -1027,7 +990,7 @@ bool ChatHandler::HandleReloadAreaTriggerTavernCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadAreaTriggerTeleportCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading AreaTrigger teleport definitions...");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading AreaTrigger teleport definitions...");
     sObjectMgr.LoadAreaTriggerTeleports();
     SendSysMessage("DB table `areatrigger_teleport` reloaded.");
     return true;
@@ -1042,7 +1005,7 @@ bool ChatHandler::HandleReloadCommandCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadCreatureSpellsCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Creature Spells... (`creature_spells`)");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Creature Spells... (`creature_spells`)");
     sObjectMgr.LoadCreatureSpells();
     SendSysMessage("DB table `creature_spells` reloaded.");
     return true;
@@ -1050,7 +1013,7 @@ bool ChatHandler::HandleReloadCreatureSpellsCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadCreatureQuestRelationsCommand(char* /*args*/)
 {
-    sLog.outString("Loading Quests Relations... (`creature_questrelation`)");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Loading Quests Relations... (`creature_questrelation`)");
     sObjectMgr.LoadCreatureQuestRelations();
     SendSysMessage("DB table `creature_questrelation` (creature quest givers) reloaded.");
     return true;
@@ -1058,7 +1021,7 @@ bool ChatHandler::HandleReloadCreatureQuestRelationsCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadCreatureQuestInvRelationsCommand(char* /*args*/)
 {
-    sLog.outString("Loading Quests Relations... (`creature_involvedrelation`)");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Loading Quests Relations... (`creature_involvedrelation`)");
     sObjectMgr.LoadCreatureInvolvedRelations();
     SendSysMessage("DB table `creature_involvedrelation` (creature quest takers) reloaded.");
     return true;
@@ -1066,7 +1029,7 @@ bool ChatHandler::HandleReloadCreatureQuestInvRelationsCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadGossipMenuCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading `gossip_menu` Table!");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading `gossip_menu` Table!");
     std::set<uint32> gossipScriptSet;
     for (const auto& itr : sGossipScripts)
         gossipScriptSet.insert(itr.first);
@@ -1077,7 +1040,7 @@ bool ChatHandler::HandleReloadGossipMenuCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadGossipMenuOptionCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading `gossip_menu_option` Table!");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading `gossip_menu_option` Table!");
     std::set<uint32> gossipScriptSet;
     for (const auto& itr : sGossipScripts)
         gossipScriptSet.insert(itr.first);
@@ -1096,7 +1059,7 @@ bool ChatHandler::HandleReloadGossipScriptsCommand(char* args)
     }
 
     if (*args != 'a')
-        sLog.outString("Re-Loading Scripts from `gossip_scripts`...");
+        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Scripts from `gossip_scripts`...");
 
     sScriptMgr.LoadGossipScripts();
 
@@ -1108,7 +1071,7 @@ bool ChatHandler::HandleReloadGossipScriptsCommand(char* args)
 
 bool ChatHandler::HandleReloadGOQuestRelationsCommand(char* /*args*/)
 {
-    sLog.outString("Loading Quests Relations... (`gameobject_questrelation`)");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Loading Quests Relations... (`gameobject_questrelation`)");
     sObjectMgr.LoadGameobjectQuestRelations();
     SendSysMessage("DB table `gameobject_questrelation` (gameobject quest givers) reloaded.");
     return true;
@@ -1116,7 +1079,7 @@ bool ChatHandler::HandleReloadGOQuestRelationsCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadGORequirementsCommand(char* /*args*/)
 {
-    sLog.outString("Loading Game Objects requirements... (`gameobject_requirement`)");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Loading Game Objects requirements... (`gameobject_requirement`)");
     sObjectMgr.LoadGameobjectsRequirements();
     SendSysMessage("DB table `gameobject_requirement` (Game Objects requirements) reloaded.");
     return true;
@@ -1124,7 +1087,7 @@ bool ChatHandler::HandleReloadGORequirementsCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadGOQuestInvRelationsCommand(char* /*args*/)
 {
-    sLog.outString("Loading Quests Relations... (`gameobject_involvedrelation`)");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Loading Quests Relations... (`gameobject_involvedrelation`)");
     sObjectMgr.LoadGameobjectInvolvedRelations();
     SendSysMessage("DB table `gameobject_involvedrelation` (gameobject quest takers) reloaded.");
     return true;
@@ -1132,7 +1095,7 @@ bool ChatHandler::HandleReloadGOQuestInvRelationsCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadQuestAreaTriggersCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Quest Area Triggers...");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Quest Area Triggers...");
     sObjectMgr.LoadQuestAreaTriggers();
     SendSysMessage("DB table `areatrigger_involvedrelation` (quest area triggers) reloaded.");
     return true;
@@ -1140,12 +1103,12 @@ bool ChatHandler::HandleReloadQuestAreaTriggersCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadQuestTemplateCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Quest Templates...");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Quest Templates...");
     sObjectMgr.LoadQuests();
     SendSysMessage("DB table `quest_template` (quest definitions) reloaded.");
 
     /// dependent also from `gameobject` but this table not reloaded anyway
-    sLog.outString("Re-Loading GameObjects for quests...");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading GameObjects for quests...");
     sObjectMgr.LoadGameObjectForQuests();
     SendSysMessage("Data GameObjects for quests reloaded.");
     return true;
@@ -1153,7 +1116,7 @@ bool ChatHandler::HandleReloadQuestTemplateCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadQuestGreetingCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Quest Greetings...");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Quest Greetings...");
     sObjectMgr.LoadQuestGreetings();
     SendSysMessage("DB table `quest_greeting` reloaded.");
     return true;
@@ -1161,7 +1124,7 @@ bool ChatHandler::HandleReloadQuestGreetingCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadTrainerGreetingCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Trainer Greetings...");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Trainer Greetings...");
     sObjectMgr.LoadTrainerGreetings();
     SendSysMessage("DB table `npc_trainer_greeting` reloaded.");
     return true;
@@ -1169,7 +1132,7 @@ bool ChatHandler::HandleReloadTrainerGreetingCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadLootTemplatesCreatureCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Loot Tables... (`creature_loot_template`)");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Loot Tables... (`creature_loot_template`)");
     LoadLootTemplates_Creature();
     LootTemplates_Creature.CheckLootRefs();
     SendSysMessage("DB table `creature_loot_template` reloaded.");
@@ -1178,7 +1141,7 @@ bool ChatHandler::HandleReloadLootTemplatesCreatureCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadLootTemplatesDisenchantCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Loot Tables... (`disenchant_loot_template`)");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Loot Tables... (`disenchant_loot_template`)");
     LoadLootTemplates_Disenchant();
     LootTemplates_Disenchant.CheckLootRefs();
     SendSysMessage("DB table `disenchant_loot_template` reloaded.");
@@ -1187,7 +1150,7 @@ bool ChatHandler::HandleReloadLootTemplatesDisenchantCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadLootTemplatesFishingCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Loot Tables... (`fishing_loot_template`)");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Loot Tables... (`fishing_loot_template`)");
     LoadLootTemplates_Fishing();
     LootTemplates_Fishing.CheckLootRefs();
     SendSysMessage("DB table `fishing_loot_template` reloaded.");
@@ -1196,7 +1159,7 @@ bool ChatHandler::HandleReloadLootTemplatesFishingCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadLootTemplatesGameobjectCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Loot Tables... (`gameobject_loot_template`)");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Loot Tables... (`gameobject_loot_template`)");
     LoadLootTemplates_Gameobject();
     LootTemplates_Gameobject.CheckLootRefs();
     SendSysMessage("DB table `gameobject_loot_template` reloaded.");
@@ -1205,7 +1168,7 @@ bool ChatHandler::HandleReloadLootTemplatesGameobjectCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadLootTemplatesItemCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Loot Tables... (`item_loot_template`)");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Loot Tables... (`item_loot_template`)");
     LoadLootTemplates_Item();
     LootTemplates_Item.CheckLootRefs();
     SendSysMessage("DB table `item_loot_template` reloaded.");
@@ -1214,7 +1177,7 @@ bool ChatHandler::HandleReloadLootTemplatesItemCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadLootTemplatesPickpocketingCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Loot Tables... (`pickpocketing_loot_template`)");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Loot Tables... (`pickpocketing_loot_template`)");
     LoadLootTemplates_Pickpocketing();
     LootTemplates_Pickpocketing.CheckLootRefs();
     SendSysMessage("DB table `pickpocketing_loot_template` reloaded.");
@@ -1223,7 +1186,7 @@ bool ChatHandler::HandleReloadLootTemplatesPickpocketingCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadLootTemplatesMailCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Loot Tables... (`mail_loot_template`)");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Loot Tables... (`mail_loot_template`)");
     LoadLootTemplates_Mail();
     LootTemplates_Mail.CheckLootRefs();
     SendSysMessage("DB table `mail_loot_template` reloaded.");
@@ -1232,7 +1195,7 @@ bool ChatHandler::HandleReloadLootTemplatesMailCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadLootTemplatesReferenceCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Loot Tables... (`reference_loot_template`)");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Loot Tables... (`reference_loot_template`)");
     LoadLootTemplates_Reference();
     SendSysMessage("DB table `reference_loot_template` reloaded.");
     return true;
@@ -1240,7 +1203,7 @@ bool ChatHandler::HandleReloadLootTemplatesReferenceCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadLootTemplatesSkinningCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Loot Tables... (`skinning_loot_template`)");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Loot Tables... (`skinning_loot_template`)");
     LoadLootTemplates_Skinning();
     LootTemplates_Skinning.CheckLootRefs();
     SendSysMessage("DB table `skinning_loot_template` reloaded.");
@@ -1249,7 +1212,7 @@ bool ChatHandler::HandleReloadLootTemplatesSkinningCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadMangosStringCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading mangos_string Table!");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading mangos_string Table!");
     sObjectMgr.LoadMangosStrings();
     SendSysMessage("DB table `mangos_string` reloaded.");
     return true;
@@ -1257,7 +1220,7 @@ bool ChatHandler::HandleReloadMangosStringCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadNpcGossipCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading `npc_gossip` Table!");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading `npc_gossip` Table!");
     sObjectMgr.LoadNpcGossips();
     SendSysMessage("DB table `npc_gossip` reloaded.");
     return true;
@@ -1265,7 +1228,7 @@ bool ChatHandler::HandleReloadNpcGossipCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadNpcTextCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading `npc_text` Table!");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading `npc_text` Table!");
     sObjectMgr.LoadNPCText();
     SendSysMessage("DB table `npc_text` reloaded.");
     return true;
@@ -1273,11 +1236,11 @@ bool ChatHandler::HandleReloadNpcTextCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadNpcTrainerCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading `npc_trainer_template` Table!");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading `npc_trainer_template` Table!");
     sObjectMgr.LoadTrainerTemplates();
     SendSysMessage("DB table `npc_trainer_template` reloaded.");
 
-    sLog.outString("Re-Loading `npc_trainer` Table!");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading `npc_trainer` Table!");
     sObjectMgr.LoadTrainers();
     SendSysMessage("DB table `npc_trainer` reloaded.");
     return true;
@@ -1286,11 +1249,11 @@ bool ChatHandler::HandleReloadNpcTrainerCommand(char* /*args*/)
 bool ChatHandler::HandleReloadNpcVendorCommand(char* /*args*/)
 {
     // not safe reload vendor template tables independent...
-    sLog.outString("Re-Loading `npc_vendor_template` Table!");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading `npc_vendor_template` Table!");
     sObjectMgr.LoadVendorTemplates();
     SendSysMessage("DB table `npc_vendor_template` reloaded.");
 
-    sLog.outString("Re-Loading `npc_vendor` Table!");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading `npc_vendor` Table!");
     sObjectMgr.LoadVendors();
     SendSysMessage("DB table `npc_vendor` reloaded.");
     return true;
@@ -1298,7 +1261,7 @@ bool ChatHandler::HandleReloadNpcVendorCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadPointsOfInterestCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading `points_of_interest` Table!");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading `points_of_interest` Table!");
     sObjectMgr.LoadPointsOfInterest();
     SendSysMessage("DB table `points_of_interest` reloaded.");
     return true;
@@ -1306,7 +1269,7 @@ bool ChatHandler::HandleReloadPointsOfInterestCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadReservedNameCommand(char* /*args*/)
 {
-    sLog.outString("Loading ReservedNames... (`reserved_name`)");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Loading ReservedNames... (`reserved_name`)");
     sObjectMgr.LoadReservedPlayersNames();
     SendSysMessage("DB table `reserved_name` (player reserved names) reloaded.");
     return true;
@@ -1314,7 +1277,7 @@ bool ChatHandler::HandleReloadReservedNameCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadReputationRewardRateCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading `reputation_reward_rate` Table!");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading `reputation_reward_rate` Table!");
     sObjectMgr.LoadReputationRewardRate();
     SendSysMessage("DB table `reputation_reward_rate` reloaded.");
     return true;
@@ -1322,7 +1285,7 @@ bool ChatHandler::HandleReloadReputationRewardRateCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadReputationSpilloverTemplateCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading `reputation_spillover_template` Table!");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading `reputation_spillover_template` Table!");
     sObjectMgr.LoadReputationSpilloverTemplate();
     SendSysMessage("DB table `reputation_spillover_template` reloaded.");
     return true;
@@ -1330,7 +1293,7 @@ bool ChatHandler::HandleReloadReputationSpilloverTemplateCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadSkillFishingBaseLevelCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Skill Fishing base level requirements...");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Skill Fishing base level requirements...");
     sObjectMgr.LoadFishingBaseSkillLevel();
     SendSysMessage("DB table `skill_fishing_base_level` (fishing base level for zone/subzone) reloaded.");
     return true;
@@ -1338,7 +1301,7 @@ bool ChatHandler::HandleReloadSkillFishingBaseLevelCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadSpellAffectCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading SpellAffect definitions...");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading SpellAffect definitions...");
     sSpellMgr.LoadSpellAffects();
     SendSysMessage("DB table `spell_affect` (spell mods apply requirements) reloaded.");
     return true;
@@ -1346,7 +1309,7 @@ bool ChatHandler::HandleReloadSpellAffectCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadSpellAreaCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading SpellArea Data...");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading SpellArea Data...");
     sSpellMgr.LoadSpellAreas();
     SendSysMessage("DB table `spell_area` (spell dependences from area/quest/auras state) reloaded.");
     return true;
@@ -1354,7 +1317,7 @@ bool ChatHandler::HandleReloadSpellAreaCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadSpellChainCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Spell Chain Data... ");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Spell Chain Data... ");
     sSpellMgr.LoadSpellChains();
     SendSysMessage("DB table `spell_chain` (spell ranks) reloaded.");
     return true;
@@ -1362,7 +1325,7 @@ bool ChatHandler::HandleReloadSpellChainCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadSpellElixirCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Spell Elixir types...");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Spell Elixir types...");
     sSpellMgr.LoadSpellElixirs();
     SendSysMessage("DB table `spell_elixir` (spell elixir types) reloaded.");
     return true;
@@ -1370,7 +1333,7 @@ bool ChatHandler::HandleReloadSpellElixirCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadSpellLearnSpellCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Spell Learn Spells...");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Spell Learn Spells...");
     sSpellMgr.LoadSpellLearnSpells();
     SendSysMessage("DB table `spell_learn_spell` reloaded.");
     return true;
@@ -1378,7 +1341,7 @@ bool ChatHandler::HandleReloadSpellLearnSpellCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadSpellProcEventCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Spell Proc Event conditions...");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Spell Proc Event conditions...");
     sSpellMgr.LoadSpellProcEvents();
     SendSysMessage("DB table `spell_proc_event` (spell proc trigger requirements) reloaded.");
     return true;
@@ -1386,7 +1349,7 @@ bool ChatHandler::HandleReloadSpellProcEventCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadSpellProcItemEnchantCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Spell Proc Item Enchant...");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Spell Proc Item Enchant...");
     sSpellMgr.LoadSpellProcItemEnchant();
     SendSysMessage("DB table `spell_proc_item_enchant` (item enchantment ppm) reloaded.");
     return true;
@@ -1394,7 +1357,7 @@ bool ChatHandler::HandleReloadSpellProcItemEnchantCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadSpellScriptTargetCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading SpellsScriptTarget...");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading SpellsScriptTarget...");
     sSpellMgr.LoadSpellScriptTarget();
     SendSysMessage("DB table `spell_script_target` (spell targets selection in case specific creature/GO requirements) reloaded.");
     return true;
@@ -1402,7 +1365,7 @@ bool ChatHandler::HandleReloadSpellScriptTargetCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadSpellTargetPositionCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading spell target destination coordinates...");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading spell target destination coordinates...");
     sSpellMgr.LoadSpellTargetPositions();
     SendSysMessage("DB table `spell_target_position` (destination coordinates for spell targets) reloaded.");
     return true;
@@ -1410,7 +1373,7 @@ bool ChatHandler::HandleReloadSpellTargetPositionCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadSpellThreatsCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Aggro Spells Definitions...");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Aggro Spells Definitions...");
     sSpellMgr.LoadSpellThreats();
     SendSysMessage("DB table `spell_threat` (spell aggro definitions) reloaded.");
     return true;
@@ -1418,7 +1381,7 @@ bool ChatHandler::HandleReloadSpellThreatsCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadSpellPetAurasCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Spell pet auras...");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Spell pet auras...");
     sSpellMgr.LoadSpellPetAuras();
     SendSysMessage("DB table `spell_pet_auras` reloaded.");
     return true;
@@ -1426,7 +1389,7 @@ bool ChatHandler::HandleReloadSpellPetAurasCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadPageTextsCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Page Texts...");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Page Texts...");
     sObjectMgr.LoadPageTexts();
     SendSysMessage("DB table `page_texts` reloaded.");
     return true;
@@ -1434,7 +1397,7 @@ bool ChatHandler::HandleReloadPageTextsCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadItemEnchantementsCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Item Random Enchantments Table...");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Item Random Enchantments Table...");
     LoadRandomEnchantmentsTable();
     SendSysMessage("DB table `item_enchantment_template` reloaded.");
     return true;
@@ -1442,7 +1405,7 @@ bool ChatHandler::HandleReloadItemEnchantementsCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadItemRequiredTragetCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Item Required Targets Table...");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Item Required Targets Table...");
     sObjectMgr.LoadItemRequiredTarget();
     SendSysMessage("DB table `item_required_target` reloaded.");
     return true;
@@ -1450,7 +1413,7 @@ bool ChatHandler::HandleReloadItemRequiredTragetCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadBattleEventCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading BattleGround Eventindexes...");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading BattleGround Eventindexes...");
     sBattleGroundMgr.LoadBattleEventIndexes();
     SendSysMessage("DB table `gameobject_battleground` and `creature_battleground` reloaded.");
     return true;
@@ -1466,7 +1429,7 @@ bool ChatHandler::HandleReloadGameObjectScriptsCommand(char* args)
     }
 
     if (*args != 'a')
-        sLog.outString("Re-Loading Scripts from `gameobject_scripts`...");
+        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Scripts from `gameobject_scripts`...");
 
     sScriptMgr.LoadGameObjectScripts();
 
@@ -1486,7 +1449,7 @@ bool ChatHandler::HandleReloadGenericScriptsCommand(char* args)
     }
 
     if (*args != 'a')
-        sLog.outString("Re-Loading Scripts from `generic_scripts`...");
+        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Scripts from `generic_scripts`...");
 
     sScriptMgr.LoadGenericScripts();
 
@@ -1506,7 +1469,7 @@ bool ChatHandler::HandleReloadEventScriptsCommand(char* args)
     }
 
     if (*args != 'a')
-        sLog.outString("Re-Loading Scripts from `event_scripts`...");
+        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Scripts from `event_scripts`...");
 
     sScriptMgr.LoadEventScripts();
 
@@ -1523,14 +1486,14 @@ bool ChatHandler::HandleReloadEventAIEventsCommand(char* args)
     sEventAIMgr.ClearEventData();
 
     if (*args != 'a')
-        sLog.outString("Re-Loading Scripts from `creature_ai_scripts`...");
+        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Scripts from `creature_ai_scripts`...");
 
     sScriptMgr.LoadCreatureEventAIScripts();
 
     if (*args != 'a')
         SendSysMessage("DB table `creature_ai_scripts` reloaded.");
 
-    sLog.outString("Re-Loading Events from `creature_ai_events`...");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Events from `creature_ai_events`...");
     sEventAIMgr.LoadCreatureEventAI_Events();
     SendSysMessage("DB table `creature_ai_events` reloaded.");
     return true;
@@ -1546,7 +1509,7 @@ bool ChatHandler::HandleReloadQuestEndScriptsCommand(char* args)
     }
 
     if (*args != 'a')
-        sLog.outString("Re-Loading Scripts from `quest_end_scripts`...");
+        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Scripts from `quest_end_scripts`...");
 
     sScriptMgr.LoadQuestEndScripts();
 
@@ -1566,7 +1529,7 @@ bool ChatHandler::HandleReloadQuestStartScriptsCommand(char* args)
     }
 
     if (*args != 'a')
-        sLog.outString("Re-Loading Scripts from `quest_start_scripts`...");
+        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Scripts from `quest_start_scripts`...");
 
     sScriptMgr.LoadQuestStartScripts();
 
@@ -1586,7 +1549,7 @@ bool ChatHandler::HandleReloadCreatureSpellScriptsCommand(char* args)
     }
 
     if (*args != 'a')
-        sLog.outString("Re-Loading Scripts from `creature_spells_scripts`...");
+        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Scripts from `creature_spells_scripts`...");
 
     sScriptMgr.LoadCreatureSpellScripts();
 
@@ -1606,7 +1569,7 @@ bool ChatHandler::HandleReloadSpellScriptsCommand(char* args)
     }
 
     if (*args != 'a')
-        sLog.outString("Re-Loading Scripts from `spell_scripts`...");
+        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Scripts from `spell_scripts`...");
 
     sScriptMgr.LoadSpellScripts();
 
@@ -1618,7 +1581,7 @@ bool ChatHandler::HandleReloadSpellScriptsCommand(char* args)
 
 bool ChatHandler::HandleReloadGameGraveyardZoneCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Graveyard-zone links...");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Graveyard-zone links...");
 
     sObjectMgr.LoadGraveyardZones();
 
@@ -1629,7 +1592,7 @@ bool ChatHandler::HandleReloadGameGraveyardZoneCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadGameTeleCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Game Tele coordinates...");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Game Tele coordinates...");
 
     sObjectMgr.LoadGameTele();
 
@@ -1640,7 +1603,7 @@ bool ChatHandler::HandleReloadGameTeleCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadTaxiPathTransitionsCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Taxi path transitions...");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Taxi path transitions...");
 
     sObjectMgr.LoadTaxiPathTransitions();
 
@@ -1651,7 +1614,7 @@ bool ChatHandler::HandleReloadTaxiPathTransitionsCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadLocalesCreatureCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Locales Creature ...");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Locales Creature ...");
     sObjectMgr.LoadCreatureLocales();
     SendSysMessage("DB table `locales_creature` reloaded.");
     return true;
@@ -1659,7 +1622,7 @@ bool ChatHandler::HandleReloadLocalesCreatureCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadLocalesGameobjectCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Locales Gameobject ... ");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Locales Gameobject ... ");
     sObjectMgr.LoadGameObjectLocales();
     SendSysMessage("DB table `locales_gameobject` reloaded.");
     return true;
@@ -1667,7 +1630,7 @@ bool ChatHandler::HandleReloadLocalesGameobjectCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadLocalesGossipMenuOptionCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Locales Gossip Menu Option ... ");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Locales Gossip Menu Option ... ");
     sObjectMgr.LoadGossipMenuItemsLocales();
     SendSysMessage("DB table `locales_gossip_menu_option` reloaded.");
     return true;
@@ -1675,7 +1638,7 @@ bool ChatHandler::HandleReloadLocalesGossipMenuOptionCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadLocalesItemCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Locales Item ... ");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Locales Item ... ");
     sObjectMgr.LoadItemLocales();
     SendSysMessage("DB table `locales_item` reloaded.");
     return true;
@@ -1683,7 +1646,7 @@ bool ChatHandler::HandleReloadLocalesItemCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadLocalesPageTextCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Locales Page Text ... ");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Locales Page Text ... ");
     sObjectMgr.LoadPageTextLocales();
     SendSysMessage("DB table `locales_page_text` reloaded.");
     return true;
@@ -1691,7 +1654,7 @@ bool ChatHandler::HandleReloadLocalesPageTextCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadLocalesPointsOfInterestCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Locales Points Of Interest ... ");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Locales Points Of Interest ... ");
     sObjectMgr.LoadPointOfInterestLocales();
     SendSysMessage("DB table `locales_points_of_interest` reloaded.");
     return true;
@@ -1699,7 +1662,7 @@ bool ChatHandler::HandleReloadLocalesPointsOfInterestCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadLocalesQuestCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Locales Quest ... ");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Locales Quest ... ");
     sObjectMgr.LoadQuestLocales();
     SendSysMessage("DB table `locales_quest` reloaded.");
     return true;
@@ -1719,7 +1682,7 @@ bool ChatHandler::HandleReloadCharacterPetCommand(char *args)
 
 bool ChatHandler::HandleReloadCreatureCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading `creature` table ...");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading `creature` table ...");
     sObjectMgr.LoadCreatures(true);
     SendSysMessage("DB table `creature` reloaded.");
     return true;
@@ -1727,7 +1690,7 @@ bool ChatHandler::HandleReloadCreatureCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadGameObjectCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading `gameobject` table ...");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading `gameobject` table ...");
     sObjectMgr.LoadGameobjects(true);
     SendSysMessage("DB table `gameobject` reloaded.");
     return true;
@@ -1910,7 +1873,7 @@ bool ChatHandler::HandleReloadMapLootDisabledCommand(char *args)
 
 bool ChatHandler::HandleReloadConditionsCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading `conditions`... ");
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading `conditions`... ");
     sObjectMgr.LoadConditions();
     SendSysMessage("DB table `conditions` reloaded.");
     return true;

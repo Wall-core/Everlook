@@ -3074,7 +3074,7 @@ bool ChatHandler::HandleAddItemCommand(char* args)
     if (!plTarget)
         plTarget = pl;
 
-    DETAIL_LOG(GetMangosString(LANG_ADDITEM), itemId, count);
+    sLog.Out(LOG_BASIC, LOG_LVL_DETAIL, GetMangosString(LANG_ADDITEM), itemId, count);
 
     if (!ObjectMgr::GetItemPrototype(itemId))
     {
@@ -3179,7 +3179,7 @@ bool ChatHandler::HandleDeleteItemCommand(char* args)
         return false;
     }
 
-    DETAIL_LOG(GetMangosString(LANG_REMOVEITEM), itemId, count);
+    sLog.Out(LOG_BASIC, LOG_LVL_DETAIL, GetMangosString(LANG_REMOVEITEM), itemId, count);
 
     if (player)
     {
@@ -3305,7 +3305,7 @@ bool ChatHandler::HandleAddItemSetCommand(char* args)
     if (!plTarget)
         plTarget = pl;
 
-    DETAIL_LOG(GetMangosString(LANG_ADDITEMSET), itemsetId);
+    sLog.Out(LOG_BASIC, LOG_LVL_DETAIL, GetMangosString(LANG_ADDITEMSET), itemsetId);
 
     bool found = false;
     for (uint32 id = 0; id < sItemStorage.GetMaxEntry(); id++)
@@ -3585,7 +3585,7 @@ static bool HandleResetStatsOrLevelHelper(Player* player)
     ChrClassesEntry const* cEntry = sChrClassesStore.LookupEntry(player->GetClass());
     if (!cEntry)
     {
-        sLog.outError("Class %u not found in DBC (Wrong DBC files?)", player->GetClass());
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Class %u not found in DBC (Wrong DBC files?)", player->GetClass());
         return false;
     }
 
@@ -4297,7 +4297,7 @@ bool ChatHandler::HandleModifyMoneyCommand(char* args)
     {
         int32 newmoney = int32(moneyuser) + addmoney;
 
-        DETAIL_LOG(GetMangosString(LANG_CURRENT_MONEY), moneyuser, addmoney, newmoney);
+        sLog.Out(LOG_BASIC, LOG_LVL_DETAIL, GetMangosString(LANG_CURRENT_MONEY), moneyuser, addmoney, newmoney);
         if (newmoney <= 0)
         {
             PSendSysMessage(LANG_YOU_TAKE_ALL_MONEY, GetNameLink(chr).c_str());
@@ -4329,7 +4329,7 @@ bool ChatHandler::HandleModifyMoneyCommand(char* args)
             chr->LogModifyMoney(addmoney, "GM", m_session->GetPlayer()->GetObjectGuid());
     }
 
-    DETAIL_LOG(GetMangosString(LANG_NEW_MONEY), moneyuser, addmoney, chr->GetMoney());
+    sLog.Out(LOG_BASIC, LOG_LVL_DETAIL, GetMangosString(LANG_NEW_MONEY), moneyuser, addmoney, chr->GetMoney());
 
     return true;
 }
@@ -4577,7 +4577,7 @@ bool ChatHandler::HandleModifyEnergyCommand(char* args)
     chr->SetMaxPower(POWER_ENERGY, energym);
     chr->SetPower(POWER_ENERGY, energy);
 
-    DETAIL_LOG(GetMangosString(LANG_CURRENT_ENERGY), chr->GetMaxPower(POWER_ENERGY));
+    sLog.Out(LOG_BASIC, LOG_LVL_DETAIL, GetMangosString(LANG_CURRENT_ENERGY), chr->GetMaxPower(POWER_ENERGY));
 
     return true;
 }
@@ -5343,7 +5343,7 @@ bool ChatHandler::HandleServiceDeleteCharacters(char* args)
         delete result;
     }
 
-    sLog.outString("Service: Removed %u characters", count);
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Service: Removed %u characters", count);
     return true;
 }
 
