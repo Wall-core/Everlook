@@ -474,9 +474,11 @@ HonorScores HonorMaintenancer::GenerateScores(HonorStandingList& standingList)
         sc.BRK[0] = 1.000f;
     }
 
+    uint32 poolSize = sWorld.getConfig(CONFIG_UINT32_PVP_POOL_SIZE_PER_FACTION) == 0 ?
+            standingList.size() : sWorld.getConfig(CONFIG_UINT32_PVP_POOL_SIZE_PER_FACTION);
     // get the WS scores at the top of each break point
     for (float & group : sc.BRK)
-        group = floor((group * standingList.size()) + 0.5f);
+        group = floor((group * poolSize) + 0.5f);
 
     // initialize RP array
     // set the low point
@@ -1030,15 +1032,25 @@ void HonorMgr::SendPVPCredit(Unit* victim, float honor)
     {
         data << victim->GetObjectGuid();
 
-        if (victim->GetTypeId() == TYPEID_UNIT)
+        if (victim->IsCreature())
         {
             if (((Creature*)victim)->IsRacialLeader())
                 data << int32(19);
             else
                 data << int32(0);
         }
-        else if (victim->GetTypeId() == TYPEID_PLAYER)
-            data << uint32(((Player*)victim)->GetHonorMgr().GetRank().rank);
+        else if (victim->IsPlayer())
+        {
+            // Never display just "HK:" without rank name.
+            // When killing a player with no rank,
+            // we need to send first rank instead.
+            // https://youtu.be/hef06Cs6Q34?t=191
+            // New classic client does this on its own.
+            int32 rank = ((Player*)victim)->GetHonorMgr().GetRank().rank;
+            if (!rank)
+                rank = (HONOR_RANK_COUNT - POSITIVE_HONOR_RANK_COUNT) + 1;
+            data << uint32(rank);
+        }
     }
 
     m_owner->SendDirectMessage(&data);

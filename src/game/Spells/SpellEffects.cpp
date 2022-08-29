@@ -697,15 +697,6 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }
                     return;
                 }
-                case 26471: // Lunar Festival Port Error
-                {
-                    if (!m_caster->IsPlayer())
-                        return;
-
-                    m_caster->RemoveSpellCooldown(26373); // Remove cooldown from Lunar Invititation
-                    SendCastResult(SPELL_FAILED_NOT_HERE);
-                    return;
-                }
                 case 24531: // Refocus : "Instantly clears the cooldowns of Aimed Shot, Multishot, Volley, and Arcane Shot."
                 {
                     if (!m_caster->IsPlayer())
@@ -1538,8 +1529,6 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                 case 8897:                                 // Destroy Rocket Boots
                 {
                     m_caster->CastSpell(unitTarget, 8893, true);
-                    m_caster->CastSpell(unitTarget, 13158, true);
-
                     return;
                 }
                 case 23185:                                 // Aura of Frost
