@@ -1372,7 +1372,7 @@ class Unit : public SpellCaster
         virtual bool CanFly() const = 0;
         virtual bool CanSwim() const = 0;
         
-        void SetInFront(Unit const* pTarget);
+        void SetInFront(Unit const* target);
         void SetFacingTo(float ori);
         void SetFacingToObject(WorldObject* pObject);
         bool IsBehindTarget(Unit const* pTarget, bool strict = true) const;
