@@ -1057,7 +1057,7 @@ void ObjectMgr::LoadGossipMenuItemsLocales()
 
         if (!found)
         {
-            sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "Table `locales_gossip_menu_option` has data for nonexistent gossip menu %u item %u, skipped.", menuId, id);
+            sLog.Out(LOG_DBERROR, LOG_LVL_DETAIL, "Table `locales_gossip_menu_option` has data for nonexistent gossip menu %u item %u, skipped.", menuId, id);
             continue;
         }
 
@@ -3977,7 +3977,7 @@ void ObjectMgr::LoadItemLocales()
 
         if (!GetItemPrototype(entry))
         {
-            sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "Table `locales_item` has data for nonexistent item entry %u, skipped.", entry);
+            sLog.Out(LOG_DBERROR, LOG_LVL_DETAIL, "Table `locales_item` has data for nonexistent item entry %u, skipped.", entry);
             continue;
         }
 
@@ -5789,7 +5789,7 @@ void ObjectMgr::LoadQuestLocales()
 
         if (!GetQuestTemplate(entry))
         {
-            sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "Table `locales_quest` has data for nonexistent quest entry %u, skipped.", entry);
+            sLog.Out(LOG_DBERROR, LOG_LVL_DETAIL, "Table `locales_quest` has data for nonexistent quest entry %u, skipped.", entry);
             continue;
         }
 
@@ -6135,7 +6135,7 @@ void ObjectMgr::LoadPageTextLocales()
 
         if (!sPageTextStore.LookupEntry<PageText>(entry))
         {
-            sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "Table `locales_page_text` has data for nonexistent page text entry %u, skipped.", entry);
+            sLog.Out(LOG_DBERROR, LOG_LVL_DETAIL, "Table `locales_page_text` has data for nonexistent page text entry %u, skipped.", entry);
             continue;
         }
 
@@ -7332,8 +7332,8 @@ void ObjectMgr::LoadGameObjectLocales()
 
         if (!GetGameObjectInfo(entry))
         {
-            sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "Table `locales_gameobject` has data for nonexistent gameobject entry %u, skipped.", entry);
-            sLog.Out(LOG_DBERRFIX, LOG_LVL_ERROR, "DELETE FROM `locales_gameobject` WHERE entry = %u;", entry);
+            sLog.Out(LOG_DBERROR, LOG_LVL_DETAIL, "Table `locales_gameobject` has data for nonexistent gameobject entry %u, skipped.", entry);
+            sLog.Out(LOG_DBERRFIX, LOG_LVL_DETAIL, "DELETE FROM `locales_gameobject` WHERE entry = %u;", entry);
             continue;
         }
 
