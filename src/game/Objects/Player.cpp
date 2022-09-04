@@ -1405,6 +1405,7 @@ bool Player::CheckMirrorTimerDeactivation(MirrorTimer::Type timer) const
             return false;
     }
 }
+
 void Player::OnMirrorTimerExpirationPulse(MirrorTimer::Type timer)
 {
     switch (timer)
@@ -1434,6 +1435,7 @@ void Player::OnMirrorTimerExpirationPulse(MirrorTimer::Type timer)
             return;
     }
 }
+
 uint32 Player::GetMirrorTimerMaxDuration(MirrorTimer::Type timer) const
 {
     switch (timer)
@@ -1450,6 +1452,7 @@ uint32 Player::GetMirrorTimerMaxDuration(MirrorTimer::Type timer) const
             return 0;
     }
 }
+
 SpellAuraHolder const* Player::GetMirrorTimerBuff(MirrorTimer::Type timer) const
 {
     switch (timer)
