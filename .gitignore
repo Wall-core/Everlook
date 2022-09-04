@@ -29,6 +29,8 @@
 *.opendb
 *.exp
 *.res
+*.ilk
+*.pdb
 CMakeSettings.json
 /out/
 
