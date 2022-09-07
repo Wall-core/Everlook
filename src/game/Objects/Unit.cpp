@@ -6395,7 +6395,7 @@ void Unit::CheckPendingMovementChanges()
 
     Player* pPlayer = ToPlayer();
     if (pPlayer && pPlayer->IsBeingTeleportedFar())
-            return;
+        return;
 
     Player* pController = GetPlayerMovingMe();
     if (!pController || !pController->IsInWorld() || !pController->GetSession()->IsConnected())
@@ -6446,43 +6446,10 @@ void Unit::CheckPendingMovementChanges()
             return;
         }
 
-        if (oldestChange.resent)
-        {
-            // Change was resent but still no reply. Enforce the flags.
-            pController->GetCheatData()->OnFailedToAckChange();
-            ResolvePendingMovementChange(oldestChange, true);
-            PopPendingMovementChange();
-        }
-        else
-        {
-            // Send the change a second time and wait for reply.
-            oldestChange.resent = true;
-            oldestChange.time = WorldTimer::getMSTime();
-
-            if (oldestChange.movementCounter < GetMovementCounter())
-                oldestChange.movementCounter = GetMovementCounterAndInc();
-
-            switch (oldestChange.movementChangeType)
-            {
-                case ROOT:
-                case WATER_WALK:
-                case SET_HOVER:
-                case FEATHER_FALL:
-                    MovementPacketSender::SendMovementFlagChangeToController(this, pController, oldestChange);
-                    return;
-                case SPEED_CHANGE_WALK:
-                case SPEED_CHANGE_RUN:
-                case SPEED_CHANGE_RUN_BACK:
-                case SPEED_CHANGE_SWIM:
-                case SPEED_CHANGE_SWIM_BACK:
-                case RATE_CHANGE_TURN:
-                    MovementPacketSender::SendSpeedChangeToController(this, pController, oldestChange);
-                    return;
-                default:
-                    sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Unit::CheckPendingMovementChange - Unhandled resendable movement change type %u", oldestChange.movementChangeType);
-                    return;
-            }
-        }
+        // Enforce the change.
+        pController->GetCheatData()->OnFailedToAckChange();
+        ResolvePendingMovementChange(oldestChange, true);
+        PopPendingMovementChange();
     }
 }
 
