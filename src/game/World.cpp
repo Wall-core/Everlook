@@ -1177,16 +1177,22 @@ void World::LoadConfigSettings(bool reload)
     sLog.InitSmartlogGuids(sConfig.GetStringDefault("Smartlog.ExtraGuids", ""));
 }
 
-void charactersDatabaseWorkerThread()
+void CharactersDatabaseWorkerThread()
 {
+    time_t lastCheckTime = 0;
     CharacterDatabase.ThreadStart();
     while (!sWorld.IsStopped())
     {
         std::this_thread::sleep_for(std::chrono::seconds(1));
-        if (CharacterDatabase.HasAsyncQuery())
-            continue;
-        Player::DeleteOldCharacters();
-        sObjectMgr.ReturnOrDeleteOldMails(true);
+        time_t const now = time(nullptr);
+        if ((lastCheckTime + 30 * MINUTE) < now)
+        {
+            if (CharacterDatabase.HasAsyncQuery())
+                continue;
+            Player::DeleteOldCharacters();
+            sObjectMgr.ReturnOrDeleteOldMails(true);
+            lastCheckTime = now;
+        }
     }
     CharacterDatabase.ThreadEnd();
 }
@@ -1797,7 +1803,7 @@ void World::SetInitialWorldSettings()
         std::make_unique<MovementBroadcaster>(sWorld.getConfig(CONFIG_UINT32_PACKET_BCAST_THREADS),
                                               std::chrono::milliseconds(sWorld.getConfig(CONFIG_UINT32_PACKET_BCAST_FREQUENCY)));
 
-    m_charDbWorkerThread.reset(new std::thread(&charactersDatabaseWorkerThread));
+    m_charDbWorkerThread.reset(new std::thread(&CharactersDatabaseWorkerThread));
 
     sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "");
     sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "==========================================================");
