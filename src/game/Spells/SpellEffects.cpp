@@ -235,7 +235,7 @@ void Spell::EffectResurrectNew(SpellEffectIndex eff_idx)
         pet->SavePetToDB(PET_SAVE_AS_CURRENT);
 
         // Remove Demonic Sacrifice auras (Blizzlike - cf patchnote 1.12)
-        Unit::AuraList const& auraClassScripts = owner->GetAurasByType(SPELL_AURA_OVERRIDE_CLASS_SCRIPTS);
+/*      Unit::AuraList const& auraClassScripts = owner->GetAurasByType(SPELL_AURA_OVERRIDE_CLASS_SCRIPTS);
         for (Unit::AuraList::const_iterator itr = auraClassScripts.begin(); itr != auraClassScripts.end();)
         {
             if ((*itr)->GetModifier()->m_miscvalue == 2228)
@@ -245,7 +245,7 @@ void Spell::EffectResurrectNew(SpellEffectIndex eff_idx)
             }
             else
                 ++itr;
-        }
+        } -- Everlook: Don't remove Sacrifice if pet is manually rezzed (Jumper cables or hasted rez) */
         return;
     }
 
