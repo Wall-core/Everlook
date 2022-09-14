@@ -446,7 +446,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             break;
         case 612: // Kalimdor -> Winterspring
             player->CLOSE_GOSSIP_MENU();
-            player->TeleportTo(1, -6722.279f, -4651.489f, 720.89f, 4.51f);
+            player->TeleportTo(1, 6722.279f, -4651.489f, 720.89f, 4.51f);
             break;
         case 613: // Eastern Kingdoms -> Arathi Highlands
             player->CLOSE_GOSSIP_MENU();
