@@ -196,6 +196,29 @@ bool Map::ScriptCommand_MoveTo(ScriptInfo const& script, WorldObject* source, Wo
             pSource->GetRandomPoint(x, y, z, script.o, x, y, z);
             break;
         }
+		case SO_MOVETO_COORDINATES_AROUND_TARGET:
+		{
+			if (WorldObject* pTarget = target)
+			{
+				float distance = x;
+				float angle = pTarget->GetOrientation();
+				pTarget->GetNearPoint(pSource, x, y, z, 0, distance, angle);
+			}
+			else
+			{
+				sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "SCRIPT_COMMAND_MOVE_TO (script id %u) call with datalong = %u for a nullptr or non-worldobject target, skipping.", script.id, script.moveTo.coordinatesType);
+				return ShouldAbortScript(script);
+			}
+			break;
+		}
+		case SO_MOVETO_COORDINATES_RANDOM_NEAR:
+		{
+			x = pSource->GetPositionX();
+			y = pSource->GetPositionY();
+			z = pSource->GetPositionZ();
+			pSource->GetRandomPoint(x, y, z, script.o, x, y, z);
+			break;
+		}
     }
 
     // Only move if we can move.
