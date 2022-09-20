@@ -200,8 +200,32 @@ bool Map::ScriptCommand_MoveTo(ScriptInfo const& script, WorldObject* source, Wo
 		{
 			if (WorldObject* pTarget = target)
 			{
-				float distance = x;
-				float angle = pTarget->GetOrientation();
+				float distance = x; // Distance from target; use 1 for front melee range, -1 for behind melee range
+				float bound = pTarget->GetObjectBoundingRadius(); // Account for bounding radius of NPCs
+				float angle = pTarget->GetOrientation(); // Target facing direction
+				if (target->IsPlayer())
+				{
+					if (distance >= 0)
+						float distance = (x + 1); // If front, calculate from bound of 2
+					else
+						float distance = (x - 2); // If behind, calculate from bound of 3
+				}
+				else
+				{
+					if (bound >= 0)
+					{
+						if (distance >= 0)
+							float distance = (x + bound); // If front, add bound
+						else
+							float distance = (x - bound); // If behind, subtract bound
+					}
+					else  // If no bound, use 2 as generic
+						if (distance >= 0)
+							float distance = (x + 1); // If front, calculate from bound of 2
+						else
+							float distance = (x - 2); // If behind, calculate from bound of 3
+				}
+
 				pTarget->GetNearPoint(pSource, x, y, z, 0, distance, angle);
 			}
 			else

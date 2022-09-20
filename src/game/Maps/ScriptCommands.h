@@ -349,7 +349,7 @@ enum eMoveToCoordinateTypes
     SO_MOVETO_COORDINATES_RELATIVE_TO_TARGET   = 1,            // Coordinates are added to that of target.
     SO_MOVETO_COORDINATES_DISTANCE_FROM_TARGET = 2,            // X is distance from target, others not used.
     SO_MOVETO_COORDINATES_RANDOM_POINT         = 3,            // O is max distance from coordinates
-	SO_MOVETO_COORDINATES_AROUND_TARGET        = 4,            // X is distance from target, use negative values with forced movement flag to move behind, and combat movement stop flag to stay there
+	SO_MOVETO_COORDINATES_AROUND_TARGET        = 4,            // Bounding Radius is multiplied by X, use negative values to move behind, and combat movement stop flag to stay. 
     SO_MOVETO_COORDINATES_RANDOM_NEAR          = 5,            // O is max distance from current location
 
     MOVETO_COORDINATES_MAX
