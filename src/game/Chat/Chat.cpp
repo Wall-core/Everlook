@@ -2100,7 +2100,7 @@ bool ChatHandler::isValidChatMessage(char const* message)
                     if (reader.eof())                       // : must be
                         return false;
 
-                    linkedItem = ObjectMgr::GetItemPrototype(atoi(buffer));
+                    linkedItem = sObjectMgr.GetItemPrototype(atoi(buffer));
                     if (!linkedItem)
                     {
                         sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "ChatHandler::isValidChatMessage got invalid itemID %u in |item command", atoi(buffer));
