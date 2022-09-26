@@ -4602,6 +4602,7 @@ bool Unit::AttackStop(bool targetSwitch /*=false*/)
 
     // reset only at real combat stop
     if (!targetSwitch)
+    {
         if (Creature* me = ToCreature())
         {
             me->ResetDamageTakenOrigin();
@@ -4613,6 +4614,7 @@ bool Unit::AttackStop(bool targetSwitch /*=false*/)
                 UpdateSpeed(MOVE_RUN, false);
             }
         }
+    }
 
     SendMeleeAttackStop(victim);
 
