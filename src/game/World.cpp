@@ -1569,8 +1569,10 @@ void World::SetInitialWorldSettings()
     sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Loading Player Corpses...");
     sObjectMgr.LoadCorpses();
 
+
     sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Loading Loot Tables...");
     sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "");
+	LootIdSet ids_set;
     LoadLootTables();
     sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, ">>> Loot Tables loaded");
     sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "");
@@ -1731,6 +1733,7 @@ void World::SetInitialWorldSettings()
     ///- Initialize Battlegrounds
     sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Starting BattleGround System");
     sBattleGroundMgr.CreateInitialBattleGrounds();
+    CheckLootTemplates_Reference(ids_set);
 
     sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Starting ZoneScripts");
     sZoneScriptMgr.InitZoneScripts();

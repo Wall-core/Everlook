@@ -876,6 +876,7 @@ bool ChatHandler::HandleReloadAllAreaCommand(char* /*args*/)
 bool ChatHandler::HandleReloadAllLootCommand(char* /*args*/)
 {
     sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Loot Tables...");
+    LootIdSet ids_set;
     LoadLootTables();
     SendSysMessage("DB tables `*_loot_template` reloaded.");
     return true;
@@ -1196,7 +1197,9 @@ bool ChatHandler::HandleReloadLootTemplatesMailCommand(char* /*args*/)
 bool ChatHandler::HandleReloadLootTemplatesReferenceCommand(char* /*args*/)
 {
     sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Loot Tables... (`reference_loot_template`)");
-    LoadLootTemplates_Reference();
+    LootIdSet ids_set;
+    LoadLootTemplates_Reference(ids_set);
+    CheckLootTemplates_Reference(ids_set);
     SendSysMessage("DB table `reference_loot_template` reloaded.");
     return true;
 }
