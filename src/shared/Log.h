@@ -172,9 +172,10 @@ class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::m
 
         bool IsSmartLog(uint32 entry, uint32 guid) const;
 
-        LogLevel GetConsoleLevel() const { return m_consoleLevel; }
-        LogLevel GetFileLevel() const { return m_fileLevel; }
-        LogLevel GetDbLevel() const { return m_dbLevel; }
+        uint32 GetConsoleLevel() const { return m_consoleLevel; }
+        uint32 GetFileLevel() const { return m_fileLevel; }
+        uint32 GetDbLevel() const { return m_dbLevel; }
+
         void SetConsoleLevel(LogLevel level);
         void SetFileLevel(LogLevel level);
 
@@ -203,7 +204,8 @@ class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::m
         LogLevel m_consoleLevel;
         LogLevel m_fileLevel;
         LogLevel m_dbLevel;
-        const uint16 m_defaultColor;
+
+        uint16 const m_defaultColor;
 
         // include timestamp in console output
         bool m_includeTime;
@@ -211,7 +213,8 @@ class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::m
 
         // cache values for after initilization use (like gm log per account case)
         std::string m_logsDir;
-        const std::string m_logsTimestamp;
+
+        std::string const m_logsTimestamp;
 
         // char log control
         bool m_charLog_Dump;

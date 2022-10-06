@@ -3875,6 +3875,7 @@ void Spell::EffectEnchantItemTmp(SpellEffectIndex eff_idx)
 			break;
 		}
 	}
+
     // remove old enchant before applying new
     item_owner->ApplyEnchantment(itemTarget, TEMP_ENCHANTMENT_SLOT, false);
 

@@ -304,7 +304,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
         clientOs = CLIENT_OS_MAC;
     else
     {
-        sLog.Player(id, LOG_ANTICHEAT, "Anticheat", LOG_LVL_ERROR, "WorldSocket::HandleAuthSession: Unrecognized OS '%s' for account '%s' from %s", os.c_str(), account.c_str(), address.c_str());
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldSocket::HandleAuthSession: Unrecognized OS '%s' for account '%s' from %s", os.c_str(), account.c_str(), address.c_str());
         return -1;
     }
 

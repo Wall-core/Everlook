@@ -1474,6 +1474,10 @@ bool Pet::InitStatsForLevel(uint32 petlevel, Unit* owner)
             else                                            // not exist in DB, use some default fake data
             {
                 sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Hunter pet levelstats missing in DB");
+<<<<<<< HEAD
+=======
+                CreatureClassLevelStats const* pCLS = GetClassLevelStats();
+>>>>>>> dfb90c588 (Logging rewrite (#1519))
 
                 // disregard template multiplier
                 SetCreateHealth(GetClassLevelStats()->health * healthMod);

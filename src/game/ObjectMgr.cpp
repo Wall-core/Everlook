@@ -969,7 +969,11 @@ void ObjectMgr::LoadCreatureLocales()
 
         if (!GetCreatureTemplate(entry))
         {
+<<<<<<< HEAD
             sLog.Out(LOG_DBERROR, LOG_LVL_DETAIL, "Table `locales_creature` has data for not existed creature entry %u, skipped.", entry);
+=======
+            sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Table `locales_creature` has data for not existed creature entry %u, skipped.", entry);
+>>>>>>> dfb90c588 (Logging rewrite (#1519))
             continue;
         }
 
@@ -1057,7 +1061,11 @@ void ObjectMgr::LoadGossipMenuItemsLocales()
 
         if (!found)
         {
+<<<<<<< HEAD
             sLog.Out(LOG_DBERROR, LOG_LVL_DETAIL, "Table `locales_gossip_menu_option` has data for nonexistent gossip menu %u item %u, skipped.", menuId, id);
+=======
+            sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "Table `locales_gossip_menu_option` has data for nonexistent gossip menu %u item %u, skipped.", menuId, id);
+>>>>>>> dfb90c588 (Logging rewrite (#1519))
             continue;
         }
 
@@ -3655,8 +3663,14 @@ void ObjectMgr::LoadItemPrototypes()
         BarGoLink bar(1);
         bar.step();
 
+<<<<<<< HEAD
 		sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, ">> Loaded 0 item definitions");
 
+=======
+        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "");
+        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, ">> Loaded 0 item definitions");
+        sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "`item_template` table is empty!");
+>>>>>>> dfb90c588 (Logging rewrite (#1519))
         return;
     }
 
@@ -3753,7 +3767,10 @@ void ObjectMgr::LoadItemPrototypes()
     while (result->NextRow());
 
     m_QuestStartingItemsMap.clear();
+<<<<<<< HEAD
 
+=======
+>>>>>>> dfb90c588 (Logging rewrite (#1519))
     sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, ">> Loaded %u item prototypes", (uint32)m_itemPrototypesMap.size());
     sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "");
 
@@ -4083,7 +4100,11 @@ void ObjectMgr::LoadItemLocales()
 
         if (!GetItemPrototype(entry))
         {
+<<<<<<< HEAD
             sLog.Out(LOG_DBERROR, LOG_LVL_DETAIL, "Table `locales_item` has data for nonexistent item entry %u, skipped.", entry);
+=======
+            sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "Table `locales_item` has data for nonexistent item entry %u, skipped.", entry);
+>>>>>>> dfb90c588 (Logging rewrite (#1519))
             continue;
         }
 
@@ -4255,26 +4276,43 @@ void ObjectMgr::LoadPetLevelInfo()
             uint32 creature_id = fields[0].GetUInt32();
             if (!sCreatureStorage.LookupEntry<CreatureInfo>(creature_id))
             {
+<<<<<<< HEAD
                 if (!IsExistingCreatureId(creature_id))
                     sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Wrong creature id %u in `pet_levelstats` table, ignoring.", creature_id);
+=======
+                if (!IsExistingCreatureId(creatureId))
+                    sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Wrong creature id %u in `pet_levelstats` table, ignoring.", creatureId);
+>>>>>>> dfb90c588 (Logging rewrite (#1519))
                 continue;
             }
 
             uint32 current_level = fields[1].GetUInt32();
             if (current_level > sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL))
             {
+<<<<<<< HEAD
                 if (current_level > PLAYER_STRONG_MAX_LEVEL) // hardcoded level maximum
                     sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Wrong (> %u) level %u in `pet_levelstats` table, ignoring.", PLAYER_STRONG_MAX_LEVEL, current_level);
                 else
                 {
                     sLog.Out(LOG_BASIC, LOG_LVL_DETAIL, "Unused (> MaxPlayerLevel in mangosd.conf) level %u in `pet_levelstats` table, ignoring.", current_level);
+=======
+                if (currentLevel > PLAYER_STRONG_MAX_LEVEL) // hardcoded level maximum
+                    sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Wrong (> %u) level %u in `pet_levelstats` table, ignoring.", PLAYER_STRONG_MAX_LEVEL, currentLevel);
+                else
+                {
+                    sLog.Out(LOG_BASIC, LOG_LVL_DETAIL, "Unused (> MaxPlayerLevel in mangosd.conf) level %u in `pet_levelstats` table, ignoring.", currentLevel);("Unused (> MaxPlayerLevel in mangosd.conf) level %u in `pet_levelstats` table, ignoring.", currentLevel);
+>>>>>>> dfb90c588 (Logging rewrite (#1519))
                     ++count;                                 // make result loading percent "expected" correct in case disabled detail mode for example.
                 }
                 continue;
             }
             else if (current_level < 1)
             {
+<<<<<<< HEAD
                 sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Wrong (<1) level %u in `pet_levelstats` table, ignoring.", current_level);
+=======
+                sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Wrong (<1) level %u in `pet_levelstats` table, ignoring.", currentLevel);
+>>>>>>> dfb90c588 (Logging rewrite (#1519))
                 continue;
             }
 
@@ -5913,7 +5951,11 @@ void ObjectMgr::LoadQuestLocales()
 
         if (!GetQuestTemplate(entry))
         {
+<<<<<<< HEAD
             sLog.Out(LOG_DBERROR, LOG_LVL_DETAIL, "Table `locales_quest` has data for nonexistent quest entry %u, skipped.", entry);
+=======
+            sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "Table `locales_quest` has data for nonexistent quest entry %u, skipped.", entry);
+>>>>>>> dfb90c588 (Logging rewrite (#1519))
             continue;
         }
 
@@ -6259,7 +6301,11 @@ void ObjectMgr::LoadPageTextLocales()
 
         if (!sPageTextStore.LookupEntry<PageText>(entry))
         {
+<<<<<<< HEAD
             sLog.Out(LOG_DBERROR, LOG_LVL_DETAIL, "Table `locales_page_text` has data for nonexistent page text entry %u, skipped.", entry);
+=======
+            sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "Table `locales_page_text` has data for nonexistent page text entry %u, skipped.", entry);
+>>>>>>> dfb90c588 (Logging rewrite (#1519))
             continue;
         }
 
@@ -7462,8 +7508,8 @@ void ObjectMgr::LoadGameObjectLocales()
 
         if (!GetGameObjectInfo(entry))
         {
-            sLog.Out(LOG_DBERROR, LOG_LVL_DETAIL, "Table `locales_gameobject` has data for nonexistent gameobject entry %u, skipped.", entry);
-            sLog.Out(LOG_DBERRFIX, LOG_LVL_DETAIL, "DELETE FROM `locales_gameobject` WHERE entry = %u;", entry);
+            sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "Table `locales_gameobject` has data for nonexistent gameobject entry %u, skipped.", entry);
+            sLog.Out(LOG_DBERRFIX, LOG_LVL_ERROR, "DELETE FROM `locales_gameobject` WHERE entry = %u;", entry);
             continue;
         }
 
@@ -7520,7 +7566,11 @@ inline void CheckGOLinkedTrapId(GameObjectInfo const* goInfo, uint32 dataN, uint
     }
     else
         // too many error reports about nonexistent trap templates
+<<<<<<< HEAD
         sLog.Out(LOG_DBERROR, LOG_LVL_DETAIL, "Gameobject (Entry: %u GoType: %u) have data%d=%u but trap GO (Entry %u) not exist in `gameobject_template`.",
+=======
+        sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "Gameobject (Entry: %u GoType: %u) have data%d=%u but trap GO (Entry %u) not exist in `gameobject_template`.",
+>>>>>>> dfb90c588 (Logging rewrite (#1519))
                             goInfo->id, goInfo->type, N, dataN, dataN);
 }
 
@@ -8564,9 +8614,15 @@ void ObjectMgr::LoadCreatureQuestRelations()
     {
         CreatureInfo const* cInfo = GetCreatureTemplate(itr.first);
         if (!cInfo)
+<<<<<<< HEAD
             sLog.Out(LOG_DBERROR, LOG_LVL_BASIC, "Table `creature_questrelation` have data for nonexistent creature entry (%u) and existing quest %u", itr.first, itr.second);
         else if (!(cInfo->npc_flags & UNIT_NPC_FLAG_QUESTGIVER))
             sLog.Out(LOG_BASIC, LOG_LVL_DETAIL, "Table `creature_questrelation` has creature entry (%u) for quest %u, but npc_flags does not include UNIT_NPC_FLAG_QUESTGIVER", itr.first, itr.second);
+=======
+            sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "Table `creature_questrelation` have data for nonexistent creature entry (%u) and existing quest %u", itr.first, itr.second);
+        else if (!(cInfo->npc_flags & UNIT_NPC_FLAG_QUESTGIVER))
+            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Table `creature_questrelation` has creature entry (%u) for quest %u, but npc_flags does not include UNIT_NPC_FLAG_QUESTGIVER", itr.first, itr.second);
+>>>>>>> dfb90c588 (Logging rewrite (#1519))
     }
 }
 
@@ -8578,9 +8634,15 @@ void ObjectMgr::LoadCreatureInvolvedRelations()
     {
         CreatureInfo const* cInfo = GetCreatureTemplate(itr.first);
         if (!cInfo)
+<<<<<<< HEAD
             sLog.Out(LOG_DBERROR, LOG_LVL_BASIC, "Table `creature_involvedrelation` have data for nonexistent creature entry (%u) and existing quest %u", itr.first, itr.second);
         else if (!(cInfo->npc_flags & UNIT_NPC_FLAG_QUESTGIVER))
             sLog.Out(LOG_BASIC, LOG_LVL_DETAIL, "Table `creature_involvedrelation` has creature entry (%u) for quest %u, but npc_flags does not include UNIT_NPC_FLAG_QUESTGIVER", itr.first, itr.second);
+=======
+            sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "Table `creature_involvedrelation` have data for nonexistent creature entry (%u) and existing quest %u", itr.first, itr.second);
+        else if (!(cInfo->npc_flags & UNIT_NPC_FLAG_QUESTGIVER))
+            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Table `creature_involvedrelation` has creature entry (%u) for quest %u, but npc_flags does not include UNIT_NPC_FLAG_QUESTGIVER", itr.first, itr.second);
+>>>>>>> dfb90c588 (Logging rewrite (#1519))
     }
 }
 
@@ -10314,7 +10376,11 @@ void ObjectMgr::LoadGossipMenu(std::set<uint32>& gossipScriptSet)
     for (auto itr = sGOStorage.begin<GameObjectInfo>(); itr < sGOStorage.end<GameObjectInfo>(); ++itr)
         if (uint32 menuid = itr->GetGossipMenuId())
             if (m_GossipMenusMap.find(menuid) == m_GossipMenusMap.end())
+<<<<<<< HEAD
                 sLog.Out(LOG_DBERROR, LOG_LVL_DETAIL, "Gameobject (Entry: %u) has gossip_menu_id = %u for nonexistent menu", itr->id, menuid);
+=======
+                sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "Gameobject (Entry: %u) has gossip_menu_id = %u for nonexistent menu", itr->id, menuid);
+>>>>>>> dfb90c588 (Logging rewrite (#1519))
 }
 
 void ObjectMgr::LoadGossipMenuItems(std::set<uint32>& gossipScriptSet)
@@ -10465,7 +10531,11 @@ void ObjectMgr::LoadGossipMenuItems(std::set<uint32>& gossipScriptSet)
             }
 
             if (found_menu_uses && !found_flags_uses)
+<<<<<<< HEAD
                 sLog.Out(LOG_BASIC, LOG_LVL_DETAIL, "Table gossip_menu_option for menu %u, id %u has `npc_option_npcflag` = %u but creatures using this menu does not have corresponding `npc_flags`. Option will not accessible in game.", gMenuItem.menu_id, gMenuItem.id, gMenuItem.npc_option_npcflag);
+=======
+                sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Table gossip_menu_option for menu %u, id %u has `npc_option_npcflag` = %u but creatures using this menu does not have corresponding `npc_flags`. Option will not accessible in game.", gMenuItem.menu_id, gMenuItem.id, gMenuItem.npc_option_npcflag);
+>>>>>>> dfb90c588 (Logging rewrite (#1519))
         }
 
         if (gMenuItem.action_poi_id && !GetPointOfInterest(gMenuItem.action_poi_id))

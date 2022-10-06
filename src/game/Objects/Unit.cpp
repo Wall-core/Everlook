@@ -10408,12 +10408,12 @@ bool Unit::HasBreakableByDamageCrowdControlAura(Unit* excludeCasterChannel) cons
 
 void Unit::SetReactState(ReactStates state)
 {
-	if (CharmInfo* pCharmInfo = GetCharmInfo())
-		pCharmInfo->SetReactState(state);
-	else if (Creature* pCreature = ToCreature())
-		pCreature->SetCreatureReactState(state);
-	else
-		sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "SetReactState called for non-charmed player!");
+    if (CharmInfo* pCharmInfo = GetCharmInfo())
+        pCharmInfo->SetReactState(state);
+    else if (Creature* pCreature = ToCreature())
+        pCreature->SetCreatureReactState(state);
+    else
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "SetReactState called for non-charmed player!");
 }
 
 ReactStates Unit::GetReactState() const

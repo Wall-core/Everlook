@@ -163,8 +163,7 @@ void WaypointManager::Load()
             {
                 CreatureData const* cData = sObjectMgr.GetCreatureData(itr);
                 CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(cData->creature_id[0]);
-
-                sLog.Out(LOG_DBERROR, LOG_LVL_DETAIL, "Table creature_movement has waypoint for creature guid %u (entry %u), but MovementType is not WAYPOINT_MOTION_TYPE(2). Make sure that this is actually used in a script!", itr, cData->creature_id[0]);
+                sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Table creature_movement has waypoint for creature guid %u (entry %u), but MovementType is not WAYPOINT_MOTION_TYPE(2). Make sure that this is actually used in a script!", itr, cData->creature_id[0]);
 
                 if (cInfo->movement_type == WAYPOINT_MOTION_TYPE)
                     sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "    creature_template for this entry has MovementType WAYPOINT_MOTION_TYPE(2), did you intend to use creature_movement_template ?");

@@ -15612,7 +15612,7 @@ bool Player::_LoadInventory(QueryResult* result, uint32 timediff, bool& hasEpicM
                 std::stringstream oss;
                 oss << "Duplicate item (via AH) " << item_id << " GUID:" << item_lowguid << ", count: " << item->GetCount() << ", bag: " << bag_guid << ", slot: " << uint32(slot);
                 CharacterDatabase.PExecute("DELETE FROM `character_inventory` WHERE `item_guid` = '%u'", item_lowguid);
-                GetSession()->ProcessAnticheatAction("Passive", oss.str().c_str(), CHEAT_ACTION_LOG | CHEAT_ACTION_REPORT_GMS);
+                GetSession()->ProcessAnticheatAction("PassiveAnticheat", oss.str().c_str(), CHEAT_ACTION_LOG | CHEAT_ACTION_REPORT_GMS);
                 sLog.Out(LOG_BASIC, LOG_LVL_DETAIL, oss.str().c_str());
                 continue;
             }
