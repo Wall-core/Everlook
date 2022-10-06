@@ -2916,7 +2916,6 @@ void World::LogChat(WorldSession* sess, char const* type, std::string const& msg
     ASSERT(plr);
 
     if (target)
-
         sLog.Player(sess, LOG_CHAT, LOG_LVL_MINIMAL, "[%s] %s:%u -> %s:%u : %s", type, plr->GetName(), plr->GetObjectGuid().GetCounter(), target->GetName(), target->GetObjectGuid().GetCounter(), msg.c_str());
     else if (chanId)
         sLog.Player(sess, LOG_CHAT, LOG_LVL_MINIMAL, "[%s:%u] %s:%u : %s", type, chanId, plr->GetName(), plr->GetObjectGuid().GetCounter(), msg.c_str());
@@ -2924,7 +2923,6 @@ void World::LogChat(WorldSession* sess, char const* type, std::string const& msg
         sLog.Player(sess, LOG_CHAT, LOG_LVL_MINIMAL, "[%s:%s] %s:%u : %s", type, chanStr, plr->GetName(), plr->GetObjectGuid().GetCounter(), msg.c_str());
     else
         sLog.Player(sess, LOG_CHAT, LOG_LVL_MINIMAL, "[%s] %s:%u : %s", type, plr->GetName(), plr->GetObjectGuid().GetCounter(), msg.c_str());
-
 }
 
 void World::LogTransaction(PlayerTransactionData const& data)

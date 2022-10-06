@@ -4256,39 +4256,39 @@ void ObjectMgr::LoadPetLevelInfo()
             bar.step();
             Field* fields = result->Fetch();
 
-            uint32 creature_id = fields[0].GetUInt32();
-            if (!sCreatureStorage.LookupEntry<CreatureInfo>(creature_id))
+            uint32 creatureId = fields[0].GetUInt32();
+            if (!sCreatureStorage.LookupEntry<CreatureInfo>(creatureId))
             {
-                if (!IsExistingCreatureId(creature_id))
-                    sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Wrong creature id %u in `pet_levelstats` table, ignoring.", creature_id);
+                if (!IsExistingCreatureId(creatureId))
+                    sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Wrong creature id %u in `pet_levelstats` table, ignoring.", creatureId);
                 continue;
             }
 
-            uint32 current_level = fields[1].GetUInt32();
-            if (current_level > sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL))
+            uint32 currentLevel = fields[1].GetUInt32();
+            if (currentLevel > sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL))
             {
-                if (current_level > PLAYER_STRONG_MAX_LEVEL) // hardcoded level maximum
-                    sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Wrong (> %u) level %u in `pet_levelstats` table, ignoring.", PLAYER_STRONG_MAX_LEVEL, current_level);
+                if (currentLevel > PLAYER_STRONG_MAX_LEVEL) // hardcoded level maximum
+                    sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Wrong (> %u) level %u in `pet_levelstats` table, ignoring.", PLAYER_STRONG_MAX_LEVEL, currentLevel);
                 else
                 {
-                    sLog.Out(LOG_BASIC, LOG_LVL_DETAIL, "Unused (> MaxPlayerLevel in mangosd.conf) level %u in `pet_levelstats` table, ignoring.", current_level);("Unused (> MaxPlayerLevel in mangosd.conf) level %u in `pet_levelstats` table, ignoring.", current_level);
+                    sLog.Out(LOG_BASIC, LOG_LVL_DETAIL, "Unused (> MaxPlayerLevel in mangosd.conf) level %u in `pet_levelstats` table, ignoring.", currentLevel);("Unused (> MaxPlayerLevel in mangosd.conf) level %u in `pet_levelstats` table, ignoring.", currentLevel);
                     ++count;                                 // make result loading percent "expected" correct in case disabled detail mode for example.
                 }
                 continue;
             }
-            else if (current_level < 1)
+            else if (currentLevel < 1)
             {
-                sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Wrong (<1) level %u in `pet_levelstats` table, ignoring.", current_level);
+                sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Wrong (<1) level %u in `pet_levelstats` table, ignoring.", currentLevel);
                 continue;
             }
 
-            PetLevelInfo*& pInfoMapEntry = m_PetInfoMap[creature_id];
+            PetLevelInfo*& pInfoMapEntry = m_PetInfoMap[creatureId];
 
             if (pInfoMapEntry == nullptr)
                 pInfoMapEntry =  new PetLevelInfo[sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL)];
 
             // data for level 1 stored in [0] array element, ...
-            PetLevelInfo* pLevelInfo = &pInfoMapEntry[current_level - 1];
+            PetLevelInfo* pLevelInfo = &pInfoMapEntry[currentLevel - 1];
 
             pLevelInfo->health = fields[2].GetUInt16();
             pLevelInfo->mana   = fields[3].GetUInt16();
@@ -8577,6 +8577,7 @@ void ObjectMgr::LoadCreatureQuestRelations()
         CreatureInfo const* cInfo = GetCreatureTemplate(itr.first);
         if (!cInfo)
             sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "Table `creature_questrelation` have data for nonexistent creature entry (%u) and existing quest %u", itr.first, itr.second);
+		// Everlook - Prevent logging spam from creatures which change questgiver flags after game events (ex. Lok'Delar tree npcs)
         //else if (!(cInfo->npc_flags & UNIT_NPC_FLAG_QUESTGIVER))
         //    sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Table `creature_questrelation` has creature entry (%u) for quest %u, but npc_flags does not include UNIT_NPC_FLAG_QUESTGIVER", itr.first, itr.second);
     }
@@ -8591,6 +8592,7 @@ void ObjectMgr::LoadCreatureInvolvedRelations()
         CreatureInfo const* cInfo = GetCreatureTemplate(itr.first);
         if (!cInfo)
             sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "Table `creature_involvedrelation` have data for nonexistent creature entry (%u) and existing quest %u", itr.first, itr.second);
+		// Everlook - Prevent logging spam from creatures which change questgiver flags after game events (ex. Lok'Delar tree npcs)
         //else if (!(cInfo->npc_flags & UNIT_NPC_FLAG_QUESTGIVER))
         //    sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Table `creature_involvedrelation` has creature entry (%u) for quest %u, but npc_flags does not include UNIT_NPC_FLAG_QUESTGIVER", itr.first, itr.second);
     }
@@ -10475,7 +10477,7 @@ void ObjectMgr::LoadGossipMenuItems(std::set<uint32>& gossipScriptSet)
                 if (!sLog.HasLogFilter(LOG_FILTER_DB_STRICTED_CHECK))
                     menu_ids.erase(gMenuItem.menu_id);
             }
-
+            // Everlook - Prevent logging spam from creatures which change questgiver flags after game events (ex. Lok'Delar tree npcs)
             //if (found_menu_uses && !found_flags_uses)
             //    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Table gossip_menu_option for menu %u, id %u has `npc_option_npcflag` = %u but creatures using this menu does not have corresponding `npc_flags`. Option will not accessible in game.", gMenuItem.menu_id, gMenuItem.id, gMenuItem.npc_option_npcflag);
         }

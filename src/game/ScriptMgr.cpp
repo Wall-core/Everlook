@@ -1186,7 +1186,6 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, char const* tablename)
                 if (tmp.playCustomAnim.animId > 3)
                 {
                     sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Table `%s` using invalid anim id in datalong (%u) in SCRIPT_COMMAND_PLAY_CUSTOM_ANIM for script id %u",
-
                         tablename, tmp.setGoState.state, tmp.id);
                     continue;
                 }

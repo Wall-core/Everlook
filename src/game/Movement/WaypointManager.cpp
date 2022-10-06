@@ -150,6 +150,7 @@ void WaypointManager::Load()
             }
         }
         while (result->NextRow());
+
         sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "");
         sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, ">> Waypoints and behaviors loaded");
         sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "");

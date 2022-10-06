@@ -204,7 +204,6 @@ class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::m
         LogLevel m_consoleLevel;
         LogLevel m_fileLevel;
         LogLevel m_dbLevel;
-
         uint16 const m_defaultColor;
 
         // include timestamp in console output
@@ -213,7 +212,6 @@ class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::m
 
         // cache values for after initilization use (like gm log per account case)
         std::string m_logsDir;
-
         std::string const m_logsTimestamp;
 
         // char log control
