@@ -910,18 +910,10 @@ void WorldSession::HandleAreaTriggerOpcode(WorldPacket& recv_data)
 
 void WorldSession::HandleUpdateAccountData(WorldPacket& recv_data)
 {
-<<<<<<< HEAD
-=======
     sLog.Out(LOG_BASIC, LOG_LVL_DETAIL, "WORLD: Received opcode CMSG_UPDATE_ACCOUNT_DATA");
->>>>>>> dfb90c588 (Logging rewrite (#1519))
-
     uint32 type, decompressedSize;
     recv_data >> type >> decompressedSize;
-
-<<<<<<< HEAD
-=======
     sLog.Out(LOG_BASIC, LOG_LVL_DETAIL, "UAD: type %u, decompressedSize %u", type, decompressedSize);
->>>>>>> dfb90c588 (Logging rewrite (#1519))
 
     if (type > NUM_ACCOUNT_DATA_TYPES)
         return;
@@ -935,11 +927,7 @@ void WorldSession::HandleUpdateAccountData(WorldPacket& recv_data)
     if (decompressedSize > 0xFFFF)
     {
         recv_data.rpos(recv_data.wpos());                   // unnneded warning spam in this case
-<<<<<<< HEAD
-		sLog.Out(LOG_BASIC, LOG_LVL_DETAIL, "WORLD: Received CMSG_UPDATE_ACCOUNT_DATA");
-=======
         sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "UAD: Account data packet too big, size %u", decompressedSize);
->>>>>>> dfb90c588 (Logging rewrite (#1519))
         return;
     }
 

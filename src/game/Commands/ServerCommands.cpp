@@ -877,7 +877,7 @@ bool ChatHandler::HandleReloadAllLootCommand(char* /*args*/)
 {
     sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading Loot Tables...");
     LootIdSet ids_set;
-    LoadLootTables();
+    LoadLootTables(ids_set);
     SendSysMessage("DB tables `*_loot_template` reloaded.");
     return true;
 }
