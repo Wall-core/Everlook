@@ -1117,10 +1117,6 @@ void WorldSession::HandleItemNameQueryOpcode(WorldPacket& recv_data)
     recv_data >> itemid;
     recv_data.read_skip<uint64>();                          // guid
 
-<<<<<<< HEAD
-
-=======
->>>>>>> dfb90c588 (Logging rewrite (#1519))
     sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WORLD: CMSG_ITEM_NAME_QUERY %u", itemid);
     ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(itemid);
 
