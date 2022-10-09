@@ -54,7 +54,7 @@
 #define MELEE_RANGE                 (NOMINAL_MELEE_RANGE - MIN_MELEE_REACH * 2)
 
 #define LEEWAY_MIN_MOVE_SPEED       4.97f
-#define LEEWAY_BONUS_RANGE          2.66f
+#define LEEWAY_BONUS_RANGE          1.5f // Everlook: Reduce leeway
 
 enum TempSummonType
 {
