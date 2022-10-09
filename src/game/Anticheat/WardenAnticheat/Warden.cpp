@@ -408,7 +408,7 @@ void Warden::ApplyPenalty(std::string message, WardenActions penalty, std::share
     message = "Player " + playerName + " (Account " + accountName + ") " + message;
 
     sLog.Player(_session, LOG_ANTICHEAT, "Warden", LOG_LVL_BASIC, message.c_str());
-    sWorld.SendGMText(LANG_GM_ANNOUNCE_COLOR, "WardenAnticheat", message.c_str());
+//    sWorld.SendGMText(LANG_GM_ANNOUNCE_COLOR, "WardenAnticheat", message.c_str()); -- Everlook: Temporarily disable non-sanctioned alerts to prevent chat flooding
 }
 
 void Warden::HandlePacket(WorldPacket& recvData)
