@@ -997,7 +997,7 @@ struct npc_murkdeepAI : public ScriptedAI
         npc_murkdeepAI::Reset();
 
         m_creature->SetVisibility(VISIBILITY_OFF);
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER);
     }
 
     ObjectGuid m_playerGuid;
@@ -1160,7 +1160,7 @@ struct npc_murkdeepAI : public ScriptedAI
                     case 3:
                         DoSummon();
                         m_creature->SetVisibility(VISIBILITY_ON);
-                        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+                        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER);
 
                         Player* player = GetPlayer();
                         if (player)
