@@ -3848,19 +3848,19 @@ void Spell::EffectEnchantItemTmp(SpellEffectIndex effIdx)
 
 	// Everlook - Imbue Twisting
 	bool wfcheck = m_spellInfo->SpellIconID == 220;
-	if (enchant_id && !wfcheck)
+	if (enchantId && !wfcheck)
 	{
 		uint32 cImbue = itemTarget->GetEnchantmentId(TEMP_ENCHANTMENT_SLOT);
 		switch (cImbue)
 		{
 		case 283:
-			p_caster->CastSpell(p_caster, 33031, true);
+			pCaster->CastSpell(pCaster, 33031, true);
 		case 284:
-			p_caster->CastSpell(p_caster, 33032, true);
+			pCaster->CastSpell(pCaster, 33032, true);
 		case 525:
-			p_caster->CastSpell(p_caster, 33033, true);
+			pCaster->CastSpell(pCaster, 33033, true);
 		case 1669:
-			p_caster->CastSpell(p_caster, 33034, true);
+			pCaster->CastSpell(pCaster, 33034, true);
 		default:
 			break;
 		}
