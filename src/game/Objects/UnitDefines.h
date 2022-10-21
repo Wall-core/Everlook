@@ -62,7 +62,7 @@ enum MovementChangeType
 #define ATTACK_DISPLAY_DELAY 200
 
 // For this time difference is computed regen value
-#define REGEN_TIME_FULL     2000
+#define REGEN_TIME_FULL     5000			// Everlook: Set npc regen tick to 5 seconds
 
 #define UNIT_PVP_COMBAT_TIMER 5500
 
