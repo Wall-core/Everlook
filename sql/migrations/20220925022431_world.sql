@@ -35,6 +35,9 @@ INSERT INTO `game_graveyard_zone` (`id`, `ghost_zone`, `faction`, `patch_min`, `
 INSERT INTO `game_graveyard_zone` (`id`, `ghost_zone`, `faction`, `patch_min`, `patch_max`) VALUES (105, 34, 469, 0, 10);
 INSERT INTO `game_graveyard_zone` (`id`, `ghost_zone`, `faction`, `patch_min`, `patch_max`) VALUES (105, 59, 469, 0, 10);
 
+-- Add Razor Hill as a graveyard for Burning Blade Coven to retain the ability to graveyard hop from Valley of Trials to Razor Hill
+INSERT INTO `game_graveyard_zone` (`id`, `ghost_zone`, `faction`, `patch_min`, `patch_max`) VALUES (32, 365, 0, 0, 10);
+
 -- Condition to return false if quest 769 is complete
 INSERT INTO `conditions` (`condition_entry`, `type`, `value1`, `value2`, `value3`, `value4`, `flags`) VALUES (769, 8, 769, 0, 0, 0, 1);
 
