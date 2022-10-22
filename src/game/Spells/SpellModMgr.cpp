@@ -277,7 +277,7 @@ void SpellModMgr::LoadSpellMods()
 
 	// Frostbite delay to prevent breaking from batching
 	if (SpellEntry* spellInfo = const_cast<SpellEntry*>(sSpellMgr.GetSpellEntry(12494)))
-		spellInfo->speed = 20.0f;
+		spellInfo->speed = 200.0f;
 
     // Divine Favor EffectItemMask for Holy Light base spell
     // (HACK) need to modify EffectItemType column in spell_effect_mod to support bigint flags
