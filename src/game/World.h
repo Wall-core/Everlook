@@ -939,7 +939,7 @@ class World
         time_t GetWorldUpdateTimer(WorldTimers timer);
         time_t GetWorldUpdateTimerInterval(WorldTimers timer);
 
-		Messager<World>& GetMessager() { return m_messager; }
+        Messager<World>& GetMessager() { return m_messager; }
 
         LFGQueue& GetLFGQueue() { return m_lfgQueue; }
         void StartLFGQueueThread();
@@ -1046,7 +1046,7 @@ class World
         static TimePoint m_currentTime;
         static uint32 m_currentDiff;
 
-		Messager<World> m_messager;
+        Messager<World> m_messager;
 };
 
 extern uint32 realmID;
