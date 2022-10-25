@@ -35,7 +35,6 @@ enum
     SPELL_ACTIVATE_BOMB_B               = 11795,            // Target Dest = -530.754 670.571 -313.784
     SPELL_KNOCK_AWAY                    = 10101,
     SPELL_KNOCK_AWAY_AOE                = 11130,
-    SPELL_WALKING_BOMB_EFFECT           = 11504,
 
     NPC_WALKING_BOMB                    = 7915,
 };
