@@ -99,6 +99,7 @@ struct mob_stone_keeperAI : public ScriptedAI
     {
         if (instance)
             instance->SetData(ULDAMAN_ENCOUNTER_STONE_KEEPERS, IN_PROGRESS);
+            m_creature->CastSpell(m_creature, SPELL_SELF_DESTRUCT, true);
     }
 
     void UpdateAI(uint32 const diff) override
