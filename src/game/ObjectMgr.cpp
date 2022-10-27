@@ -969,7 +969,7 @@ void ObjectMgr::LoadCreatureLocales()
 
         if (!GetCreatureTemplate(entry))
         {
-            sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Table `locales_creature` has data for not existed creature entry %u, skipped.", entry);
+            sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "Table `locales_creature` has data for not existed creature entry %u, skipped.", entry);
             continue;
         }
 
