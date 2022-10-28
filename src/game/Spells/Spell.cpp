@@ -1346,7 +1346,7 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
     // All weapon based abilities can trigger weapon procs,
     // even if they do no damage, or break on damage, like Sap.
     // https://www.youtube.com/watch?v=klMsyF_Kz5o
-    bool triggerWeaponProcs = m_casterUnit != unitTarget && m_spellInfo->EquippedItemClass == ITEM_CLASS_WEAPON;
+    bool triggerWeaponProcs = m_casterUnit != unitTarget && m_spellInfo->EquippedItemClass == ITEM_CLASS_WEAPON && !m_spellInfo->IsFitToFamilyMask<CF_ROGUE_GOUGE, CF_ROGUE_SAP>(); // Everlook - don't proc sap or gouge
 
     // All calculated do it!
     // Do healing and triggers
