@@ -2814,9 +2814,9 @@ void Unit::_UpdateAutoRepeatSpell()
     }
 }
 
-void Unit::SetInFront(Unit const* target)
+void Unit::SetInFront(Unit const* pTarget)
 {
-    SetOrientation(GetAngle(target));
+    SetOrientation(GetAngle(pTarget));
 }
 
 void Unit::SetFacingTo(float ori)
@@ -2838,6 +2838,23 @@ void Unit::SetFacingToObject(WorldObject* pObject)
 
     // TODO: figure out under what conditions creature will move towards object instead of facing it where it currently is.
     SetFacingTo(GetAngle(pObject));
+}
+
+bool Unit::IsBehindTarget(Unit const* pTarget, bool strict) const
+{
+    if (strict)
+    {
+        if (Creature const* pCreature = pTarget->ToCreature())
+        {
+            // Mobs always face their currect victim, unless incapacitated.
+            if (!pCreature->m_castingTargetGuid && (pCreature->GetVictim() == this) &&
+                !pTarget->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED | UNIT_FLAG_CONFUSED | UNIT_FLAG_FLEEING | UNIT_FLAG_POSSESSED) &&
+                !pTarget->HasUnitState(UNIT_STAT_CAN_NOT_REACT_OR_LOST_CONTROL))
+                return false;
+        }
+    }
+
+    return !pTarget->HasInArc(this);
 }
 
 bool Unit::CantPathToVictim() const
