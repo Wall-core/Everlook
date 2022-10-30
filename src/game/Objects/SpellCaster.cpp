@@ -583,10 +583,10 @@ float SpellCaster::GetSpellResistChance(Unit const* victim, uint32 schoolMask, b
 
     float resistModHitChance = baseResistance + selfResistance;
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
+/* #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     if ((resistModHitChance < 0.0f) && (baseResistance >= 0.0f))
         resistModHitChance = 0.0f;
-#endif
+#endif */
 
     // Magic vulnerability calculation
     if (resistModHitChance < 0.0f)
