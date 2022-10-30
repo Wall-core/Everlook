@@ -2418,8 +2418,12 @@ bool Unit::IsSpellBlocked(SpellCaster* pCaster, Unit* pVictim, SpellEntry const*
 float Unit::RollMagicResistanceMultiplierOutcomeAgainst(float resistanceChance, SpellSchoolMask schoolMask, DamageEffectType damagetype, SpellEntry const* spellProto) const
 {
     // Magic vulnerability instead of magic resistance:
-    if (resistanceChance < 0)
-        return resistanceChance;
+    bool negResist = (resistanceChance < 0);
+    if (negResist)
+    {
+        // Convert to a positive float for calculating rolls
+        resistanceChance *= -1.0f;
+    }
 
     resistanceChance *= 100.0f;
 
@@ -2468,7 +2472,10 @@ float Unit::RollMagicResistanceMultiplierOutcomeAgainst(float resistanceChance, 
     // Players CANNOT resist 100% of damage, it is always rounded down to 75%, despite what Blizzard's table sugests.
     // The true magic damage resist cap is therefore actually ~68-70% because of this mechanic.
     // http://web.archive.org/web/20110808083353/http://elitistjerks.com/f15/t10712-resisting_magical_damage_its_relation_resistance_levels/p4/
-    if (ran < resist100 + resist75)
+    // However, 100% resist roll is simply treated as a static resist; spell vulnerability (which mirrors resistance for roll chances) allows for 100% damage increase.
+    if (ran < resist100 && negResist)
+        resistCnt = 1.0f;
+    else if (ran < resist100 + resist75)
         resistCnt = 0.75f;
     else if (ran < resist100 + resist75 + resist50)
         resistCnt = 0.5f;
@@ -2478,7 +2485,10 @@ float Unit::RollMagicResistanceMultiplierOutcomeAgainst(float resistanceChance, 
     DEBUG_UNIT(this, DEBUG_SPELL_COMPUTE_RESISTS, "Partial resist : chances %.2f:%.2f:%.2f:%.2f:%.2f. Hit resist chance %f",
         resist0, resist25, resist50, resist75, resist100, resistanceChance);
 
-    return resistCnt;
+    // Return negative value for negative resistance
+    if (negResist)
+        return resistCnt * -1.0f;
+    else return resistCnt;
 }
 
 bool Unit::IsEffectResist(SpellEntry const* spell, int eff) const
