@@ -2,11 +2,19 @@
 DELETE FROM `broadcast_text` WHERE `entry`=200003;
 INSERT INTO `broadcast_text` (`entry`, `male_text`, `female_text`) VALUES (200003, 'Welcome to Everlook. Today, we are releasing Pre-Raid BiS gear for you to test out. Enjoy the templates and good luck in Molten Core.', 'Welcome to Everlook. Today, we are releasing Pre-Raid BiS gear for you to test out. Enjoy the templates and good luck in Molten Core.');
 
+DELETE FROM `npc_text` WHERE `ID`=90009;
+INSERT INTO `npc_text` (`ID`, `BroadcastTextID0`, `Probability0`, `BroadcastTextID1`, `Probability1`, `BroadcastTextID2`, `Probability2`, `BroadcastTextID3`, `Probability3`, `BroadcastTextID4`, `Probability4`, `BroadcastTextID5`, `Probability5`, `BroadcastTextID6`, `Probability6`, `BroadcastTextID7`, `Probability7`) VALUES (90009, 200003, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+DELETE FROM `npc_gossip` WHERE `textid`=90009;
+INSERT INTO `npc_gossip` (`npc_guid`, `textid`) VALUES (2000111, 90009);
+INSERT INTO `npc_gossip` (`npc_guid`, `textid`) VALUES (2000126, 90009);
+
 -- Premade PTR sets
 DELETE FROM `player_premade_item` WHERE `entry` BETWEEN 100 AND 126;
 
 -- Warrior
 -- Arms
+INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (100, 40030, 0, 0); -- Walltoken
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (100, 16731, 1503, 0); -- Helm of Valor
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (100, 15411, 0, 0); -- Mark of Fordring
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (100, 16733, 2488, 0); -- Spaulders of Valor
@@ -28,6 +36,7 @@ INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (1
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (100, 12651, 2042, 0); -- Blackcrow
 
 -- Fury
+INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (101, 40030, 0, 0); -- Walltoken
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (101, 13404, 1506, 0); -- Mask of the Unforgiven
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (101, 15411, 0, 0); -- Mark of Fordring
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (101, 12927, 2488, 0); -- Truestrike Shoulders
@@ -49,6 +58,7 @@ INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (1
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (101, 12651, 2042, 0); -- Blackcrow
 
 -- Protection
+INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (102, 40030, 0, 0); -- Walltoken
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (102, 11746, 1503, 0); -- Golem Skull Helm
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (102, 13091, 0, 0); -- Medallion of Grand Marshal Morris
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (102, 14552, 2488, 0); -- Stockade Pauldrons
@@ -72,6 +82,7 @@ INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (1
 
 -- Paladin
 -- Holy
+INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (103, 40030, 0, 0); -- Walltoken
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (103, 12633, 1509, 0); -- Whitesoul Helm
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (103, 13141, 0, 0); -- Tooth of Gnarr
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (103, 12625, 2488, 0); -- Dawnbringer Shoulders
@@ -90,6 +101,7 @@ INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (1
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (103, 11904, 0, 0); -- Spirit of Aquamentas
 
 -- Protection
+INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (104, 40030, 0, 0); -- Walltoken
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (104, 11746, 1503, 0); -- Golem Skull Helm
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (104, 13091, 0, 0); -- Medallion of Grand Marshal Morris
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (104, 14552, 2488, 0); -- Stockade Pauldrons
@@ -108,6 +120,7 @@ INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (1
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (104, 1168, 1704, 0); -- Skullflame Shield
 
 -- Retribution
+INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (105, 40030, 0, 0); -- Walltoken
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (105, 16727, 1508, 0); -- Lightforge Helm
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (105, 15411, 0, 0); -- Mark of Fordring
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (105, 16729, 2488, 0); -- Lightforge Spaulders
@@ -126,6 +139,7 @@ INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (1
 
 -- Shaman
 -- Elemental
+INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (106, 40030, 0, 0); -- Walltoken
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (106, 5175, 0, 0); -- Earth Totem
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (106, 5176, 0, 0); -- Fire Totem
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (106, 5177, 0, 0); -- Water Totem
@@ -148,6 +162,7 @@ INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (1
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (106, 11904, 0, 0); -- Spirit of Aquamentas
 
 -- Enhancement
+INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (107, 40030, 0, 0); -- Walltoken
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (107, 5175, 0, 0); -- Earth Totem
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (107, 5176, 0, 0); -- Fire Totem
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (107, 5177, 0, 0); -- Water Totem
@@ -171,6 +186,7 @@ INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (1
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (107, 12784, 803, 0); -- Arcanite Reaper
 
 -- Restoration
+INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (108, 40030, 0, 0); -- Walltoken
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (108, 5175, 0, 0); -- Earth Totem
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (108, 5176, 0, 0); -- Fire Totem
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (108, 5177, 0, 0); -- Water Totem
@@ -194,6 +210,7 @@ INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (1
 
 -- Hunter
 -- Beast Mastery
+INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (109, 40030, 0, 0); -- Walltoken
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (109, 2662, 0, 0); -- Harpy Hide Quiver
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (109, 13404, 1508, 0); -- Mask of the Unforgiven
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (109, 15411, 0, 0); -- Mark of Fordring
@@ -215,6 +232,7 @@ INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (1
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (109, 12651, 2042, 0); -- Blackcrow
 
 -- Marksmanship
+INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (110, 40030, 0, 0); -- Walltoken
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (110, 2662, 0, 0); -- Harpy Hide Quiver
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (110, 13404, 1508, 0); -- Mask of the Unforgiven
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (110, 15411, 0, 0); -- Mark of Fordring
@@ -236,6 +254,7 @@ INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (1
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (110, 12651, 2042, 0); -- Blackcrow
 
 -- Survival
+INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (111, 40030, 0, 0); -- Walltoken
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (111, 2662, 0, 0); -- Harpy Hide Quiver
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (111, 16677, 1508, 0); -- Beaststalker's Cap
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (111, 15411, 0, 0); -- Mark of Fordring
@@ -258,6 +277,7 @@ INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (1
 
 -- Rogue
 -- Assassination
+INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (112, 40030, 0, 0); -- Walltoken
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (112, 5060, 0, 0); -- Thieves' Tools
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (112, 13404, 1508, 0); -- Mask of the Unforgiven
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (112, 15411, 0, 0); -- Mark of Fordring
@@ -284,6 +304,7 @@ INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (1
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (112, 12651, 2042, 0); -- Blackcrow
 
 -- Combat
+INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (113, 40030, 0, 0); -- Walltoken
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (113, 5060, 0, 0); -- Thieves' Tools
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (113, 13404, 1508, 0); -- Mask of the Unforgiven
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (113, 15411, 0, 0); -- Mark of Fordring
@@ -310,6 +331,7 @@ INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (1
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (113, 12651, 2042, 0); -- Blackcrow
 
 -- Subtlety
+INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (114, 40030, 0, 0); -- Walltoken
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (114, 5060, 0, 0); -- Thieves' Tools
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (114, 13404, 1508, 0); -- Mask of the Unforgiven
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (114, 15411, 0, 0); -- Mark of Fordring
@@ -337,6 +359,7 @@ INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (1
 
 -- Druid
 -- Balance
+INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (115, 40030, 0, 0); -- Walltoken
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (115, 16720, 1509, 0); -- Wildheart Cowl
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (115, 13141, 0, 0); -- Tooth of Gnarr
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (115, 16718, 2488, 0); -- Wildheart Spaulders
@@ -355,6 +378,7 @@ INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (1
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (115, 11904, 0, 0); -- Spirit of Aquamentas
 
 -- Feral
+INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (116, 40030, 0, 0); -- Walltoken
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (116, 13404, 1508, 0); -- Mask of the Unforgiven
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (116, 15411, 0, 0); -- Mark of Fordring
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (116, 12927, 2488, 0); -- Truestrike Shoulders
@@ -374,6 +398,7 @@ INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (1
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (116, 8345, 0, 0); -- Wolfshead Helm
 
 -- Restoration
+INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (117, 40030, 0, 0); -- Walltoken
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (117, 13216, 1483, 0); -- Crown of the Penitent
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (117, 13141, 0, 0); -- Tooth of Gnarr
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (117, 13013, 2488, 0); -- Elder Wizard's Mantle
@@ -393,6 +418,7 @@ INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (1
 
 -- Warlock
 -- Affliction
+INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (118, 40030, 0, 0); -- Walltoken
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (118, 21341, 0, 0); -- Felcloth Bag
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (118, 14111, 1510, 0); -- Felcloth Hood
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (118, 13141, 0, 0); -- Tooth of Gnarr
@@ -414,6 +440,7 @@ INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (1
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (118, 13938, 0, 0); -- Bonecreeper Stylus
 
 -- Demonology
+INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (119, 40030, 0, 0); -- Walltoken
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (119, 21341, 0, 0); -- Felcloth Bag
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (119, 16698, 1503, 0); -- Dreadmist Mask
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (119, 13141, 0, 0); -- Tooth of Gnarr
@@ -435,6 +462,7 @@ INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (1
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (119, 13938, 0, 0); -- Bonecreeper Stylus
 
 -- Destruction
+INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (120, 40030, 0, 0); -- Walltoken
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (120, 21341, 0, 0); -- Felcloth Bag
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (120, 14111, 1509, 0); -- Felcloth Hood
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (120, 13141, 0, 0); -- Tooth of Gnarr
@@ -457,6 +485,7 @@ INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (1
 
 -- Priest
 -- Discipline
+INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (121, 40030, 0, 0); -- Walltoken
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (121, 13216, 1483, 0); -- Crown of the Penitent
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (121, 13141, 0, 0); -- Tooth of Gnarr
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (121, 16695, 2488, 0); -- Devout Mantle
@@ -476,6 +505,7 @@ INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (1
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (121, 13938, 0, 0); -- Bonecreeper Stylus
 
 -- Holy
+INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (122, 40030, 0, 0); -- Walltoken
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (122, 21341, 0, 0); -- Felcloth Bag
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (122, 13216, 1483, 0); -- Cassandra's Grace
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (122, 13141, 0, 0); -- Tooth of Gnarr
@@ -496,6 +526,7 @@ INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (1
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (122, 13938, 0, 0); -- Bonecreeper Stylus
 
 -- Shadow
+INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (123, 40030, 0, 0); -- Walltoken
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (123, 14111, 1483, 0); -- Felcloth Hood
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (123, 13141, 0, 0); -- Tooth of Gnarr
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (123, 14112, 2488, 0); -- Felcloth Shoulders
@@ -516,6 +547,7 @@ INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (1
 
 -- Mage
 -- Arcane
+INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (124, 40030, 0, 0); -- Walltoken
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (124, 16686, 1509, 0); -- Magister's Crown
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (124, 13141, 0, 0); -- Tooth of Gnarr
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (124, 13013, 2488, 0); -- Elder Wizard's Mantle
@@ -535,6 +567,7 @@ INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (1
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (124, 13938, 0, 0); -- Bonecreeper Stylus
 
 -- Fire
+INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (125, 40030, 0, 0); -- Walltoken
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (125, 3075, 1509, 0); -- Eye of Flame
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (125, 13141, 0, 0); -- Tooth of Gnarr
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (125, 11310, 2488, 0); -- Flameseer Mantle
@@ -555,6 +588,7 @@ INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (1
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (125, 13938, 0, 0); -- Bonecreeper Stylus
 
 -- Frost
+INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (126, 40030, 0, 0); -- Walltoken
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (126, 16686, 1509, 0); -- Magister's Crown
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (126, 13141, 0, 0); -- Tooth of Gnarr
 INSERT INTO `player_premade_item` (`entry`, `item`, `enchant`, `team`) VALUES (126, 11782, 2488, 0); -- Boreal Mantle

@@ -2472,10 +2472,7 @@ float Unit::RollMagicResistanceMultiplierOutcomeAgainst(float resistanceChance, 
     // Players CANNOT resist 100% of damage, it is always rounded down to 75%, despite what Blizzard's table sugests.
     // The true magic damage resist cap is therefore actually ~68-70% because of this mechanic.
     // http://web.archive.org/web/20110808083353/http://elitistjerks.com/f15/t10712-resisting_magical_damage_its_relation_resistance_levels/p4/
-    // However, 100% resist roll is simply treated as a static resist; spell vulnerability (which mirrors resistance for roll chances) allows for 100% damage increase.
-    if (ran < resist100 && negResist)
-        resistCnt = 1.0f;
-    else if (ran < resist100 + resist75)
+    if (ran < resist100 + resist75)
         resistCnt = 0.75f;
     else if (ran < resist100 + resist75 + resist50)
         resistCnt = 0.5f;
