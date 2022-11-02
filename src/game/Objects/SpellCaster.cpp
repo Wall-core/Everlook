@@ -597,7 +597,8 @@ float SpellCaster::GetSpellResistChance(Unit const* victim, uint32 schoolMask, b
         resistModHitChance = (float(resistModHitChance) / skill);
         if (resistModHitChance < -0.75f)
             resistModHitChance = -0.75f;
-        return (resistModHitChance);
+
+        return resistModHitChance;
     }
 
     uint32 const uiLevel = GetLevel();
