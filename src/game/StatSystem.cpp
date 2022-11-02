@@ -631,9 +631,9 @@ void Player::UpdateManaRegen()
     if (modManaRegenInterrupt > 100)
         modManaRegenInterrupt = 100;
 
-    m_modManaRegenInterrupt = ((((sqrt(intellect) + power_regen) * (modManaRegenInterrupt / 100.0f)) + power_regen_mp5));
+    m_modManaRegenInterrupt = power_regen_mp5 + (sqrt(intellect) + power_regen) * modManaRegenInterrupt / 100.0f;
 
-    m_modManaRegen = ((sqrt(intellect) + power_regen) + power_regen_mp5);
+    m_modManaRegen = power_regen_mp5 + (sqrt(intellect) + power_regen);
 }
 
 void Player::_ApplyAllStatBonuses()
@@ -790,7 +790,7 @@ void Creature::UpdateManaRegen()
     // Mana regen from SPELL_AURA_MOD_POWER_REGEN aura
     float power_regen_mp5 = GetTotalAuraModifierByMiscValue(SPELL_AURA_MOD_POWER_REGEN, POWER_MANA) / 5.0f;
     
-    m_manaRegen = uint32(((sqrt(intellect) + power_regen) + power_regen_mp5) * ManaIncreaseRate);
+    m_manaRegen = uint32(power_regen_mp5 + (sqrt(intellect) + power_regen) * ManaIncreaseRate);
 }
 
 void Creature::UpdateAttackPowerAndDamage(bool ranged)
