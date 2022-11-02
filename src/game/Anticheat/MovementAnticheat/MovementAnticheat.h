@@ -97,7 +97,6 @@ private:
         bool CheckTeleportToTransport(MovementInfo const& movementInfo) const;
         uint32 CheckSpeedHack(MovementInfo const& movementInfo, uint16 opcode);
         uint32 CheckTimeDesync(MovementInfo const& movementInfo);
-        bool ShouldAcceptCorpseMovement(MovementInfo& movementInfo, uint16 opcode);
 
         void AddMessageToPacketLog(std::string message);
 
