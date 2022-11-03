@@ -529,9 +529,7 @@ INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`, `patch_max`)
 (@DEEPMOS_EGGS_OGUID, @DEEPMOS_EGGS_POOL_TEMPLATE, 'Stonetalon Mountains - Deepmoss Eggs', 10),
 (@DEEPMOS_EGGS_OGUID+1, @DEEPMOS_EGGS_POOL_TEMPLATE+1, 'Stonetalon Mountains - Deepmoss Eggs', 10),
 (@DEEPMOS_EGGS_OGUID+2, @DEEPMOS_EGGS_POOL_TEMPLATE, 'Stonetalon Mountains - Deepmoss Eggs', 10),
-(@DEEPMOS_EGGS_OGUID+3, @DEEPMOS_EGGS_POOL_TEMPLATE+1, 'Stonetalon Mountains - Deepmoss Eggs', 10),
-(@DEEPMOS_EGGS_OGUID+4, @DEEPMOS_EGGS_POOL_TEMPLATE, 'Stonetalon Mountains - Deepmoss Eggs', 10),
-(@DEEPMOS_EGGS_OGUID+5, @DEEPMOS_EGGS_POOL_TEMPLATE+1, 'Stonetalon Mountains - Deepmoss Eggs', 10);
+(@DEEPMOS_EGGS_OGUID+3, @DEEPMOS_EGGS_POOL_TEMPLATE+1, 'Stonetalon Mountains - Deepmoss Eggs', 10);
 
 -- Atal'ai Artifact
 SET @ATAL_ARTIFACT_OGUID = 705000;
@@ -617,13 +615,7 @@ INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`, `patch_min`,
 (@TWILIGHT_TABLET_OGUID+9, @TWILIGHT_TABLET_POOL_TEMPLATE+3, 'Silithus - Twilight Tablet Fragment', 6, 10),
 (@TWILIGHT_TABLET_OGUID+10, @TWILIGHT_TABLET_POOL_TEMPLATE+4, 'Silithus - Twilight Tablet Fragment', 6, 10),
 (@TWILIGHT_TABLET_OGUID+11, @TWILIGHT_TABLET_POOL_TEMPLATE+5, 'Silithus - Twilight Tablet Fragment', 6, 10),
-(@TWILIGHT_TABLET_OGUID+12, @TWILIGHT_TABLET_POOL_TEMPLATE+6, 'Silithus - Twilight Tablet Fragment', 6, 10),
-(@TWILIGHT_TABLET_OGUID+13, @TWILIGHT_TABLET_POOL_TEMPLATE+1, 'Silithus - Twilight Tablet Fragment', 6, 10),
-(@TWILIGHT_TABLET_OGUID+14, @TWILIGHT_TABLET_POOL_TEMPLATE+2, 'Silithus - Twilight Tablet Fragment', 6, 10),
-(@TWILIGHT_TABLET_OGUID+15, @TWILIGHT_TABLET_POOL_TEMPLATE+3, 'Silithus - Twilight Tablet Fragment', 6, 10),
-(@TWILIGHT_TABLET_OGUID+16, @TWILIGHT_TABLET_POOL_TEMPLATE+4, 'Silithus - Twilight Tablet Fragment', 6, 10),
-(@TWILIGHT_TABLET_OGUID+17, @TWILIGHT_TABLET_POOL_TEMPLATE+5, 'Silithus - Twilight Tablet Fragment', 6, 10),
-(@TWILIGHT_TABLET_OGUID+18, @TWILIGHT_TABLET_POOL_TEMPLATE+6, 'Silithus - Twilight Tablet Fragment', 6, 10);
+(@TWILIGHT_TABLET_OGUID+12, @TWILIGHT_TABLET_POOL_TEMPLATE+6, 'Silithus - Twilight Tablet Fragment', 6, 10);
 
 -- Supply Crate
 SET @SUPPLY_CRATE_OGUID = 709000;
@@ -675,16 +667,16 @@ INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`, `patch_min`,
 (@SUPPLY_CRATE_OGUID+8, @SUPPLY_CRATE_POOL_TEMPLATE+8, 'Stratholme - Supply Crate', 0, 10),
 (@SUPPLY_CRATE_OGUID+9, @SUPPLY_CRATE_POOL_TEMPLATE+9, 'Stratholme - Supply Crate', 0, 10),
 (@SUPPLY_CRATE_OGUID+10, @SUPPLY_CRATE_POOL_TEMPLATE+10, 'Stratholme - Supply Crate', 0, 10),
-(@SUPPLY_CRATE_OGUID+11, @SUPPLY_CRATE_POOL_TEMPLATE+11, 'Stratholme - Supply Crate', 0, 10),
-(@SUPPLY_CRATE_OGUID+12, @SUPPLY_CRATE_POOL_TEMPLATE+12, 'Stratholme - Supply Crate', 0, 10),
-(@SUPPLY_CRATE_OGUID+13, @SUPPLY_CRATE_POOL_TEMPLATE+13, 'Stratholme - Supply Crate', 0, 10),
-(@SUPPLY_CRATE_OGUID+14, @SUPPLY_CRATE_POOL_TEMPLATE+14, 'Stratholme - Supply Crate', 0, 10),
-(@SUPPLY_CRATE_OGUID+15, @SUPPLY_CRATE_POOL_TEMPLATE+15, 'Stratholme - Supply Crate', 0, 10),
-(@SUPPLY_CRATE_OGUID+16, @SUPPLY_CRATE_POOL_TEMPLATE+16, 'Stratholme - Supply Crate', 0, 10),
-(@SUPPLY_CRATE_OGUID+17, @SUPPLY_CRATE_POOL_TEMPLATE+17, 'Stratholme - Supply Crate', 0, 10),
-(@SUPPLY_CRATE_OGUID+18, @SUPPLY_CRATE_POOL_TEMPLATE+18, 'Stratholme - Supply Crate', 0, 10),
-(@SUPPLY_CRATE_OGUID+19, @SUPPLY_CRATE_POOL_TEMPLATE+19, 'Stratholme - Supply Crate', 0, 10),
-(@SUPPLY_CRATE_OGUID+20, @SUPPLY_CRATE_POOL_TEMPLATE+20, 'Stratholme - Supply Crate', 0, 10);
+(@SUPPLY_CRATE_OGUID+11, @SUPPLY_CRATE_POOL_TEMPLATE+1, 'Stratholme - Supply Crate', 0, 10),
+(@SUPPLY_CRATE_OGUID+12, @SUPPLY_CRATE_POOL_TEMPLATE+2, 'Stratholme - Supply Crate', 0, 10),
+(@SUPPLY_CRATE_OGUID+13, @SUPPLY_CRATE_POOL_TEMPLATE+3, 'Stratholme - Supply Crate', 0, 10),
+(@SUPPLY_CRATE_OGUID+14, @SUPPLY_CRATE_POOL_TEMPLATE+4, 'Stratholme - Supply Crate', 0, 10),
+(@SUPPLY_CRATE_OGUID+15, @SUPPLY_CRATE_POOL_TEMPLATE+5, 'Stratholme - Supply Crate', 0, 10),
+(@SUPPLY_CRATE_OGUID+16, @SUPPLY_CRATE_POOL_TEMPLATE+6, 'Stratholme - Supply Crate', 0, 10),
+(@SUPPLY_CRATE_OGUID+17, @SUPPLY_CRATE_POOL_TEMPLATE+7, 'Stratholme - Supply Crate', 0, 10),
+(@SUPPLY_CRATE_OGUID+18, @SUPPLY_CRATE_POOL_TEMPLATE+8, 'Stratholme - Supply Crate', 0, 10),
+(@SUPPLY_CRATE_OGUID+19, @SUPPLY_CRATE_POOL_TEMPLATE+9, 'Stratholme - Supply Crate', 0, 10),
+(@SUPPLY_CRATE_OGUID+20, @SUPPLY_CRATE_POOL_TEMPLATE+10, 'Stratholme - Supply Crate', 0, 10);
 
 UPDATE `pool_template` SET `description` = 'Stratholme - Supply Crate' WHERE `description` LIKE 'Strat : Supply Crate';
 UPDATE `pool_gameobject` SET `description` = 'Stratholme - Supply Crate' WHERE `guid` IN (SELECT `guid` FROM `gameobject` WHERE `id` IN (176224, 176304));
