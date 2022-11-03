@@ -17304,12 +17304,12 @@ void Player::ResetInstances(InstanceResetMethod method)
                 continue;
             }
 
-            // solo player cannot reset instance while inside
-            if (IsInWorld() && itr->first == GetMapId())
+            // Everlook - allow players to solo reset
+/*            if (IsInWorld() && itr->first == GetMapId())
             {
                 ++itr;
                 continue;
-            }
+            }*/
         }
 
         // if the map is loaded, reset it
