@@ -435,7 +435,6 @@ struct npc_weegli_blastfuseAI : public ScriptedAI
 
     void OnScriptEventHappened(uint32 /*uiEvent*/ = 0, uint32 /*uiData*/ = 0, WorldObject* /*pInvoker*/ = 0) override
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "OnScriptEventHappened de npc_weegli_blastfuse : Destruction porte");
         DestroyDoor();
     }
 
