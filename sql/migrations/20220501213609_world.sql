@@ -3880,7 +3880,7 @@ INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `chance`, `description`, `p
 
 -- Missing Small Thorium Vein spawns in Burning Steppes.
 INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `state`, `animprogress`, `patch_min`, `patch_max`) VALUES
-(445, 324, 0, -7864.27, -874.889, 150.601, 2.70526, 0, 0, 0.976295, 0.216442, 300, 300, 1, 100, 0, 10), -- Closest existing guid is 183 at 7.389390 yards.
+-- (445, 324, 0, -7864.27, -874.889, 150.601, 2.70526, 0, 0, 0.976295, 0.216442, 300, 300, 1, 100, 0, 10), -- Closest existing guid is 183 at 7.389390 yards.
 (447, 324, 0, -8124.25, -2463.32, 149.642, 2.80998, 0, 0, 0.986285, 0.16505, 300, 300, 1, 100, 0, 10), -- Closest existing guid is 150 at 8.866940 yards.
 (448, 324, 0, -7858.74, -2693.35, 173.306, 0.680677, 0, 0, 0.333806, 0.942642, 300, 300, 1, 100, 0, 10), -- Closest existing guid is 247 at 36.773102 yards.
 (449, 324, 0, -7499.86, -2133.78, 143.687, 3.63029, 0, 0, -0.970295, 0.241925, 300, 300, 1, 100, 0, 10), -- Closest existing guid is 271 at 19.785688 yards.
@@ -3895,7 +3895,7 @@ INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `posi
 (13791, 324, 0, -7867.83, -2616.99, 124.392, 5.44543, 0, 0, -0.406736, 0.913546, 300, 300, 1, 100, 0, 10), -- Closest existing guid is 305 at 57.744373 yards.
 (13793, 324, 0, -8085.11, -1281.41, 141.056, 4.25861, 0, 0, -0.848047, 0.529921, 300, 300, 1, 100, 0, 10); -- Closest existing guid is 188 at 69.791489 yards.
 INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `chance`, `description`, `patch_min`, `patch_max`) VALUES
-(445, 1298, 0, 'Small Thorium Vein', 0, 10), -- Small Thorium Veins in Burning Steppes 40 objects total
+-- (445, 1298, 0, 'Small Thorium Vein', 0, 10), -- Small Thorium Veins in Burning Steppes 40 objects total
 (447, 1298, 0, 'Small Thorium Vein', 0, 10), -- Small Thorium Veins in Burning Steppes 40 objects total
 (448, 1298, 0, 'Small Thorium Vein', 0, 10), -- Small Thorium Veins in Burning Steppes 40 objects total
 (449, 1298, 0, 'Small Thorium Vein', 0, 10), -- Small Thorium Veins in Burning Steppes 40 objects total
@@ -3912,14 +3912,14 @@ INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `chance`, `description`, `p
 
 -- Missing Small Thorium Vein spawns in The Hinterlands.
 INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `state`, `animprogress`, `patch_min`, `patch_max`) VALUES
-(444, 324, 0, 107.217, -4568.66, 132.759, 1.71042, 0, 0, 0.754709, 0.656059, 300, 300, 1, 100, 0, 10), -- Closest existing guid is 296 at 97.710045 yards.
+-- (444, 324, 0, 107.217, -4568.66, 132.759, 1.71042, 0, 0, 0.754709, 0.656059, 300, 300, 1, 100, 0, 10), -- Closest existing guid is 296 at 97.710045 yards.
 (14485, 324, 0, -121.696, -4368.51, 153.591, 4.69494, 0, 0, -0.71325, 0.70091, 300, 300, 1, 100, 0, 10), -- Closest existing guid is 354 at 121.626671 yards.
 (13699, 324, 0, -222.086, -3605.74, 231.848, 3.89209, 0, 0, -0.930417, 0.366502, 300, 300, 1, 100, 0, 10), -- Closest existing guid is 360 at 144.790466 yards.
 (13701, 324, 0, 408.902, -4095.56, 113.969, 6.12611, 0, 0, -0.0784588, 0.996917, 300, 300, 1, 100, 0, 10), -- Closest existing guid is 331 at 19.041668 yards.
 (13755, 324, 0, -155.38, -4073.34, 127.776, 1.71042, 0, 0, 0.754709, 0.656059, 300, 300, 1, 100, 0, 10), -- Closest existing guid is 349 at 220.628830 yards.
 (13790, 324, 0, -261.942, -3704.23, 242.799, 2.72271, 0, 0, 0.978148, 0.207912, 300, 300, 1, 100, 0, 10); -- Closest existing guid is 360 at 39.542103 yards.
 INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `chance`, `description`, `patch_min`, `patch_max`) VALUES
-(444, 1257, 0, 'Small Thorium Vein', 0, 10), -- Small Thorium Veins in Hinterlands 9 objects total
+-- (444, 1257, 0, 'Small Thorium Vein', 0, 10), -- Small Thorium Veins in Hinterlands 9 objects total
 (14485, 1257, 0, 'Small Thorium Vein', 0, 10), -- Small Thorium Veins in Hinterlands 9 objects total
 (13699, 1257, 0, 'Small Thorium Vein', 0, 10), -- Small Thorium Veins in Hinterlands 9 objects total
 (13701, 1257, 0, 'Small Thorium Vein', 0, 10), -- Small Thorium Veins in Hinterlands 9 objects total
@@ -3928,11 +3928,11 @@ INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `chance`, `description`, `p
 
 -- Missing Small Thorium Vein spawns in Searing Gorge.
 INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `state`, `animprogress`, `patch_min`, `patch_max`) VALUES
-(443, 324, 0, -6561.7, -1257.7, 136.212, 5.84685, 0, 0, -0.216439, 0.976296, 300, 300, 1, 100, 0, 10), -- Closest existing guid is 175 at 131.318481 yards.
+-- (443, 324, 0, -6561.7, -1257.7, 136.212, 5.84685, 0, 0, -0.216439, 0.976296, 300, 300, 1, 100, 0, 10), -- Closest existing guid is 175 at 131.318481 yards.
 (13697, 324, 0, -6502.38, -1040.03, 344.818, 2.63544, 0, 0, 0.968147, 0.250381, 300, 300, 1, 100, 0, 10), -- Closest existing guid is 13212 at 214.234131 yards.
 (454, 324, 0, -6421.86, -1300.82, 180.939, 4.01426, 0, 0, -0.906307, 0.422619, 300, 300, 1, 100, 0, 10); -- Closest existing guid is 175 at 269.450500 yards.
 INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `chance`, `description`, `patch_min`, `patch_max`) VALUES
-(443, 1295, 0, 'Small Thorium Vein', 0, 10), -- Small Thorium Veins in Searing Gorge 13 objects total
+-- (443, 1295, 0, 'Small Thorium Vein', 0, 10), -- Small Thorium Veins in Searing Gorge 13 objects total
 (13697, 1295, 0, 'Small Thorium Vein', 0, 10), -- Small Thorium Veins in Searing Gorge 13 objects total
 (454, 1295, 0, 'Small Thorium Vein', 0, 10); -- Small Thorium Veins in Searing Gorge 13 objects total
 
