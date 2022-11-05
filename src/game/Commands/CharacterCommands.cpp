@@ -4698,6 +4698,25 @@ bool ChatHandler::HandleModifyAccessoriesCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleModifyRestedCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    uint32 rest = (uint32)atoi(args);
+    Player* target = GetSelectedPlayer();
+
+    if (!target)
+    {
+        SendSysMessage(LANG_PLAYER_NOT_FOUND);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    target->SetRestBonus(rest);
+    return true;
+}
+
 bool ChatHandler::HandlePDumpLoadCommand(char *args)
 {
     char* file = ExtractQuotedOrLiteralArg(&args);

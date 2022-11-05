@@ -664,6 +664,9 @@ class ChatHandler
         bool HandleModifySkinColorCommand(char *args);
         bool HandleModifyAccessoriesCommand(char *args);
 
+        // Everlook: Additional commands
+        bool HandleModifyRestedCommand(char *args);
+
         //-----------------------Npc Commands-----------------------
         bool HandleNpcAddCommand(char* args);
         bool HandleNpcAddEntryCommand(char* args);
