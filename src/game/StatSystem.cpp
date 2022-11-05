@@ -617,9 +617,6 @@ void Player::UpdateManaRegen()
     // Mana regen from spirit
     float power_regen = GetRegenMPPerSpirit();
 
-    // Mana regen from intellect
-    float intellect = GetStat(STAT_INTELLECT);
-
     // Apply PCT bonus from SPELL_AURA_MOD_POWER_REGEN_PERCENT aura on spirit base regen
     power_regen *= GetTotalAuraMultiplierByMiscValue(SPELL_AURA_MOD_POWER_REGEN_PERCENT, POWER_MANA);
 
@@ -631,9 +628,9 @@ void Player::UpdateManaRegen()
     if (modManaRegenInterrupt > 100)
         modManaRegenInterrupt = 100;
 
-    m_modManaRegenInterrupt = power_regen_mp5 + (sqrt(intellect) + power_regen) * modManaRegenInterrupt / 100.0f;
+    m_modManaRegenInterrupt = power_regen_mp5 + power_regen * modManaRegenInterrupt / 100.0f;
 
-    m_modManaRegen = power_regen_mp5 + (sqrt(intellect) + power_regen);
+    m_modManaRegen = power_regen_mp5 + power_regen;
 }
 
 void Player::_ApplyAllStatBonuses()
@@ -784,13 +781,12 @@ void Creature::UpdateManaRegen()
 {
     float power_regen = GetRegenMPPerSpirit();
     float ManaIncreaseRate = sWorld.getConfig(CONFIG_FLOAT_RATE_POWER_MANA);
-    float intellect = std::max(1.0f, GetStat(STAT_INTELLECT));
     // Apply PCT bonus from SPELL_AURA_MOD_POWER_REGEN_PERCENT aura on spirit base regen
     power_regen *= GetTotalAuraMultiplierByMiscValue(SPELL_AURA_MOD_POWER_REGEN_PERCENT, POWER_MANA);
     // Mana regen from SPELL_AURA_MOD_POWER_REGEN aura
     float power_regen_mp5 = GetTotalAuraModifierByMiscValue(SPELL_AURA_MOD_POWER_REGEN, POWER_MANA) / 5.0f;
     
-    m_manaRegen = uint32(power_regen_mp5 + (sqrt(intellect) + power_regen) * ManaIncreaseRate);
+    m_manaRegen = uint32(power_regen_mp5 + power_regen * ManaIncreaseRate);
 }
 
 void Creature::UpdateAttackPowerAndDamage(bool ranged)
