@@ -17938,7 +17938,9 @@ void Player::SetRestBonus(float rest_bonus_new)
     if (rest_bonus_new < 0)
         rest_bonus_new = 0;
 
-    float rest_bonus_max = 4084700.0f; // Everlook - no cap fr fr
+    float rest_bonus_max = (float)GetUInt32Value(PLAYER_NEXT_LEVEL_XP) * 1.5f / 2.0f;
+    if (GetSession()->GetAccountMaxLevel() >= 60) // Everlook - no cap on rested exp for alts after reaching 60
+        rest_bonus_max = 4084700.0f;
 
     if (rest_bonus_new > rest_bonus_max)
         m_restBonus = rest_bonus_max;
