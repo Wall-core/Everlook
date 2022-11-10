@@ -9971,7 +9971,7 @@ void ObjectMgr::LoadTrainers(char const* tableName, bool isTemplates)
 
         if (!SpellMgr::IsSpellValid(spellinfo))
         {
-            sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Table `%s` (Entry: %u) has broken learning spell %u, ignore", tableName, entry, spell);
+          /*sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Table `%s` (Entry: %u) has broken learning spell %u, ignore", tableName, entry, spell);*/
             continue;
         }
 

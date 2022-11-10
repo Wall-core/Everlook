@@ -2297,8 +2297,8 @@ bool SpellMgr::IsSpellValid(SpellEntry const* spellInfo, Player* pl, bool msg)
                     {
                         if (pl)
                             ChatHandler(pl).PSendSysMessage("Spell %u learn to broken spell %u, and then...", spellInfo->Id, spellInfo->EffectTriggerSpell[i]);
-                        else
-                            sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "Spell %u learn to invalid spell %u, and then...", spellInfo->Id, spellInfo->EffectTriggerSpell[i]);
+                      /*else
+                            sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "Spell %u learn to invalid spell %u, and then...", spellInfo->Id, spellInfo->EffectTriggerSpell[i]);*/
                     }
                     return false;
                 }
