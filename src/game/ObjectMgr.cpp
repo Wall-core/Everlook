@@ -5806,8 +5806,8 @@ void ObjectMgr::LoadQuests()
             {
                 if (qinfo->NextQuestId)
                     sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Quest %u is a breadcrumb, it should not unlock quest %d", qinfo->GetQuestId(), qinfo->NextQuestId);
-                if (qinfo->ExclusiveGroup)
-                    sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Quest %u is a breadcrumb, it should not be in exclusive group %d", qinfo->GetQuestId(), qinfo->ExclusiveGroup);
+                /*if (qinfo->ExclusiveGroup)
+                    sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Quest %u is a breadcrumb, it should not be in exclusive group %d", qinfo->GetQuestId(), qinfo->ExclusiveGroup);*/
             }
         }
     }
