@@ -439,17 +439,15 @@ struct npc_grimstoneAI : public npc_escortAI
                         break;
                     case 11:
                         DoGate(DATA_ARENA2, GO_STATE_ACTIVE);
-                        Event_Timer = 3000;
+                        Event_Timer = 5000;
+                        DoCastSpellIfCan(m_creature, SPELL_GRIMSTONE_TELEPORT);
                         break;
                     case 12:
-                        DoCastSpellIfCan(m_creature, SPELL_GRIMSTONE_TELEPORT);
-                        Event_Timer = 2000;
-                    case 13:
                         m_creature->SetVisibility(VISIBILITY_OFF);
                         SummonRingBoss();
                         Event_Timer = 0;
                         break;
-                    case 14:
+                    case 13:
                         //if quest, complete
                         DoGate(DATA_ARENA2, GO_STATE_READY);
                         DoGate(DATA_ARENA3, GO_STATE_ACTIVE);
@@ -502,7 +500,7 @@ struct npc_grimstoneAI : public npc_escortAI
                 
                 for (uint64& guid : RingMobGUID)
                     if (Creature* mob = m_creature->GetMap()->GetCreature(guid))
-                        mob->ForcedDespawn();                     
+                        mob->ForcedDespawn();                
 
                 m_creature->ForcedDespawn();
                 Reset();
