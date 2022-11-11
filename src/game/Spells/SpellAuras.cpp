@@ -3786,8 +3786,8 @@ void Aura::HandleModStealth(bool apply, bool Real)
             target->InterruptSpellsCastedOnMe(false, false, true);
 
             // Prevent Hunter pets from pursuing players who stealth while not tracked
-            if (target->GetTypeId() == TYPEID_PLAYER && !target->HasAuraType(SPELL_AURA_MOD_STALKED))
-                ((Player*)target)->SetCannotBeDetectedTimer(1000);
+//            if (target->GetTypeId() == TYPEID_PLAYER && !target->HasAuraType(SPELL_AURA_MOD_STALKED))
+//                ((Player*)target)->SetCannotBeDetectedTimer(1000);
         }
     }
     else
