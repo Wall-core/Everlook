@@ -5757,7 +5757,11 @@ void Player::UpdateCombatSkills(Unit* pVictim, WeaponAttackType attType, bool de
 
     // No weapon skill gain while in tree/feral form
     if (!defence && IsShapeShifted())
-        return; 
+        return;
+
+    // No weapon skillups from combat dummies
+    if (pVictim->GetFactionTemplateId() == 914)
+        return;
 
     uint32 playerLevel      = GetLevel();
     uint32 currentSkillValue = defence ? GetBaseDefenseSkillValue() : GetBaseWeaponSkillValue(attType);
