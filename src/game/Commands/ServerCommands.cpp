@@ -388,6 +388,9 @@ bool ChatHandler::HandleServerShutDownCommand(char* args)
     if (exitcode > 125)
         return false;
 
+    // Everlook - Add 30 seconds to shutdown to stop Wall
+    delay = delay + 30;
+
     sWorld.ShutdownServ(delay, 0, exitcode);
     return true;
 }
