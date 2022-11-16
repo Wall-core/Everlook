@@ -64,7 +64,7 @@ struct boss_arcanist_doanAI : public ScriptedAI
 
     void UpdateAI(uint32 const diff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+        if (!m_creature->SelectHostileTarget())
             return;
 
         if (bShielded && bCanDetonate)
