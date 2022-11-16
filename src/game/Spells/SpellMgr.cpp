@@ -1224,9 +1224,9 @@ bool SpellMgr::IsNoStackSpellDueToSpell(uint32 spellId_1, uint32 spellId_2) cons
             spellInfo_1->SpellIconID != 516 && // Improved Sprint
             // World of Warcraft Client Patch 1.8.0 (2005-10-11)
             // - Sayge?s buffs at the Darkmoon Faire are now exclusive to one another.
-#if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_7_1
+/* #if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_7_1 - Everlook: More power, more pain
             !(spellInfo_1->SpellIconID == 1595 && spellInfo_1->SpellVisual == 7042 && spellInfo_2->SpellIconID == 1595 && spellInfo_2->SpellVisual == 7042) &&
-#endif
+#endif */
             spellInfo_1->IsPositiveSpell() == spellInfo_2->IsPositiveSpell() // judgement does not remove the enemy seal in a pala-pala duel
        )
     {

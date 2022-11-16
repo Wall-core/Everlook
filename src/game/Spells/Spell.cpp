@@ -748,11 +748,11 @@ void Spell::prepareDataForTriggerSystem()
                 // Holy Shock
                 else if (m_spellInfo->IsFitToFamilyMask<CF_PALADIN_HOLY_SHOCK>())
                     m_canTrigger = true;
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
+/* #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4 - Everlook: Allow triggers in early patches */
                 // Eye for an Eye triggered spell
                 else if (m_spellInfo->Id == 25997)
                     m_canTrigger = true;
-#endif
+/* #endif */
                 break;
             case SPELLFAMILY_PRIEST:
                 // Touch of Weakness / Devouring Plague
@@ -6554,11 +6554,11 @@ SpellCastResult Spell::CheckCast(bool strict)
                     if (!strict && go->HasFlag(GAMEOBJECT_FLAGS, GO_FLAG_IN_USE))
                         return SPELL_FAILED_CHEST_IN_USE;
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_7_1
+/* #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_7_1 - Everlook: Allow in early patches */ 
                     // Prevent looting chests while totally immune
                     if (go->GetGOInfo()->CannotBeUsedUnderImmunity() && m_caster->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE))
                         return SPELL_FAILED_DAMAGE_IMMUNE;
-#endif
+/* #endif */
                 }
                 else if (Item* item = m_targets.getItemTarget())
                 {
