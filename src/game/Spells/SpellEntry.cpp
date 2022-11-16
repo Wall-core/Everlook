@@ -270,6 +270,11 @@ DiminishingGroup SpellEntry::GetDiminishingReturnsGroup(bool triggered) const
     // Explicit Diminishing Groups
     switch (SpellFamilyName)
     {
+        case SPELLFAMILY_DRUID: // Everlook: Allow no DR on in early patches
+        {
+            if (IsFitToFamilyMask<CF_DRUID_FERAL_CHARGE>())
+                return DIMINISHING_TRIGGER_ROOT;
+        }
         case SPELLFAMILY_ROGUE:
         {
             // Kidney Shot
@@ -280,7 +285,7 @@ DiminishingGroup SpellEntry::GetDiminishingReturnsGroup(bool triggered) const
                 return DIMINISHING_NONE;
             break;
         }
-        case SPELLFAMILY_HUNTER:
+/*        case SPELLFAMILY_HUNTER: - Everlook: Allow no DR on in early patches
         {
             // World of Warcraft Client Patch 1.10.0 (2006-03-28)
             // - Freezing Traps are now affected by diminishing returns.
@@ -290,7 +295,7 @@ DiminishingGroup SpellEntry::GetDiminishingReturnsGroup(bool triggered) const
                 return DIMINISHING_FREEZE;
 #endif
             break;
-        }
+        } */
         case SPELLFAMILY_WARLOCK:
         {
             // Fear
@@ -300,11 +305,11 @@ DiminishingGroup SpellEntry::GetDiminishingReturnsGroup(bool triggered) const
             // World of Warcraft Client Patch 1.4.0 (2005-04-19)
             // - Seduction (Succubus) - Is now considered a Fear effect for purposes 
             //   of diminishing returns.
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_3_1
+/*#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_3_1 - Everlook: Allow no DR on in early patches
             // Seduction
             if (Id == 6358)
                 return DIMINISHING_WARLOCK_FEAR;
-#endif
+#endif */
             // Curses/etc
             if (IsFitToFamilyMask<CF_WARLOCK_MISC_DEBUFFS>())
                 return DIMINISHING_LIMITONLY;
@@ -317,7 +322,7 @@ DiminishingGroup SpellEntry::GetDiminishingReturnsGroup(bool triggered) const
                 return DIMINISHING_LIMITONLY;
             break;
         }
-        case SPELLFAMILY_SHAMAN:
+/*        case SPELLFAMILY_SHAMAN: - Everlook: Allow no DR on in early patches
         {
             // World of Warcraft Client Patch 1.4.0 (2005-04-19)
             // - Frost Shock - Now subject to diminishing returns in PvP. This is 
@@ -325,10 +330,10 @@ DiminishingGroup SpellEntry::GetDiminishingReturnsGroup(bool triggered) const
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_3_1
             // Frost Shock
             if (IsFitToFamilyMask<CF_SHAMAN_FROST_SHOCK>())
-                return DIMINISHING_CONTROL_ROOT;
+               return DIMINISHING_CONTROL_ROOT;
 #endif
             break;
-        }
+        } */
         case SPELLFAMILY_MAGE:
         {
             // Ice Block
