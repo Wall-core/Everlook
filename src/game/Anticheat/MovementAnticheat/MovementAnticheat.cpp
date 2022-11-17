@@ -559,6 +559,14 @@ uint32 MovementAnticheat::HandlePositionTests(Player* pPlayer, MovementInfo& mov
     if (pPlayer != me)
         InitNewPlayer(pPlayer);
 
+    if (opcode == MSG_MOVE_SET_FACING)
+        ++m_consecutiveFacing;
+    else if (m_consecutiveFacing > 0)
+    {
+        m_averageConsecutiveFacing = (m_averageConsecutiveFacing * m_averageConsecutiveFacingCount + m_consecutiveFacing) / (++m_averageConsecutiveFacingCount);
+        m_consecutiveFacing = 0;
+    }
+
     if (opcode == CMSG_MOVE_FEATHER_FALL_ACK)
         GetLastMovementInfo().jump.startClientTime = movementInfo.jump.startClientTime = movementInfo.ctime;
 

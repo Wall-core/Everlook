@@ -59,6 +59,11 @@ void PInfoHandler::HandlePInfoCommand(WorldSession* session, Player* target, Obj
             warden->GetPlayerInfo(data->warden_clock, data->warden_fingerprint, data->warden_hypervisors,
                 data->warden_proxifier);
 
+        if (auto const cheat_data = target->GetSession()->GetCheatData())
+            data->fatio = cheat_data->Fatio();
+        else
+            data->fatio = 0.f;
+
         HandleDataAfterPlayerLookup(data);
     }
     else
@@ -230,7 +235,8 @@ void PInfoHandler::HandleResponse(WorldSession* session, PInfoData *data)
         cHandler.SendSysMessage(data->warden_hypervisors.c_str());
     if (!data->warden_proxifier.empty())
         cHandler.SendSysMessage(data->warden_proxifier.c_str());
-
+    if (data->fatio > 0.f)
+        cHandler.PSendSysMessage("Fatio: %f", data->fatio);
     delete data;
 }
 

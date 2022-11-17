@@ -79,6 +79,8 @@ class MovementAnticheat
 
         float DistanceTraveled() const { return m_distanceTraveled; }
 
+        float Fatio() const { return m_averageConsecutiveFacing; }
+
         void OnKnockBack(Player* pPlayer, float speedxy, float speedz, float cos, float sin);
         void OnUnreachable(Unit* attacker);
         void OnExplore(AreaEntry const* pArea);
@@ -120,6 +122,11 @@ private:
         uint32 m_maxClientDesync = 0;
         float m_overspeedDistance = 0.0f;
         float m_maxOverspeedDistance = 0.0f;
+
+        // Rotation types
+        uint32 m_consecutiveFacing = 0;
+        float m_averageConsecutiveFacing = 0.f;
+        uint32 m_averageConsecutiveFacingCount = 0;
 
         float m_distanceTraveled = 0.0f;
 

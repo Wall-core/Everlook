@@ -64,6 +64,8 @@ struct PInfoData
     std::string warden_fingerprint;
     std::string warden_hypervisors;
     std::string warden_proxifier;
+
+    float fatio;
 };
 
 class WorldSession;
