@@ -21,6 +21,7 @@
   *
   */
 
+
 #include "Warden.hpp"
 #include "WardenWin.hpp"
 #include "WardenModuleMgr.hpp"
@@ -138,6 +139,187 @@ enum WorldEnables
     Prohibited = (TerrainDoodadCollisionVisuals|CrappyBatches|ZoneBoundaryVisuals|BSPRender|ShowQuery|TerrainDoodadAABoxVisuals|Unknown6737F9|Unknown673820),
 };
 
+
+static auto constexpr foo = sizeof(ULONG);
+
+struct KSYSTEM_TIME
+{
+    ULONG LowPart;
+    LONG High1Time;
+    LONG High2Time;
+};
+
+enum NT_PRODUCT_TYPE
+{
+    NtProductWinNt = 1,
+    NtProductLanManNt = 2,
+    NtProductServer = 3
+};
+
+enum ALTERNATIVE_ARCHITECTURE_TYPE
+{
+    StandardDesign = 0,
+    NEC98x86 = 1,
+    EndAlternatives = 2
+};
+
+struct KUSER_SHARED_DATA
+{
+    ULONG                         TickCountLowDeprecated;
+    ULONG                         TickCountMultiplier;
+    KSYSTEM_TIME                  InterruptTime;
+    KSYSTEM_TIME                  SystemTime;
+    KSYSTEM_TIME                  TimeZoneBias;
+    USHORT                        ImageNumberLow;
+    USHORT                        ImageNumberHigh;
+    WCHAR                         NtSystemRoot[260];
+    ULONG                         MaxStackTraceDepth;
+    ULONG                         CryptoExponent;
+    ULONG                         TimeZoneId;
+    ULONG                         LargePageMinimum;
+    ULONG                         AitSamplingValue;
+    ULONG                         AppCompatFlag;
+    ULONGLONG                     RNGSeedVersion;
+    ULONG                         GlobalValidationRunlevel;
+    LONG                          TimeZoneBiasStamp;
+    ULONG                         NtBuildNumber;
+    NT_PRODUCT_TYPE               NtProductType;
+    BOOLEAN                       ProductTypeIsValid;
+    BOOLEAN                       Reserved0[1];
+    USHORT                        NativeProcessorArchitecture;
+    ULONG                         NtMajorVersion;
+    ULONG                         NtMinorVersion;
+    BOOLEAN                       ProcessorFeatures[64];
+    ULONG                         Reserved1;
+    ULONG                         Reserved3;
+    ULONG                         TimeSlip;
+    ALTERNATIVE_ARCHITECTURE_TYPE AlternativeArchitecture;
+    ULONG                         BootId;
+    LARGE_INTEGER                 SystemExpirationDate;
+    ULONG                         SuiteMask;
+    BOOLEAN                       KdDebuggerEnabled;
+    union {
+        UCHAR MitigationPolicies;
+        struct {
+            UCHAR NXSupportPolicy : 2;
+            UCHAR SEHValidationPolicy : 2;
+            UCHAR CurDirDevicesSkippedForDlls : 2;
+            UCHAR Reserved : 2;
+        };
+    };
+    USHORT                        CyclesPerYield;
+    ULONG                         ActiveConsoleId;
+    ULONG                         DismountCount;
+    ULONG                         ComPlusPackage;
+    ULONG                         LastSystemRITEventTickCount;
+    ULONG                         NumberOfPhysicalPages;
+    BOOLEAN                       SafeBootMode;
+    union {
+        UCHAR VirtualizationFlags;
+        struct {
+            UCHAR ArchStartedInEl2 : 1;
+            UCHAR QcSlIsSupported : 1;
+        };
+    };
+    UCHAR                         Reserved12[2];
+    union {
+        ULONG SharedDataFlags;
+        struct {
+            ULONG DbgErrorPortPresent : 1;
+            ULONG DbgElevationEnabled : 1;
+            ULONG DbgVirtEnabled : 1;
+            ULONG DbgInstallerDetectEnabled : 1;
+            ULONG DbgLkgEnabled : 1;
+            ULONG DbgDynProcessorEnabled : 1;
+            ULONG DbgConsoleBrokerEnabled : 1;
+            ULONG DbgSecureBootEnabled : 1;
+            ULONG DbgMultiSessionSku : 1;
+            ULONG DbgMultiUsersInSessionSku : 1;
+            ULONG DbgStateSeparationEnabled : 1;
+            ULONG SpareBits : 21;
+        } DUMMYSTRUCTNAME2;
+    } DUMMYUNIONNAME2;
+    ULONG                         DataFlagsPad[1];
+    ULONGLONG                     TestRetInstruction;
+    LONGLONG                      QpcFrequency;
+    ULONG                         SystemCall;
+    ULONG                         Reserved2;
+    ULONGLONG                     SystemCallPad[2];
+    union {
+        KSYSTEM_TIME TickCount;
+        ULONG64      TickCountQuad;
+        struct {
+            ULONG ReservedTickCountOverlay[3];
+            ULONG TickCountPad[1];
+        } DUMMYSTRUCTNAME;
+    } DUMMYUNIONNAME3;
+    ULONG                         Cookie;
+    ULONG                         CookiePad[1];
+    LONGLONG                      ConsoleSessionForegroundProcessId;
+    ULONGLONG                     TimeUpdateLock;
+    ULONGLONG                     BaselineSystemTimeQpc;
+    ULONGLONG                     BaselineInterruptTimeQpc;
+    ULONGLONG                     QpcSystemTimeIncrement;
+    ULONGLONG                     QpcInterruptTimeIncrement;
+    UCHAR                         QpcSystemTimeIncrementShift;
+    UCHAR                         QpcInterruptTimeIncrementShift;
+    USHORT                        UnparkedProcessorCount;
+    ULONG                         EnclaveFeatureMask[4];
+    ULONG                         TelemetryCoverageRound;
+    USHORT                        UserModeGlobalLogger[16];
+    ULONG                         ImageFileExecutionOptions;
+    ULONG                         LangGenerationCount;
+    ULONGLONG                     Reserved4;
+    ULONGLONG                     InterruptTimeBias;
+    ULONGLONG                     QpcBias;
+    ULONG                         ActiveProcessorCount;
+    UCHAR                         ActiveGroupCount;
+    UCHAR                         Reserved9;
+    union {
+        USHORT QpcData;
+        struct {
+            UCHAR QpcBypassEnabled;
+            UCHAR QpcShift;
+        };
+    };
+    LARGE_INTEGER                 TimeZoneBiasEffectiveStart;
+    LARGE_INTEGER                 TimeZoneBiasEffectiveEnd;
+    XSTATE_CONFIGURATION          XState;
+    KSYSTEM_TIME                  FeatureConfigurationChangeStamp;
+    ULONG                         Spare;
+    ULONG64                       UserPointerAuthMask;
+};
+
+// How much to read, since reading all of it would fill Warden's entire buffer
+constexpr uint32 SystemRootLength = 25;
+
+static constexpr struct
+{
+    const char* name;
+    uint32 offset;
+    uint32 length;
+} UserDataFields[] = {
+    {"NtSystemRoot", offsetof(KUSER_SHARED_DATA, NtSystemRoot), SystemRootLength * sizeof(WCHAR) },
+#define ADD_FIELD(x) { #x, offsetof(KUSER_SHARED_DATA, x), sizeof(KUSER_SHARED_DATA::x) }
+    ADD_FIELD(NtBuildNumber),
+    ADD_FIELD(NtProductType),
+    ADD_FIELD(NtMajorVersion),
+    ADD_FIELD(NtMinorVersion)
+#undef ADD_FIELD
+};
+
+constexpr size_t GetDataFieldSize()
+{
+    auto constexpr fields = sizeof(UserDataFields) / sizeof(UserDataFields[0]);
+
+    size_t ret = 0;
+    for (auto i = 0u; i < fields; ++i)
+        ret += UserDataFields[i].length;
+    return ret;
+}
+
+auto constexpr UserDataFieldSize = GetDataFieldSize();
+
 const ClientOffsets* GetClientOffets(uint32 build)
 {
     static auto constexpr offset_count = sizeof(Offsets) / sizeof(Offsets[0]);
@@ -218,6 +400,26 @@ std::string ArchitectureString(uint16 arch)
     }
 }
 
+std::string OsInfoString(const WCHAR* systemRoot, NT_PRODUCT_TYPE productType, uint32 majorVersion, uint32 minorVersion, uint32 build)
+{
+    std::stringstream result;
+    std::wstring ws(systemRoot);
+    result << "Windows dir: " << std::string(ws.begin(), ws.end());
+    result << " Version: " << majorVersion << "." << minorVersion << "." << build;
+    result << " Type:";
+
+    if (productType == NtProductWinNt)
+        result << "NT";
+    else if (productType == NtProductLanManNt)
+        result << "LanManNT";
+    else if (productType == NtProductServer)
+        result << "Server";
+    else
+        result << "Unknown (" << static_cast<uint32>(productType) << ")";
+
+    return result.str();
+}
+
 std::string CPUTypeAndRevision(uint32 cpuType, uint16 revision)
 {
     std::stringstream str;
@@ -277,171 +479,6 @@ std::string CPUTypeAndRevision(uint32 cpuType, uint16 revision)
     }
 
     return str.str();
-}
-
-// this function assumes that the given code begins with a valid instruction.  in other words, that
-// it does not begin in random data or in the middle of an instruction.
-void DeobfuscateAsm(std::vector<std::uint8_t> &code)
-{
-#define LSTRIP(c, l) do { if (c.size() <= l) { c.clear(); return; } else { c.erase(c.begin(), c.begin()+l); } } while(false)
-
-    do
-    {
-        if (code.empty())
-            return;
-
-        // At the start of this loop we re-assume the entry condition that the code begins at a valid instruction.
-
-        // remove NOP
-        if (code[0] == 0x90)
-        {
-            LSTRIP(code, 1);
-            continue;
-        }
-
-        // xchg statements which are either semantically equivalent to NOP or
-        // which will be inverted later on.
-        if (code[0] == 0x87)
-        {
-            // {"eax", "ebx", "ecx", "edx", "edi", "esi"};
-            if (code[1] == 0xC9 ||  // xchg ecx, ecx
-                code[1] == 0xCA ||  // xchg ecx, edx
-                code[1] == 0xCB ||  // xchg ebx, ecx
-                code[1] == 0xCE ||  // xchg esi, ecx
-                code[1] == 0xCF ||  // xchg ecx, edi
-                code[1] == 0xE4 ||  // xchg esp, esp
-                code[1] == 0xED ||  // xchg ebp, ebp
-                code[1] == 0xD1 ||  // xchg ecx, edx
-                code[1] == 0xD2 ||  // xchg edx, edx
-                code[1] == 0xD3 ||  // xchg ebx, edx
-                code[1] == 0xD6 ||  // xchg esi, edx
-                code[1] == 0xD7 ||  // xchg edx, edi
-                code[1] == 0xD9 ||  // xchg ecx, ebx
-                code[1] == 0xDA ||  // xchg ebx, edx
-                code[1] == 0xDB ||  // xchg ebx, ebx
-                code[1] == 0xDE ||  // xchg esi, ebx
-                code[1] == 0xDF ||  // xchg ebx, edi
-                code[1] == 0xF1 ||  // xchg ecx, esi
-                code[1] == 0xF2 ||  // xchg edx, esi
-                code[1] == 0xF3 ||  // xchg ebx, esi
-                code[1] == 0xF7 ||  // xchg edi, esi
-                code[1] == 0xF9 ||  // xchg ecx, edi
-                code[1] == 0xFA ||  // xchg edx, edi
-                code[1] == 0xFB ||  // xchg edi, esi
-                code[1] == 0xFE)    // xchg ebx, edi
-            {
-                LSTRIP(code, 2);
-                continue;
-            }
-        }
-        // xchg one register with another.  in wrobot this is always repeated/inverted later
-        else if (code[0] >= 0x91 && code[0] <= 0x97)
-        {
-            LSTRIP(code, 1);
-            continue;
-        }
-        // simple NOP-equivalent mov statements
-        else if (code[0] == 0x89)
-        {
-            if (code[1] == 0xC9 ||  // mov ecx, ecx
-                code[1] == 0xD2 ||  // mov edx, edx
-                code[1] == 0xDB ||  // mov ebx, ebx
-                code[1] == 0xE4 ||  // mov esp, esp
-                code[1] == 0xFF)    // mov edi, edi
-            {
-                LSTRIP(code, 2);
-                continue;
-            }
-        }
-        // near JMP past random junk
-        else if (code[0] == 0xEB)   // JMP +1-0xFF
-        {
-            // not enough room? clear out anything left and finish
-            if (code.size() < 2)
-            {
-                code.clear();
-                return;
-            }
-
-            const unsigned int len = static_cast<unsigned int>(code[1]) + 2;
-
-            LSTRIP(code, len);
-            continue;
-        }
-        // far JMP past random junk
-        else if (code[0] == 0xE9)
-        {
-            if (code.size() < 5)
-            {
-                code.clear();
-                return;
-            }
-
-            const unsigned int len = *reinterpret_cast<unsigned int *>(&code[1]) + 5;
-
-            LSTRIP(code, len);
-            continue;
-        }
-        // short conditional jumps that always are followed by far jumps to the same place:
-        // "JE", "JZ", "JNE", "JNZ", "JG", "JNLE", "JGE", "JNL", "JNGE", "JLE", "JNG", "JO", "JNO", "JP", "JPE", "JNP", "JPO", "JS"
-        else if (code[0] == 0x70 ||
-            code[0] == 0x71 ||
-            code[0] == 0x74 ||
-            code[0] == 0x75 ||
-            code[0] == 0x78 ||
-            code[0] == 0x7A ||
-            code[0] == 0x7B ||
-            code[0] == 0x7C ||
-            code[0] == 0x7D ||
-            code[0] == 0x7E ||
-            code[0] == 0x7F)
-        {
-            const unsigned int target = static_cast<unsigned int>(code[1]) + 2;
-
-            unsigned int secondJumpTarget = 0;
-
-            // currently the far jump will come within 12 bytes
-            for (auto i = 2u; i < 14; ++i)
-            {
-                if (code[i] == 0xE9)
-                {
-                    secondJumpTarget = *reinterpret_cast<unsigned int *>(&code[i + 1]) + 5;
-                    break;
-                }
-                else if (code[i] == 0xEB)
-                {
-                    secondJumpTarget = static_cast<unsigned int>(code[i + 1]) + 2 + i;
-                    break;
-                }
-            }
-
-            if (secondJumpTarget && secondJumpTarget == target)
-            {
-                LSTRIP(code, target);
-                continue;
-            }
-        }
-        // these are instructions that are not part of the obfuscation.  so for now we will skip them and
-        // deobfuscate whatever comes after them.  this will let us build up deobfuscated code.
-        // pushfd.  this is currently not part of the obfuscation of wrobot but rather it appears to always be
-        // the first non-obfuscated opcode.  therefore, lets skip it and debofuscate what comes after it.
-        else if (code[0] == 0x9C || // pushfd
-            code[0] == 0x60)   // pushad
-        {
-            std::vector<std::uint8_t> copy(code.begin() + 1, code.end());
-            DeobfuscateAsm(copy);
-
-            code.resize(1);
-            code.insert(code.end(), copy.begin(), copy.end());
-
-            // do nothing after this
-            return;
-        }
-
-        // if we reach here, we haven't made any change.  stop
-        break;
-    } while (true);
-#undef LSTRIP
 }
 }
 
@@ -800,6 +837,61 @@ void WardenWin::LoadScriptedScans()
 
         return false;
     }), "Proxifier check", WinAllBuild | InitialLogin));
+
+    sWardenScanMgr.AddWindowsScan(std::make_shared<WindowsScan>(
+    // builder
+    [](const Warden* warden, std::vector<std::string>& strings, ByteBuffer& scan)
+    {
+        auto static constexpr fields = sizeof(UserDataFields) / sizeof(UserDataFields[0]);
+
+        for (auto i = 0u; i < fields; ++i)
+            scan << static_cast<uint8>(warden->GetModule()->opcodes[READ_MEMORY] ^ warden->GetXor())
+                 << static_cast<uint8>(0)
+                 << static_cast<uint32>(0x7FFE0000u + UserDataFields[i].offset)
+                 << static_cast<uint8>(UserDataFields[i].length);
+
+    },
+    [](const Warden* warden, ByteBuffer& buff)
+    {
+        auto static constexpr fields = sizeof(UserDataFields) / sizeof(UserDataFields[0]);
+        auto const wardenWin = const_cast<WardenWin*>(reinterpret_cast<const WardenWin*>(warden));
+
+        for (auto i = 0u; i < fields; ++i)
+        {
+            // non-zero value indicates failure
+            if (!!buff.read<uint8>())
+            {
+                sLog.Player(wardenWin->_session, LOG_ANTICHEAT, "Warden", LOG_LVL_BASIC,
+                    "Failed to read KUSER_SHARED_DATA::%s", UserDataFields[i].name);
+                return true;
+            }
+
+            const std::string field{ UserDataFields[i].name };
+
+            if (field == "NtSystemRoot")
+            {
+                memset(wardenWin->_systemRoot, 0, sizeof(wardenWin->_systemRoot));
+                static_assert(SystemRootLength * sizeof(WCHAR) == sizeof(WardenWin::_systemRoot), "System root length wrong");
+                buff.read(reinterpret_cast<uint8*>(wardenWin->_systemRoot), UserDataFields[i].length);
+            }
+            else if (field == "NtBuildNumber")
+                wardenWin->_systemBuild = buff.read<uint32>();
+            else if (field == "NtProductType")
+                wardenWin->_productType = buff.read<uint32>();
+            else if (field == "NtMajorVersion")
+                wardenWin->_winMajorVersion = buff.read<uint32>();
+            else if (field == "NtMinorVersion")
+                wardenWin->_winMinorVersion = buff.read<uint32>();
+            else
+            {
+                buff.rpos(buff.rpos() + UserDataFields[i].length);
+                sLog.Player(wardenWin->_session, LOG_ANTICHEAT, "Warden", LOG_LVL_DEBUG, "Unhandled KUSER_SHAREED_DATA value: %s length: %d", field.c_str(), UserDataFields[i].length);
+            }
+        }
+
+        return false;
+    }, 7 * sizeof(UserDataFields) / sizeof(UserDataFields[0]), UserDataFieldSize + sizeof(UserDataFields) / sizeof(UserDataFields[0]),
+    "KUSER_SHARED_DATA", WinAllBuild|InitialLogin));
 }
 
 void WardenWin::BuildLuaInit(const std::string &module, bool fastcall, uint32 offset, ByteBuffer &out) const
@@ -886,7 +978,8 @@ void WardenWin::BuildTimingInit(const std::string &module, uint32 offset, bool s
 WardenWin::WardenWin(WorldSession *session, const BigNumber &K) :
     _wardenAddress(0), Warden(session, sWardenModuleMgr.GetWindowsModule(), K),
     _lastClientTime(0), _lastHardwareActionTime(0), _lastTimeCheckServer(0), _sysInfoSaved(false),
-    _proxifierFound(false), _hypervisors("")
+    _proxifierFound(false), _hypervisors(""), _systemRoot(L""), _systemBuild(0), _productType(0),
+    _winMajorVersion(0), _winMinorVersion(0)
 {
     memset(&_sysInfo, 0, sizeof(_sysInfo));
 }
@@ -999,8 +1092,8 @@ void WardenWin::Update()
         static SqlStatementID fingerprintUpdate;
 
         auto stmt = LogsDatabase.CreateStatement(fingerprintUpdate,
-            "INSERT INTO `system_fingerprint_usage` (`fingerprint`, `account`, `ip`, `realm`, `architecture`, `cputype`, `activecpus`, `totalcpus`, `pagesize`) "
-            "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            "INSERT INTO `system_fingerprint_usage` (`fingerprint`, `account`, `ip`, `realm`, `architecture`, `cputype`, `os_info`, `activecpus`, `totalcpus`, `pagesize`) "
+            "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
         stmt.addUInt32(_session->GetFingerprint());
         stmt.addUInt32(_session->GetAccountId());
@@ -1008,6 +1101,7 @@ void WardenWin::Update()
         stmt.addUInt32(realmID);
         stmt.addString(ArchitectureString(_sysInfo.wProcessorArchitecture));
         stmt.addString(CPUTypeAndRevision(_sysInfo.dwProcessorType, _sysInfo.wProcessorRevision));
+        stmt.addString(OsInfoString(_systemRoot, static_cast<NT_PRODUCT_TYPE>(_productType), _winMajorVersion, _winMinorVersion, _systemBuild));
         stmt.addUInt32(activeProcCount);
         stmt.addUInt32(_sysInfo.dwNumberOfProcessors);
         stmt.addUInt32(_sysInfo.dwPageSize);
@@ -1067,6 +1161,9 @@ void WardenWin::GetPlayerInfo(std::string& clock, std::string& fingerprint, std:
 
         s << " Active CPUs: " << activeProcCount;
         s << " Total CPUs: " << _sysInfo.dwNumberOfProcessors;
+
+        s << OsInfoString(_systemRoot, static_cast<NT_PRODUCT_TYPE>(_productType), _winMajorVersion,
+            _winMinorVersion, _systemBuild);
 
         fingerprint = s.str();
     }

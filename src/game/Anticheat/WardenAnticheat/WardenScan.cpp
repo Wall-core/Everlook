@@ -91,9 +91,7 @@ WindowsMemoryScan::WindowsMemoryScan(uint32 offset, const void *expected, size_t
     // builder
     [this](const Warden *warden, std::vector<std::string> &, ByteBuffer &scan)
     {
-        auto const winWarden = reinterpret_cast<const WardenWin *>(warden);
-
-        scan << static_cast<uint8>(winWarden->GetModule()->opcodes[READ_MEMORY] ^ winWarden->GetXor())
+        scan << static_cast<uint8>(warden->GetModule()->opcodes[READ_MEMORY] ^ warden->GetXor())
              << static_cast<uint8>(0)   // no string associated with this form of the constructor
              << this->_offset
              << static_cast<uint8>(this->_expected.size());
@@ -126,9 +124,7 @@ WindowsMemoryScan::WindowsMemoryScan(const std::string &module, uint32 offset, c
 
         strings.emplace_back(this->_module);
 
-        auto const winWarden = reinterpret_cast<const WardenWin *>(warden);
-
-        scan << static_cast<uint8>(winWarden->GetModule()->opcodes[READ_MEMORY] ^ winWarden->GetXor())
+        scan << static_cast<uint8>(warden->GetModule()->opcodes[READ_MEMORY] ^ warden->GetXor())
              << static_cast<uint8>(strings.size())
              << this->_offset
              << static_cast<uint8>(this->_expected.size());
@@ -161,9 +157,7 @@ WindowsMemoryScan::WindowsMemoryScan(uint32 offset, size_t length, CheckT checke
     // builder
     [this](const Warden *warden, std::vector<std::string> &, ByteBuffer &scan)
     {
-        auto const winWarden = reinterpret_cast<const WardenWin *>(warden);
-
-        scan << static_cast<uint8>(winWarden->GetModule()->opcodes[READ_MEMORY] ^ winWarden->GetXor())
+        scan << static_cast<uint8>(warden->GetModule()->opcodes[READ_MEMORY] ^ warden->GetXor())
              << static_cast<uint8>(0)   // no string associated with this form of the constructor
              << this->_offset
              << static_cast<uint8>(this->_expected.size());
@@ -182,9 +176,7 @@ WindowsMemoryScan::WindowsMemoryScan(const std::string &module, uint32 offset, s
 
         strings.emplace_back(this->_module);
 
-        auto const winWarden = reinterpret_cast<const WardenWin *>(warden);
-
-        scan << static_cast<uint8>(winWarden->GetModule()->opcodes[READ_MEMORY] ^ winWarden->GetXor())
+        scan << static_cast<uint8>(warden->GetModule()->opcodes[READ_MEMORY] ^ warden->GetXor())
              << static_cast<uint8>(strings.size())
              << this->_offset
              << static_cast<uint8>(this->_expected.size());
