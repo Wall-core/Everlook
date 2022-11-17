@@ -91,23 +91,23 @@ static constexpr char *sFingerprintAddons[] =
 
 namespace NamreebAnticheat
 {
-    bool ReadAddonInfo(WorldSession* session, WorldPacket &authPacket, WorldPacket &out)
+bool ReadAddonInfo(WorldSession* session, WorldPacket &authPacket, WorldPacket &out)
+{
+// broken addon packet, can't be received from real client
+    if (authPacket.rpos() + 4 > authPacket.size())
+        return false;
+
+    // have we already received this information?  if so, it must be some kind of hacker
+    if (!!session->GetFingerprint())
     {
-    // broken addon packet, can't be received from real client
-        if (authPacket.rpos() + 4 > authPacket.size())
-            return false;
+        sLog.Player(session, LOG_ANTICHEAT, LOG_LVL_BASIC,
+            "ADDON: Received addon information when fingerprint is already known (0x%lx).  This may be an attempt to crash the server",
+            session->GetFingerprint());
+        authPacket.rpos(authPacket.wpos());
+        return false;
+    }
 
-        // have we already received this information?  if so, it must be some kind of hacker
-        if (!!session->GetFingerprint())
-        {
-            sLog.Player(session, LOG_ANTICHEAT, LOG_LVL_BASIC,
-                "ADDON: Received addon information when fingerprint is already known (0x%lx).  This may be an attempt to crash the server",
-                session->GetFingerprint());
-            authPacket.rpos(authPacket.wpos());
-            return false;
-        }
-
-        uLong addonSize = authPacket.read<uint32>();
+    uLong addonSize = authPacket.read<uint32>();
 
     // empty addon packet, nothing process, can't be received from real client
     if (!addonSize)
