@@ -228,18 +228,21 @@ void PInfoHandler::HandleResponse(WorldSession* session, PInfoData *data)
     if (Guild* guild = sGuildMgr.GetPlayerGuild(data->target_guid))
         cHandler.PSendSysMessage("Guild: %s", cHandler.playerLink(guild->GetName()).c_str());
 
-    if (!data->warden_clock.empty())
-        cHandler.SendSysMessage(data->warden_clock.c_str());
-    if (!data->warden_fingerprint.empty())
-        cHandler.SendSysMessage(data->warden_fingerprint.c_str());
-    if (!data->warden_hypervisors.empty())
-        cHandler.SendSysMessage(data->warden_hypervisors.c_str());
-    if (!data->warden_proxifier.empty())
-        cHandler.SendSysMessage(data->warden_proxifier.c_str());
-    if (data->fatio > 0.f)
-        cHandler.PSendSysMessage("Fatio: %f", data->fatio);
-    if (session->GetSecurity() >= SEC_DEVELOPER && data->fingerprint > 0)
-        cHandler.PSendSysMessage("Fingerprint: 0x%lx", data->fingerprint);
+    if (session->GetSecurity() >= SEC_DEVELOPER)
+    {
+        if (!data->warden_clock.empty())
+            cHandler.SendSysMessage(data->warden_clock.c_str());
+        if (!data->warden_fingerprint.empty())
+            cHandler.SendSysMessage(data->warden_fingerprint.c_str());
+        if (!data->warden_hypervisors.empty())
+            cHandler.SendSysMessage(data->warden_hypervisors.c_str());
+        if (!data->warden_proxifier.empty())
+            cHandler.SendSysMessage(data->warden_proxifier.c_str());
+        if (data->fatio > 0.f)
+            cHandler.PSendSysMessage("Fatio: %f", data->fatio);
+        if (data->fingerprint > 0)
+            cHandler.PSendSysMessage("Fingerprint: 0x%lx", data->fingerprint);
+    }
 
     delete data;
 }
