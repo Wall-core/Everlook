@@ -1408,6 +1408,9 @@ bool AuthSocket::VerifyVersion(uint8 const* a, int32 aLength, uint8 const* versi
     if (allowedClients.empty())
         return false;
 
+    if (_os == OSX && _platform == PPC && sConfig.GetBoolDefault("AllowPowerPC", false))
+        return false;
+
     if (!sConfig.GetBoolDefault("StrictVersionCheck", false))
         return true;
 
