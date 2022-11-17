@@ -374,8 +374,9 @@ class WorldSession
         MovementAnticheat* GetCheatData();
         std::shared_ptr<Antispam> GetAntispam() const { return m_antispam; }
         void ProcessAnticheatAction(char const* detector, char const* reason, uint32 action, uint32 banTime = 0 /* Perm ban */);
-        uint32 GetFingerprint() const { return 0; } // TODO
-        void CleanupFingerprintHistory() {} // TODO
+        uint32 GetFingerprint() const { return m_fingerprint; }
+        void SetFingerprint(uint32 fingerprint) { m_fingerprint = fingerprint; }
+        void CleanupFingerprintHistory() const;
         bool HasClientMovementControl() const { return !m_clientMoverGuid.IsEmpty(); }
         bool IsSilenced() const { return (GetAccountFlags() & ACCOUNT_FLAG_SILENCED) != 0; }
         
@@ -866,6 +867,7 @@ class WorldSession
         ClientOSType    m_clientOS;
         ClientPlatformType m_clientPlatform;
         uint32          m_gameBuild;
+        uint32 m_fingerprint;
         std::shared_ptr<PlayerBotEntry> m_bot;
 
         Warden* m_warden;

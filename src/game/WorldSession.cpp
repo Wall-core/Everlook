@@ -26,6 +26,7 @@
 #include "WorldSocket.h"                                    // must be first to make ACE happy with ACE includes in it
 #include "Common.h"
 #include "Database/DatabaseEnv.h"
+#include "Database/DatabaseImpl.h"
 #include "Log.h"
 #include "Opcodes.h"
 #include "WorldPacket.h"
@@ -76,7 +77,7 @@ WorldSession::WorldSession(uint32 id, WorldSocket *sock, AccountTypes sec, time_
     m_playerLoading(false), m_playerLogout(false), m_playerRecentlyLogout(false), m_playerSave(false), m_sessionDbcLocale(sWorld.GetAvailableDbcLocale(locale)),
     m_sessionDbLocaleIndex(sObjectMgr.GetIndexForLocale(locale)), m_latency(0), m_tutorialState(TUTORIALDATA_UNCHANGED), m_warden(nullptr), m_cheatData(nullptr),
     m_bot(nullptr), m_clientOS(CLIENT_OS_UNKNOWN), m_clientPlatform(CLIENT_PLATFORM_UNKNOWN), m_gameBuild(0), m_antispam(sAntispamMgr.GetSession(id)),
-    m_charactersCount(10), m_characterMaxLevel(0), m_lastPubChannelMsgTime(0), m_moveRejectTime(0), m_masterPlayer(nullptr)
+    m_charactersCount(10), m_characterMaxLevel(0), m_lastPubChannelMsgTime(0), m_moveRejectTime(0), m_masterPlayer(nullptr), m_fingerprint(0)
 {
     if (sock)
     {
@@ -1164,4 +1165,38 @@ bool WorldSession::CharacterScreenIdleKick(uint32 currTime)
     }
 
     return false;
+}
+
+namespace
+{
+    void CleanupFingerprintHistoryCallback(QueryResult* result, uint32 fingerprint)
+    {
+        if (!result)
+            return;
+
+        auto const history = 20;
+        auto const pruneCount = result->Fetch()[0].GetUInt32();
+
+        if (pruneCount > history)
+        {
+            static SqlStatementID pruneLog;
+
+            LogsDatabase.BeginTransaction();
+
+            auto prune = LogsDatabase.CreateStatement(pruneLog, "DELETE FROM system_fingerprint_usage WHERE fingerprint = ? ORDER BY `time` ASC LIMIT ?");
+
+            prune.addUInt32(fingerprint);
+            prune.addUInt32(pruneCount - history);
+            prune.Execute();
+            LogsDatabase.CommitTransaction();
+        }
+
+        delete result;
+    }
+}
+
+void WorldSession::CleanupFingerprintHistory() const
+{
+    LogsDatabase.AsyncPQuery(&CleanupFingerprintHistoryCallback, m_fingerprint,
+        "SELECT COUNT(*) FROM system_fingerprint_usage WHERE fingerprint = %u", m_fingerprint);
 }

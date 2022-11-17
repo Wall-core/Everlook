@@ -165,7 +165,11 @@ void WorldSession::HandleCharEnum(QueryResult* result)
     data.put<uint8>(0, num);
     m_charactersCount = num;
 
-    SendPacket(&data);
+#ifdef USE_ANTICHEAT
+    m_warden->SetCharEnumPacket(std::move(data));
+#else
+    SendPacket(data);
+#endif
 }
 
 void WorldSession::HandleCharEnumOpcode(WorldPacket& /*recv_data*/)

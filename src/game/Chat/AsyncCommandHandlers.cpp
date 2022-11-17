@@ -54,6 +54,7 @@ void PInfoHandler::HandlePInfoCommand(WorldSession* session, Player* target, Obj
 
         data->target_guid = target->GetObjectGuid();
         data->online = true;
+        data->fingerprint = target->GetSession()->GetFingerprint();
 
         if (auto const warden = target->GetSession()->GetWarden())
             warden->GetPlayerInfo(data->warden_clock, data->warden_fingerprint, data->warden_hypervisors,
@@ -237,6 +238,9 @@ void PInfoHandler::HandleResponse(WorldSession* session, PInfoData *data)
         cHandler.SendSysMessage(data->warden_proxifier.c_str());
     if (data->fatio > 0.f)
         cHandler.PSendSysMessage("Fatio: %f", data->fatio);
+    if (session->GetSecurity() >= SEC_DEVELOPER && data->fingerprint > 0)
+        cHandler.PSendSysMessage("Fingerprint: 0x%lx", data->fingerprint);
+
     delete data;
 }
 

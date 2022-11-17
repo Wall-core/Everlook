@@ -341,7 +341,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     sWorld.AddSession(m_Session);
 
     // Create and send the Addon packet
-    if (sAddOnHandler.BuildAddonPacket(&recvPacket, &SendAddonPacked))
+    if (NamreebAnticheat::ReadAddonInfo(m_Session, recvPacket, SendAddonPacked))
         SendPacket(SendAddonPacked);
 
     return 0;

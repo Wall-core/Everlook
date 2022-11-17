@@ -66,6 +66,7 @@ struct PInfoData
     std::string warden_proxifier;
 
     float fatio;
+    uint32 fingerprint = 0;
 };
 
 class WorldSession;
