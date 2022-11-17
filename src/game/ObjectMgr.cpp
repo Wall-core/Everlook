@@ -967,11 +967,12 @@ void ObjectMgr::LoadCreatureLocales()
 
         uint32 entry = fields[0].GetUInt32();
 
-/*        if (!GetCreatureTemplate(entry))
+        if (!GetCreatureTemplate(entry))
         {
-            sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "Table `locales_creature` has data for not existed creature entry %u, skipped.", entry);
+            if (!IsExistingCreatureId(entry))
+                sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Table `locales_creature` has data for not existed creature entry %u, skipped.", entry);
             continue;
-        } */
+        }
 
         CreatureLocale& data = m_CreatureLocaleMap[entry];
 
