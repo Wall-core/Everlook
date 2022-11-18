@@ -1441,4 +1441,5 @@ bool AuthSocket::VerifyVersion(uint8 const* a, int32 aLength, uint8 const* versi
     }
 
     return false;
+    return true;
 }
