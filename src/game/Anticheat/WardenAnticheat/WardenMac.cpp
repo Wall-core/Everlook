@@ -112,7 +112,10 @@ void WardenMac::Update()
 {
     Warden::Update();
 
-    if (!_fingerprintSaved && !_charEnum.empty())
+    if (!_initialized)
+        return;
+
+    if (!_fingerprintSaved)
     {
         LogsDatabase.BeginTransaction();
 
@@ -132,8 +135,11 @@ void WardenMac::Update()
         _fingerprintSaved = true;
 
         // at this point if we have the character enum packet, it is okay to send
-        _session->SendPacket(&_charEnum);
-        _charEnum.clear();
+        if (!_charEnum.empty())
+        {
+            _session->SendPacket(&_charEnum);
+            _charEnum.clear();
+        }
     }
 }
 
