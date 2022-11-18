@@ -40,10 +40,9 @@ WindowsModuleScan::WindowsModuleScan(const std::string &module, bool wanted, con
     // builder
     [this](const Warden *warden, std::vector<std::string> &, ByteBuffer &scan)
     {
-        auto const winWarden = reinterpret_cast<const WardenWin *>(warden);
         auto const seed = static_cast<uint32>(rand32());
 
-        scan << static_cast<uint8>(winWarden->GetModule()->opcodes[FIND_MODULE_BY_NAME] ^ winWarden->GetXor()) << seed;
+        scan << static_cast<uint8>(warden->GetModule()->opcodes[FIND_MODULE_BY_NAME] ^ warden->GetXor()) << seed;
 
         HMACSHA1 hash(reinterpret_cast<const uint8 *>(&seed), sizeof(seed));
         hash.UpdateData(this->_module);
@@ -68,10 +67,9 @@ WindowsModuleScan::WindowsModuleScan(const std::string &module, CheckT checker, 
     // builder
     [this](const Warden *warden, std::vector<std::string> &, ByteBuffer &scan)
     {
-        auto const winWarden = reinterpret_cast<const WardenWin *>(warden);
         auto const seed = static_cast<uint32>(rand32());
 
-        scan << static_cast<uint8>(winWarden->GetModule()->opcodes[FIND_MODULE_BY_NAME] ^ winWarden->GetXor()) << seed;
+        scan << static_cast<uint8>(warden->GetModule()->opcodes[FIND_MODULE_BY_NAME] ^ warden->GetXor()) << seed;
 
         HMACSHA1 hash(reinterpret_cast<const uint8 *>(&seed), sizeof(seed));
         hash.UpdateData(this->_module);
@@ -188,10 +186,9 @@ WindowsCodeScan::WindowsCodeScan(uint32 offset, const std::vector<uint8> &patter
     // builder
     [this](const Warden *warden, std::vector<std::string> &, ByteBuffer &scan)
     {
-        auto const winWarden = reinterpret_cast<const WardenWin *>(warden);
         auto const seed = static_cast<uint32>(rand32());
 
-        scan << static_cast<uint8>(winWarden->GetModule()->opcodes[this->_memImageOnly ? FIND_MEM_IMAGE_CODE_BY_HASH : FIND_CODE_BY_HASH] ^ winWarden->GetXor())
+        scan << static_cast<uint8>(warden->GetModule()->opcodes[this->_memImageOnly ? FIND_MEM_IMAGE_CODE_BY_HASH : FIND_CODE_BY_HASH] ^ warden->GetXor())
              << seed;
 
         HMACSHA1 hash(reinterpret_cast<const uint8 *>(&seed), sizeof(seed));
@@ -221,9 +218,7 @@ WindowsFileHashScan::WindowsFileHashScan(const std::string &file, const void *ex
 
         strings.emplace_back(this->_file);
 
-        auto const winWarden = reinterpret_cast<const WardenWin *>(warden);
-
-        scan << static_cast<uint8>(winWarden->GetModule()->opcodes[HASH_CLIENT_FILE] ^ winWarden->GetXor())
+        scan << static_cast<uint8>(warden->GetModule()->opcodes[HASH_CLIENT_FILE] ^ warden->GetXor())
              << static_cast<uint8>(strings.size());
     },
     // checker
@@ -346,10 +341,9 @@ WindowsHookScan::WindowsHookScan(const std::string &module, const std::string &p
         strings.emplace_back(this->_module);
         strings.emplace_back(this->_proc);
 
-        auto const winWarden = reinterpret_cast<const WardenWin *>(warden);
         auto const seed = static_cast<uint32>(rand32());
 
-        scan << static_cast<uint8>(winWarden->GetModule()->opcodes[API_CHECK] ^ winWarden->GetXor()) << seed;
+        scan << static_cast<uint8>(warden->GetModule()->opcodes[API_CHECK] ^ warden->GetXor()) << seed;
 
         scan.append(this->_hash, sizeof(this->_hash));
         scan << static_cast<uint8>(strings.size() - 1)
@@ -379,10 +373,9 @@ WindowsDriverScan::WindowsDriverScan(const std::string &name, const std::string 
 
         strings.emplace_back(this->_name);
 
-        auto const winWarden = reinterpret_cast<const WardenWin *>(warden);
         auto const seed = static_cast<uint32>(rand32());
 
-        scan << static_cast<uint8>(winWarden->GetModule()->opcodes[FIND_DRIVER_BY_NAME] ^ winWarden->GetXor()) << seed;
+        scan << static_cast<uint8>(warden->GetModule()->opcodes[FIND_DRIVER_BY_NAME] ^ warden->GetXor()) << seed;
 
         HMACSHA1 hash(reinterpret_cast<const uint8 *>(&seed), sizeof(seed));
         hash.UpdateData(this->_targetPath);
@@ -404,8 +397,7 @@ WindowsTimeScan::WindowsTimeScan(CheckT checker, const std::string &comment, uin
     // builder
     [this](const Warden *warden, std::vector<std::string> &, ByteBuffer &scan)
     {
-        auto const winWarden = reinterpret_cast<const WardenWin *>(warden);
-        scan << static_cast<uint8>(winWarden->GetModule()->opcodes[CHECK_TIMING_VALUES] ^ winWarden->GetXor());
+        scan << static_cast<uint8>(warden->GetModule()->opcodes[CHECK_TIMING_VALUES] ^ warden->GetXor());
     }, checker, sizeof(uint8), sizeof(uint8) + sizeof(uint32), comment, flags)
 {
     MANGOS_ASSERT(!!checker);
