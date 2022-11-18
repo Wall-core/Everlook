@@ -270,7 +270,7 @@ DiminishingGroup SpellEntry::GetDiminishingReturnsGroup(bool triggered) const
     // Explicit Diminishing Groups
     switch (SpellFamilyName)
     {
-        case SPELLFAMILY_DRUID: // Everlook: Allow no DR on in early patches
+        case SPELLFAMILY_DRUID: // Everlook: Allow no DR in early patches
         {
             if (IsFitToFamilyMask<CF_DRUID_FERAL_CHARGE>())
                 return DIMINISHING_TRIGGER_ROOT;
@@ -285,17 +285,17 @@ DiminishingGroup SpellEntry::GetDiminishingReturnsGroup(bool triggered) const
                 return DIMINISHING_NONE;
             break;
         }
-/*        case SPELLFAMILY_HUNTER: - Everlook: Allow no DR on in early patches
+        case SPELLFAMILY_HUNTER:
         {
             // World of Warcraft Client Patch 1.10.0 (2006-03-28)
             // - Freezing Traps are now affected by diminishing returns.
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
             // Freezing trap
             if (IsFitToFamilyMask<CF_HUNTER_FREEZING_TRAP_EFFECT>())
-                return DIMINISHING_FREEZE;
+                return /*DIMINISHING_FREEZE*/DIMINISHING_NONE; // Everlook: Allow no DR in early patches
 #endif
             break;
-        } */
+        }
         case SPELLFAMILY_WARLOCK:
         {
             // Fear

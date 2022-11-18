@@ -179,7 +179,7 @@ extern pAuraProcHandler AuraProcHandler[TOTAL_AURAS];
 #define UNIT_SPELL_UPDATE_TIME_BUFFER 60
 
 // According to data from sniffs, combat is checked every 3 batches of 400 ms.
-#define UNIT_COMBAT_CHECK_TIMER_MAX 1200u
+#define UNIT_COMBAT_CHECK_TIMER_MAX 400u
 
 struct SpellImmune
 {
