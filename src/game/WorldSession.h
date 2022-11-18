@@ -51,12 +51,17 @@ class BigNumber;
 class MasterPlayer;
 class MovementAnticheat;
 class Warden;
+
+#ifdef USE_ANTICHEAT
 namespace NamreebAnticheat
 {
 class Antispam;
 };
 
 using Antispam = NamreebAnticheat::Antispam;
+#else
+class Antispam;
+#endif
 
 struct OpcodeHandler;
 struct PlayerBotEntry;
