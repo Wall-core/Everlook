@@ -69,7 +69,7 @@ class WardenWin final : public Warden
         bool _sysInfoSaved;
         bool _proxifierFound;
 
-        WCHAR _systemRoot[25];
+        wchar_t _systemRoot[25];
         uint32 _systemBuild;
         uint32 _productType;
         uint32 _winMajorVersion;

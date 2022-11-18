@@ -140,13 +140,13 @@ enum WorldEnables
 };
 
 
-static auto constexpr foo = sizeof(ULONG);
+static auto constexpr foo = sizeof(uint32);
 
 struct KSYSTEM_TIME
 {
-    ULONG LowPart;
-    LONG High1Time;
-    LONG High2Time;
+    uint32 LowPart;
+    int32 High1Time;
+    int32 High2Time;
 };
 
 enum NT_PRODUCT_TYPE
@@ -165,129 +165,125 @@ enum ALTERNATIVE_ARCHITECTURE_TYPE
 
 struct KUSER_SHARED_DATA
 {
-    ULONG                         TickCountLowDeprecated;
-    ULONG                         TickCountMultiplier;
-    KSYSTEM_TIME                  InterruptTime;
-    KSYSTEM_TIME                  SystemTime;
-    KSYSTEM_TIME                  TimeZoneBias;
-    USHORT                        ImageNumberLow;
-    USHORT                        ImageNumberHigh;
-    WCHAR                         NtSystemRoot[260];
-    ULONG                         MaxStackTraceDepth;
-    ULONG                         CryptoExponent;
-    ULONG                         TimeZoneId;
-    ULONG                         LargePageMinimum;
-    ULONG                         AitSamplingValue;
-    ULONG                         AppCompatFlag;
-    ULONGLONG                     RNGSeedVersion;
-    ULONG                         GlobalValidationRunlevel;
-    LONG                          TimeZoneBiasStamp;
-    ULONG                         NtBuildNumber;
-    NT_PRODUCT_TYPE               NtProductType;
-    BOOLEAN                       ProductTypeIsValid;
-    BOOLEAN                       Reserved0[1];
-    USHORT                        NativeProcessorArchitecture;
-    ULONG                         NtMajorVersion;
-    ULONG                         NtMinorVersion;
-    BOOLEAN                       ProcessorFeatures[64];
-    ULONG                         Reserved1;
-    ULONG                         Reserved3;
-    ULONG                         TimeSlip;
+    uint32                      TickCountLowDeprecated;
+    uint32                      TickCountMultiplier;
+    KSYSTEM_TIME                InterruptTime;
+    KSYSTEM_TIME                SystemTime;
+    KSYSTEM_TIME                TimeZoneBias;
+    uint16                      ImageNumberLow;
+    uint16                      ImageNumberHigh;
+    wchar_t                       NtSystemRoot[260];
+    uint32                      MaxStackTraceDepth;
+    uint32                      CryptoExponent;
+    uint32                      TimeZoneId;
+    uint32                      LargePageMinimum;
+    uint32                      AitSamplingValue;
+    uint32                      AppCompatFlag;
+    uint64                      RNGSeedVersion;
+    uint32                      GlobalValidationRunlevel;
+    int32                       TimeZoneBiasStamp;
+    uint32                      NtBuildNumber;
+    NT_PRODUCT_TYPE             NtProductType;
+    bool                        ProductTypeIsValid;
+    bool                        Reserved0[1];
+    uint16                      NativeProcessorArchitecture;
+    uint32                      NtMajorVersion;
+    uint32                      NtMinorVersion;
+    bool                        ProcessorFeatures[64];
+    uint32                      Reserved1;
+    uint32                      Reserved3;
+    uint32                      TimeSlip;
     ALTERNATIVE_ARCHITECTURE_TYPE AlternativeArchitecture;
-    ULONG                         BootId;
-    LARGE_INTEGER                 SystemExpirationDate;
-    ULONG                         SuiteMask;
-    BOOLEAN                       KdDebuggerEnabled;
+    uint32                      BootId;
+    uint64                      SystemExpirationDate;
+    uint32                      SuiteMask;
+    bool                        KdDebuggerEnabled;
     union {
-        UCHAR MitigationPolicies;
+        uint8 MitigationPolicies;
         struct {
-            UCHAR NXSupportPolicy : 2;
-            UCHAR SEHValidationPolicy : 2;
-            UCHAR CurDirDevicesSkippedForDlls : 2;
-            UCHAR Reserved : 2;
+            uint8 NXSupportPolicy : 2;
+            uint8 SEHValidationPolicy : 2;
+            uint8 CurDirDevicesSkippedForDlls : 2;
+            uint8 Reserved : 2;
         };
     };
-    USHORT                        CyclesPerYield;
-    ULONG                         ActiveConsoleId;
-    ULONG                         DismountCount;
-    ULONG                         ComPlusPackage;
-    ULONG                         LastSystemRITEventTickCount;
-    ULONG                         NumberOfPhysicalPages;
-    BOOLEAN                       SafeBootMode;
+    uint16                      CyclesPerYield;
+    uint32                      ActiveConsoleId;
+    uint32                      DismountCount;
+    uint32                      ComPlusPackage;
+    uint32                      LastSystemRITEventTickCount;
+    uint32                      NumberOfPhysicalPages;
+    bool                        SafeBootMode;
     union {
-        UCHAR VirtualizationFlags;
+        uint8 VirtualizationFlags;
         struct {
-            UCHAR ArchStartedInEl2 : 1;
-            UCHAR QcSlIsSupported : 1;
+            uint8 ArchStartedInEl2 : 1;
+            uint8 QcSlIsSupported : 1;
         };
     };
-    UCHAR                         Reserved12[2];
+    uint8                       Reserved12[2];
     union {
-        ULONG SharedDataFlags;
+        uint32 SharedDataFlags;
         struct {
-            ULONG DbgErrorPortPresent : 1;
-            ULONG DbgElevationEnabled : 1;
-            ULONG DbgVirtEnabled : 1;
-            ULONG DbgInstallerDetectEnabled : 1;
-            ULONG DbgLkgEnabled : 1;
-            ULONG DbgDynProcessorEnabled : 1;
-            ULONG DbgConsoleBrokerEnabled : 1;
-            ULONG DbgSecureBootEnabled : 1;
-            ULONG DbgMultiSessionSku : 1;
-            ULONG DbgMultiUsersInSessionSku : 1;
-            ULONG DbgStateSeparationEnabled : 1;
-            ULONG SpareBits : 21;
+            uint32 DbgErrorPortPresent : 1;
+            uint32 DbgElevationEnabled : 1;
+            uint32 DbgVirtEnabled : 1;
+            uint32 DbgInstallerDetectEnabled : 1;
+            uint32 DbgLkgEnabled : 1;
+            uint32 DbgDynProcessorEnabled : 1;
+            uint32 DbgConsoleBrokerEnabled : 1;
+            uint32 DbgSecureBootEnabled : 1;
+            uint32 DbgMultiSessionSku : 1;
+            uint32 DbgMultiUsersInSessionSku : 1;
+            uint32 DbgStateSeparationEnabled : 1;
+            uint32 SpareBits : 21;
         } DUMMYSTRUCTNAME2;
     } DUMMYUNIONNAME2;
-    ULONG                         DataFlagsPad[1];
-    ULONGLONG                     TestRetInstruction;
-    LONGLONG                      QpcFrequency;
-    ULONG                         SystemCall;
-    ULONG                         Reserved2;
-    ULONGLONG                     SystemCallPad[2];
+    uint32                      DataFlagsPad[1];
+    uint64                      TestRetInstruction;
+    int64                       QpcFrequency;
+    uint32                      SystemCall;
+    uint32                      Reserved2;
+    uint64                      SystemCallPad[2];
     union {
         KSYSTEM_TIME TickCount;
-        ULONG64      TickCountQuad;
+        uint64      TickCountQuad;
         struct {
-            ULONG ReservedTickCountOverlay[3];
-            ULONG TickCountPad[1];
+            uint32 ReservedTickCountOverlay[3];
+            uint32 TickCountPad[1];
         } DUMMYSTRUCTNAME;
     } DUMMYUNIONNAME3;
-    ULONG                         Cookie;
-    ULONG                         CookiePad[1];
-    LONGLONG                      ConsoleSessionForegroundProcessId;
-    ULONGLONG                     TimeUpdateLock;
-    ULONGLONG                     BaselineSystemTimeQpc;
-    ULONGLONG                     BaselineInterruptTimeQpc;
-    ULONGLONG                     QpcSystemTimeIncrement;
-    ULONGLONG                     QpcInterruptTimeIncrement;
-    UCHAR                         QpcSystemTimeIncrementShift;
-    UCHAR                         QpcInterruptTimeIncrementShift;
-    USHORT                        UnparkedProcessorCount;
-    ULONG                         EnclaveFeatureMask[4];
-    ULONG                         TelemetryCoverageRound;
-    USHORT                        UserModeGlobalLogger[16];
-    ULONG                         ImageFileExecutionOptions;
-    ULONG                         LangGenerationCount;
-    ULONGLONG                     Reserved4;
-    ULONGLONG                     InterruptTimeBias;
-    ULONGLONG                     QpcBias;
-    ULONG                         ActiveProcessorCount;
-    UCHAR                         ActiveGroupCount;
-    UCHAR                         Reserved9;
+    uint32                      Cookie;
+    uint32                      CookiePad[1];
+    int64                       ConsoleSessionForegroundProcessId;
+    uint64                      TimeUpdateLock;
+    uint64                      BaselineSystemTimeQpc;
+    uint64                      BaselineInterruptTimeQpc;
+    uint64                      QpcSystemTimeIncrement;
+    uint64                      QpcInterruptTimeIncrement;
+    uint8                       QpcSystemTimeIncrementShift;
+    uint8                       QpcInterruptTimeIncrementShift;
+    uint16                      UnparkedProcessorCount;
+    uint32                      EnclaveFeatureMask[4];
+    uint32                      TelemetryCoverageRound;
+    uint16                      UserModeGlobalLogger[16];
+    uint32                      ImageFileExecutionOptions;
+    uint32                      LangGenerationCount;
+    uint64                      Reserved4;
+    uint64                      InterruptTimeBias;
+    uint64                      QpcBias;
+    uint32                      ActiveProcessorCount;
+    uint8                       ActiveGroupCount;
+    uint8                       Reserved9;
     union {
-        USHORT QpcData;
+        uint16 QpcData;
         struct {
-            UCHAR QpcBypassEnabled;
-            UCHAR QpcShift;
+            uint8 QpcBypassEnabled;
+            uint8 QpcShift;
         };
     };
-    LARGE_INTEGER                 TimeZoneBiasEffectiveStart;
-    LARGE_INTEGER                 TimeZoneBiasEffectiveEnd;
-    XSTATE_CONFIGURATION          XState;
-    KSYSTEM_TIME                  FeatureConfigurationChangeStamp;
-    ULONG                         Spare;
-    ULONG64                       UserPointerAuthMask;
+    uint64                      TimeZoneBiasEffectiveStart;
+    uint64                      TimeZoneBiasEffectiveEnd;
 };
 
 // How much to read, since reading all of it would fill Warden's entire buffer
@@ -299,7 +295,7 @@ static constexpr struct
     uint32 offset;
     uint32 length;
 } UserDataFields[] = {
-    {"NtSystemRoot", offsetof(KUSER_SHARED_DATA, NtSystemRoot), SystemRootLength * sizeof(WCHAR) },
+    {"NtSystemRoot", offsetof(KUSER_SHARED_DATA, NtSystemRoot), SystemRootLength * sizeof(wchar_t) },
 #define ADD_FIELD(x) { #x, offsetof(KUSER_SHARED_DATA, x), sizeof(KUSER_SHARED_DATA::x) }
     ADD_FIELD(NtBuildNumber),
     ADD_FIELD(NtProductType),
@@ -400,7 +396,7 @@ std::string ArchitectureString(uint16 arch)
     }
 }
 
-std::string OsInfoString(const WCHAR* systemRoot, NT_PRODUCT_TYPE productType, uint32 majorVersion, uint32 minorVersion, uint32 build)
+std::string OsInfoString(const wchar_t* systemRoot, NT_PRODUCT_TYPE productType, uint32 majorVersion, uint32 minorVersion, uint32 build)
 {
     std::stringstream result;
     std::wstring ws(systemRoot);
@@ -871,7 +867,7 @@ void WardenWin::LoadScriptedScans()
             if (field == "NtSystemRoot")
             {
                 memset(wardenWin->_systemRoot, 0, sizeof(wardenWin->_systemRoot));
-                static_assert(SystemRootLength * sizeof(WCHAR) == sizeof(WardenWin::_systemRoot), "System root length wrong");
+                static_assert(SystemRootLength * sizeof(wchar_t) == sizeof(WardenWin::_systemRoot), "System root length wrong");
                 buff.read(reinterpret_cast<uint8*>(wardenWin->_systemRoot), UserDataFields[i].length);
             }
             else if (field == "NtBuildNumber")
