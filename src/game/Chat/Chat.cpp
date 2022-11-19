@@ -1113,7 +1113,7 @@ ChatCommand * ChatHandler::getCommandTable()
     {
         { "add",                SEC_ADMINISTRATOR,  true,  &ChatHandler::HandleAntiSpamAdd,                "", nullptr },
         { "reload",             SEC_ADMINISTRATOR,  true,  &ChatHandler::HandleAntiSpamReload,             "", nullptr },
-        { "info",               SEC_ADMINISTRATOR,  true,  &ChatHandler::HandleAntiSpamInfo,               "", nullptr },
+        { "info",               SEC_BASIC_ADMIN,    true,  &ChatHandler::HandleAntiSpamInfo,               "", nullptr },
         { nullptr,              0,                  false, nullptr,                                        "", nullptr }
     };
 
