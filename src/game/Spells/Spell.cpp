@@ -6554,7 +6554,7 @@ SpellCastResult Spell::CheckCast(bool strict)
                     if (!strict && go->HasFlag(GAMEOBJECT_FLAGS, GO_FLAG_IN_USE))
                         return SPELL_FAILED_CHEST_IN_USE;
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_7_1 - Everlook: Allow in early patches
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_7_1
                     // Prevent looting chests while totally immune
                     if (go->GetGOInfo()->CannotBeUsedUnderImmunity() && m_caster->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE))
                         return SPELL_FAILED_DAMAGE_IMMUNE;
