@@ -18338,7 +18338,7 @@ UnitMountResult Player::Mount(uint32 mount, uint32 spellId)
     However, both of these behaviors were correct behaviors in the 1.12 reference client and as such are considered bug fixes.
     https://us.forums.blizzard.com/en/wow/t/reckoning-is-broken-after-yesterdays-patch/386476/123
     */
-    ResetExtraAttacks();
+    /*ResetExtraAttacks();*/ // Everlook - Revert to 1.12 state
 
     SendMountResult(MOUNTRESULT_OK);
     return MOUNTRESULT_OK;
