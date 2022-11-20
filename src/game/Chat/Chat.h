@@ -914,6 +914,7 @@ class ChatHandler
         bool HandleNameDieCommand(char* args);
         bool HandleDieCommand(char* args);
         bool HandleKnockBackCommand(char* args);
+        bool HandleKnockUpCommand(char* args);
         bool HandleFearCommand(char* args);
         bool HandleDamageCommand(char* args);
         bool HandleAoEDamageCommand(char* args);

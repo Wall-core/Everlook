@@ -2310,3 +2310,24 @@ bool ChatHandler::HandleKnockBackCommand(char* args)
 
     return true;
 }
+
+bool ChatHandler::HandleKnockUpCommand(char* args)
+{
+    Unit* target = GetSelectedUnit();
+
+    if (!target)
+    {
+        SendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    Player* player = GetSession()->GetPlayer();
+
+    float verticalSpeed = 20.0f;
+    ExtractFloat(&args, verticalSpeed);
+
+    target->KnockBackFrom(player, 0, verticalSpeed);
+
+    return true;
+}
