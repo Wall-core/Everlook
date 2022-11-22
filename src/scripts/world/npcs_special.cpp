@@ -263,6 +263,7 @@ struct npc_doctorAI : public ScriptedAI
 
         Event = false;
 
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IN_COMBAT);
         m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
     }
 
@@ -496,9 +497,7 @@ void npc_doctorAI::PatientSaved(Creature* soldier, Player* pPlayer, Location* Po
 void npc_doctorAI::UpdateAI(uint32 const diff)
 {
     if (!Event)
-        Reset();
         return;
-
     if (SummonPatientCount >= 20)
     {
         Reset();
@@ -565,6 +564,8 @@ bool QuestRewarded_npc_doctor(Player* pPlayer, Creature* pCreature, Quest const*
 {
     if ((pQuest->GetQuestId() == QUEST_TRIAGE_A) || (pQuest->GetQuestId() == QUEST_TRIAGE_H))
     {
+        pPlayer->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IN_COMBAT);
+        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IN_COMBAT);
         if (npc_doctorAI* pDocAI = dynamic_cast<npc_doctorAI*>(pCreature->AI()))
             pDocAI->Reset();
     }
