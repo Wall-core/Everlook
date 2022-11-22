@@ -1730,7 +1730,7 @@ bool WorldObject::CanReachWithMeleeSpellAttack(WorldObject const* pVictim, float
 float WorldObject::GetLeewayBonusRangeForTargets(Player const* player, Unit const* target, bool ability)
 {
     if (ability)
-        return (player->GetXZFlagBasedSpeed() > LEEWAY_MIN_MOVE_SPEED && target->GetXZFlagBasedSpeed() > LEEWAY_MIN_MOVE_SPEED) ? LEEWAY_BONUS_RANGE : 0.0f;
+        return (player->IsMovingButNotWalking() && target->IsMovingButNotWalking()) ? LEEWAY_BONUS_RANGE : 0.0f;
 
     // auto attacks do not check speed, only flags
     return (player->IsMovingButNotWalking() && target->IsMovingButNotWalking()) ? LEEWAY_BONUS_RANGE : 0.0f;

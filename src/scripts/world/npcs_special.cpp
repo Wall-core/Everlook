@@ -263,8 +263,7 @@ struct npc_doctorAI : public ScriptedAI
 
         Event = false;
 
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IN_COMBAT);
+        m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
     }
 
     void BeginEvent(Player* pPlayer);
@@ -424,7 +423,7 @@ void npc_doctorAI::BeginEvent(Player* pPlayer)
     }
 
     Event = true;
-    m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+    m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
 }
 
 void npc_doctorAI::PatientDied(Location* Point)
@@ -442,8 +441,7 @@ void npc_doctorAI::PatientDied(Location* Point)
                 if (pPlayer->GetQuestStatus(QUEST_TRIAGE_A) == QUEST_STATUS_INCOMPLETE)
                     pPlayer->FailQuest(QUEST_TRIAGE_A);
                 else if (pPlayer->GetQuestStatus(QUEST_TRIAGE_H) == QUEST_STATUS_INCOMPLETE)
-                    pPlayer->FailQuest(QUEST_TRIAGE_H);
-                pPlayer->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);                
+                    pPlayer->FailQuest(QUEST_TRIAGE_H);               
                 Reset();
                 return;
             }
@@ -453,7 +451,6 @@ void npc_doctorAI::PatientDied(Location* Point)
         else
         {
             // If no player or player abandon quest in progress
-            pPlayer->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);
             Reset();
         }
     }
@@ -555,7 +552,6 @@ bool QuestAccept_npc_doctor(Player* pPlayer, Creature* pCreature, Quest const* p
 {
     if ((pQuest->GetQuestId() == QUEST_TRIAGE_A) || (pQuest->GetQuestId() == QUEST_TRIAGE_H))
     {
-        pPlayer->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);
         if (npc_doctorAI* pDocAI = dynamic_cast<npc_doctorAI*>(pCreature->AI()))
             pDocAI->BeginEvent(pPlayer);
     }
@@ -566,9 +562,11 @@ bool QuestAccept_npc_doctor(Player* pPlayer, Creature* pCreature, Quest const* p
 bool QuestRewarded_npc_doctor(Player* pPlayer, Creature* pCreature, Quest const* pQuest)
 {
     if ((pQuest->GetQuestId() == QUEST_TRIAGE_A) || (pQuest->GetQuestId() == QUEST_TRIAGE_H))
-        pPlayer->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);
-     if (npc_doctorAI* pDocAI = dynamic_cast<npc_doctorAI*>(pCreature->AI()))
-        pDocAI->Reset();
+    {
+        if (npc_doctorAI* pDocAI = dynamic_cast<npc_doctorAI*>(pCreature->AI()))
+            pDocAI->Reset();
+    }
+
     return true;
 }
 

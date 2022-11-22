@@ -834,8 +834,8 @@ void GameObject::getFishLoot(Loot* fishloot, Player* loot_owner)
     GetZoneAndAreaId(zone, subzone);
 
     // Don't allow fishing in hidden wetlands lake
-    if (subzone == 11 && loot_owner->IsWithinDist2d(-4074.74f, -1315.79f, 100.0f))
-        return;
+/*    if (subzone == 11 && loot_owner->IsWithinDist2d(-4074.74f, -1315.79f, 100.0f))
+        return; */ // Everlook - cozy
 
     // if subzone loot exist use it
     if (!fishloot->FillLoot(subzone, LootTemplates_Fishing, loot_owner, true, (subzone != zone)) && subzone != zone)
