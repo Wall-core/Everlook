@@ -45,6 +45,8 @@
 #include <memory>
 #include <sstream>
 #include <iomanip>
+#include <codecvt>
+#include <locale>
 
 namespace
 {
@@ -172,7 +174,7 @@ struct KUSER_SHARED_DATA
     KSYSTEM_TIME                TimeZoneBias;
     uint16                      ImageNumberLow;
     uint16                      ImageNumberHigh;
-    wchar_t                       NtSystemRoot[260];
+    wchar_t                     NtSystemRoot[260];
     uint32                      MaxStackTraceDepth;
     uint32                      CryptoExponent;
     uint32                      TimeZoneId;
@@ -396,13 +398,19 @@ std::string ArchitectureString(uint16 arch)
     }
 }
 
+std::string wstring_to_utf8(const std::wstring& str)
+{
+    std::wstring_convert<std::codecvt_utf8<wchar_t>> myconv;
+    return myconv.to_bytes(str);
+}
+
 std::string OsInfoString(const wchar_t* systemRoot, NT_PRODUCT_TYPE productType, uint32 majorVersion, uint32 minorVersion, uint32 build)
 {
     std::stringstream result;
-    std::wstring ws(systemRoot);
-    result << "Windows dir: " << std::string(ws.begin(), ws.end());
+
+    result << "Windows dir: " << wstring_to_utf8(systemRoot);
     result << " Version: " << majorVersion << "." << minorVersion << "." << build;
-    result << " Type:";
+    result << " Type: ";
 
     if (productType == NtProductWinNt)
         result << "NT";
