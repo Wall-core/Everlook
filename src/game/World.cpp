@@ -2061,7 +2061,7 @@ public:
     explicit WorldWorldTextBuilder(int32 textId, va_list* args = nullptr) : i_textId(textId), i_args(args) {}
     void operator()(WorldPacketList& data_list, int32 loc_idx)
     {
-        char const* text = sObjectMgr.GetMangosString(i_textId, loc_idx);
+        char const* text = i_textId > 0 ? sObjectMgr.GetMangosString(i_textId, loc_idx) : sObjectMgr.GetBroadcastText(i_textId, loc_idx);
 
         if (i_args)
         {

@@ -232,6 +232,8 @@ struct npc_keeper_remulosAI : public npc_escortAI
                 j = 0;
             for (uint32 & k : m_uiTabDialogsTimer)
                 k = 0;
+
+
         }
     }
 
@@ -901,6 +903,11 @@ struct npc_keeper_remulosAI : public npc_escortAI
                 }
             }
         }
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
+        DoMeleeAttackIfReady();
+
     }
 };
 

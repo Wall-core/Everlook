@@ -453,6 +453,7 @@ struct npc_yehkinyaAI : public npc_escortAI
         Event_Timer = 0;
         m_creature->SetFly(false);
         m_creature->SetWalk(false);
+        ResetCreature();
     }
 
     void WaypointReached(uint32 i) override
@@ -474,6 +475,12 @@ struct npc_yehkinyaAI : public npc_escortAI
 
     void UpdateEscortAI(uint32 const diff) override
     {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+        {
+            if (!isEventStarted)
+                Reset();
+        }
+
         if (Event_Timer <= diff)
         {
             if(isEventStarted)
@@ -485,8 +492,12 @@ struct npc_yehkinyaAI : public npc_escortAI
             }
         }
         else
+        {
             Event_Timer -= diff;
+        }
+        DoMeleeAttackIfReady();
     }
+
 };
 
 CreatureAI* GetAI_npc_yehkinya(Creature* pCreature)
