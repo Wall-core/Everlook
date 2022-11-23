@@ -2295,7 +2295,7 @@ enum
 {
     QUEST_BANG_A_GONG       = 8743,
 
-    GLOBAL_TEXT_CHAMPION    = -1000007,
+    GLOBAL_TEXT_CHAMPION    = 11427,
 
     STAGE_OPEN_GATES        = 0,
     STAGE_WAR               = 1,

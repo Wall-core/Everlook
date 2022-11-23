@@ -1298,7 +1298,7 @@ enum {
     SCRIPT_SAURFANG_SPEECH10        = -1780310,
     SCRIPT_SAURFANG_FINAL_BATTLE    = -1780311,
 
-    WORLD_TEXT_FINAL_BATTLE         = -1780311,     // The final battle for Kalimdor is upon us...
+    WORLD_TEXT_FINAL_BATTLE         = 11619,     // The final battle for Kalimdor is upon us...
 
     // Taken from Orgrimmar script
     SPELL_SF_EXECUTE                = 7160,  //OK
