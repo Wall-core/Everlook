@@ -367,6 +367,7 @@ bool Unit::IsTriggeredAtSpellProcEvent(Unit* pVictim, SpellAuraHolder* holder, S
         // Sweeping Strikes
         if (spellProto->Id == 12292 || spellProto->Id == 18765)
         {
+
             // Proc for every Whirlwind hit.
             if (procSpell->SpellIconID == 83)
                 return true;
@@ -379,7 +380,7 @@ bool Unit::IsTriggeredAtSpellProcEvent(Unit* pVictim, SpellAuraHolder* holder, S
         // Elemental Mastery
         // Do not consume aura if spell did not benefit from crit chance bonus.
         // Can happen if aura was cast after damaging spell was already launched.
-        if (spellProto->Id == 16166 && !(procExtra & PROC_EX_CRITICAL_HIT))
+        if ((spellProto->Id == 16166) && !(procExtra & PROC_EX_CRITICAL_HIT))
             return false;
     }
 

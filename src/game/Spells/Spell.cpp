@@ -1223,7 +1223,7 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
         // multiple targets, but not proc additional melee-only beneficial auras on the 
         // attacker like Sweeping Strikes. Leave the victim proc flags responding to a melee
         // spell.
-        if (procAttacker & PROC_FLAG_DEAL_MELEE_ABILITY)
+        if (!m_spellInfo->IsFitToFamilyMask<CF_WARRIOR_RETALIATION>() && (procAttacker & PROC_FLAG_DEAL_MELEE_ABILITY))
         {
             procAttacker &= ~(PROC_FLAG_DEAL_MELEE_ABILITY);
             procAttacker |= PROC_FLAG_DEAL_HARMFUL_SPELL;
