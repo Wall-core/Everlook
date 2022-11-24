@@ -1214,6 +1214,10 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
     uint32 procVictim   = m_procVictim;
     uint32 procEx       = PROC_EX_NONE;
     
+    // Don't proc abilities on Rend
+    if (m_spellInfo->IsFitToFamilyMask<CF_WARRIOR_REND>())
+        procAttacker &= ~(PROC_FLAG_DEAL_MELEE_ABILITY);
+
     // Drop some attacker proc flags if this is a secondary target. Do not need to change
     // the victim proc flags.
     if (m_targetNum > 1)
