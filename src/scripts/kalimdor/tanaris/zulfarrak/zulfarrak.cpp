@@ -44,8 +44,8 @@ enum blyAndCrewFactions
 
 enum blySays
 {
-    SAY_1       = 3382,
-    SAY_2       = 3384,
+    SAY_1       = 3882,
+    SAY_2       = 3884,
     SAY_WEEGLI  = 3811
 };
 
