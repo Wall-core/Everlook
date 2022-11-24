@@ -367,7 +367,6 @@ bool Unit::IsTriggeredAtSpellProcEvent(Unit* pVictim, SpellAuraHolder* holder, S
         // Sweeping Strikes
         if (spellProto->Id == 12292 || spellProto->Id == 18765)
         {
-
             // Proc for every Whirlwind hit.
             if (procSpell->SpellIconID == 83)
                 return true;
