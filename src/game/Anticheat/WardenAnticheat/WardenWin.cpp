@@ -400,8 +400,15 @@ std::string ArchitectureString(uint16 arch)
 
 std::string wstring_to_utf8(const std::wstring& str)
 {
-    std::wstring_convert<std::codecvt_utf8<wchar_t>> myconv;
-    return myconv.to_bytes(str);
+    try
+    {
+        std::wstring_convert<std::codecvt_utf8<wchar_t>> myconv;
+        return myconv.to_bytes(str);
+    }
+    catch (const std::range_error&)
+    {
+        return "<encoding failure>";
+    }
 }
 
 std::string OsInfoString(const wchar_t* systemRoot, NT_PRODUCT_TYPE productType, uint32 majorVersion, uint32 minorVersion, uint32 build)
