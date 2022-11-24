@@ -736,7 +736,7 @@ void Pet::RegenerateAll(uint32 update_diff, bool skipCombatCheck)
 
         RegenerateMana();
 
-        m_regenTimer = REGEN_TIME_FULL;
+        m_regenTimer = 5000;
     }
     else
         m_regenTimer -= update_diff;

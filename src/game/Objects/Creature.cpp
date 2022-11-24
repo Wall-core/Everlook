@@ -947,6 +947,8 @@ void Creature::RegenerateMana()
     {
         if (!IsUnderLastManaUseEffect())
             addvalue = m_manaRegen;
+        if (GetCharmerOrOwnerGuid().IsPlayer())
+            addvalue *= 5.0f;
     }
     else
         addvalue = maxValue / 3;
