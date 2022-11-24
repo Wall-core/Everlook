@@ -363,22 +363,7 @@ bool Unit::IsTriggeredAtSpellProcEvent(Unit* pVictim, SpellAuraHolder* holder, S
                 return true;
         }
 #endif
-        // Everlook - Allow Whirlwind and cleave to consume multiple Sweeping Strikes
-        // Sweeping Strikes
-/*        if (spellProto->Id == 12292 || spellProto->Id == 18765)
-        {
-            // Don't proc on Rend
-            if (procSpell->SpellIconID == 245)
-                return false;
 
-            // Proc for every Whirlwind hit.
-            if (procSpell->SpellIconID == 83)
-                return true;
-
-            if (procSpell->IsDirectDamageSpell() && (procFlag & (PROC_FLAG_DEAL_MELEE_SWING | PROC_FLAG_DEAL_MELEE_ABILITY)))
-                return true;
-        }
-*/
         // SHAMAN
         // Elemental Mastery
         // Do not consume aura if spell did not benefit from crit chance bonus.
