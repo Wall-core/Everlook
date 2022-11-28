@@ -1082,9 +1082,7 @@ void Channel::LeaveNotify(ObjectGuid guid)
 bool Channel::IsCustomChannel()
 {
     if ((m_name == u8"World" || m_name == u8"China" || m_name == u8"中国"))
-    {
         return true;
-    }
     else
         return false;
 }
