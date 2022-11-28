@@ -245,6 +245,8 @@ class Channel
         bool IsOn(ObjectGuid who) const { return m_players.find(who) != m_players.end(); }
         bool IsBanned(ObjectGuid guid) const { return m_banned.find(guid) != m_banned.end(); }
 
+        bool IsCustomChannel();
+
         uint8 GetPlayerFlags(ObjectGuid guid) const
         {
             PlayerList::const_iterator p_itr = m_players.find(guid);

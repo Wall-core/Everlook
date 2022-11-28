@@ -199,6 +199,14 @@ void Channel::KickOrBan(ObjectGuid guid, char const* targetName, bool ban)
     if (gplr)
         sec = gplr->GetSession()->GetSecurity();
 
+    if (IsCustomChannel() && gplr->GetSession()->GetSecurity() == 0)
+    {
+        WorldPacket data;
+        MakeNotOwner(&data);
+        SendToOne(&data, guid);
+        return;
+    }
+
     if (!IsOn(guid))
     {
         WorldPacket data;
@@ -272,6 +280,14 @@ void Channel::UnBan(ObjectGuid guid, char const* targetName)
     if (gplr)
         sec = gplr->GetSession()->GetSecurity();
 
+    if (IsCustomChannel() && gplr->GetSession()->GetSecurity() == 0)
+    {
+        WorldPacket data;
+        MakeNotOwner(&data);
+        SendToOne(&data, guid);
+        return;
+    }
+
     if (!IsOn(guid))
     {
         WorldPacket data;
@@ -321,6 +337,14 @@ void Channel::Password(ObjectGuid guid, char const* password)
     if (pPlayer)
         sec = pPlayer->GetSession()->GetSecurity();
 
+    if (IsCustomChannel() && pPlayer->GetSession()->GetSecurity() == 0)
+    {
+        WorldPacket data;
+        MakeNotOwner(&data);
+        SendToOne(&data, guid);
+        return;
+    }
+
     if (!IsOn(guid))
     {
         WorldPacket data;
@@ -352,6 +376,14 @@ void Channel::SetMode(ObjectGuid guid, char const* targetName, bool moderator, b
         return;
 
     uint32 sec = pPlayer->GetSession()->GetSecurity();
+
+    if (IsCustomChannel() && pPlayer->GetSession()->GetSecurity() == 0)
+    {
+        WorldPacket data;
+        MakeNotOwner(&data);
+        SendToOne(&data, guid);
+        return;
+    }
 
     if (!IsOn(guid))
     {
@@ -427,6 +459,14 @@ void Channel::SetOwner(ObjectGuid guid, char const* targetName)
         return;
 
     uint32 sec = pPlayer->GetSession()->GetSecurity();
+
+    if (IsCustomChannel() && pPlayer->GetSession()->GetSecurity() == 0)
+    {
+        WorldPacket data;
+        MakeNotOwner(&data);
+        SendToOne(&data, guid);
+        return;
+    }
 
     if (!IsOn(guid))
     {
@@ -563,6 +603,14 @@ void Channel::Announce(ObjectGuid guid)
     if (pPlayer)
         sec = pPlayer->GetSession()->GetSecurity();
 
+    if (IsCustomChannel() && pPlayer->GetSession()->GetSecurity() == 0)
+    {
+        WorldPacket data;
+        MakeNotOwner(&data);
+        SendToOne(&data, guid);
+        return;
+    }
+
     if (!IsOn(guid))
     {
         WorldPacket data;
@@ -597,6 +645,14 @@ void Channel::Moderate(ObjectGuid guid)
     PlayerPointer pPlayer = GetPlayer(guid);
     if (pPlayer)
         sec = pPlayer->GetSession()->GetSecurity();
+
+    if (IsCustomChannel() && pPlayer->GetSession()->GetSecurity() == 0)
+    {
+        WorldPacket data;
+        MakeNotOwner(&data);
+        SendToOne(&data, guid);
+        return;
+    }
 
     if (!IsOn(guid))
     {
@@ -746,6 +802,14 @@ void Channel::SetOwner(ObjectGuid guid, bool exclaim)
 
     if (HasFlag(CHANNEL_FLAG_GENERAL) && pPlayer->GetSession()->GetSecurity() < SEC_GAMEMASTER)
         return;
+
+    if (IsCustomChannel() && pPlayer->GetSession()->GetSecurity() == 0)
+    {
+        WorldPacket data;
+        MakeNotOwner(&data);
+        SendToOne(&data, guid);
+        return;
+    }
 
     if (m_ownerGuid)
     {
@@ -1013,6 +1077,16 @@ void Channel::JoinNotify(ObjectGuid guid)
 
 void Channel::LeaveNotify(ObjectGuid guid)
 {
+}
+
+bool Channel::IsCustomChannel()
+{
+    if ((m_name == u8"World" || m_name == u8"China" || m_name == u8"中国"))
+    {
+        return true;
+    }
+    else
+        return false;
 }
 
 PlayerPointer Channel::GetPlayer(ObjectGuid guid)
