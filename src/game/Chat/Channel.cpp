@@ -99,14 +99,14 @@ void Channel::Join(ObjectGuid guid, char const* password)
         return;
     }
 
-    if (m_password.length() > 0 && strcmp(password, m_password.c_str()) != 0)
+    PlayerPointer pPlayer = GetPlayer(guid);
+
+    if (m_password.length() > 0 && strcmp(password, m_password.c_str()) != 0 && pPlayer->GetSession()->GetSecurity() == 0) // player level (IsGamemaster() needs rework)
     {
         MakeWrongPassword(&data);
         SendToOne(&data, guid);
         return;
     }
-
-    PlayerPointer pPlayer = GetPlayer(guid);
 
     if (m_securityLevel && (!pPlayer.get() || pPlayer->GetSession()->GetSecurity() < m_securityLevel))
     {
