@@ -2062,7 +2062,7 @@ public:
     void operator()(WorldPacketList& data_list, int32 loc_idx)
     {
         char const* text = sObjectMgr.GetMangosString(i_textId, loc_idx);
-        if (text = "<error>")
+        if (!strncmp(text, "<error>", strlen(text)))
             text = sObjectMgr.GetBroadcastText(i_textId, loc_idx);
 
         if (i_args)
