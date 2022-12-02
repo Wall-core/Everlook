@@ -3439,7 +3439,7 @@ void Creature::OnEnterCombat(Unit* pWho, bool notInCombat)
         {
             if (pOwner->IsPlayer())
             {
-                if (pWho->IsValidAttackTarget(pOwner))
+                if (pWho->IsValidAttackTarget(pOwner) && !pWho->IsPlayer())
                 {
                     pWho->AddThreat(pOwner);
                     pWho->SetInCombatWithVictim(pOwner);
